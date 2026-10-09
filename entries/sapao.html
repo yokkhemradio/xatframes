@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>MYRADIOhit Player</title>
+    <title>MYRADIOhit Player - Sapao</title>
     <style>
         * {
             box-sizing: border-box;
@@ -69,7 +69,7 @@
         /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงสวยๆ ให้อยู่แถวเดียวกับโลโก้ด้านล่าง */
         .overlay-play-btn {
             position: absolute;
-            bottom: 31px; /* จัดระดับความสูงให้อยู่กึ่งกลางพอดีกับโลโก้ */
+            bottom: 31px;
             background: rgba(14, 165, 233, 0.9);
             color: #fff;
             border: none;
@@ -176,12 +176,10 @@
 </head>
 <body>
 
-    <!-- 👈 ฝั่งซ้าย: วิดีโอ + โลโก้ซ้ายล่าง + ปุ่มเล่นเพลงแถวเดียวกับโลโก้ (อยู่ฝั่งขวาของรูปซ้าย) -->
+    <!-- 👈 ฝั่งซ้าย: วิดีโอ + โลโก้ใหม่ซ้ายล่าง + ปุ่มเล่นเพลงแถวเดียวกับโลโก้ -->
     <div class="column">
         <div class="box-media">
-            <!-- โลโก้หมุนแขนเสื้อด้านล่างซ้าย -->
-            <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo" style="left: 15px;">
-            <!-- ปุ่มเล่นเพลงอยู่แถวเดียวกับโลโก้ (ชิดขวาล่างของภาพซ้าย) -->
+            <img src="https://archive.org/download/logopal/logopal.png" alt="Logo" class="watermark-logo" style="left: 15px;">
             <button class="overlay-play-btn" style="right: 15px;" onclick="togglePlay('https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3', 'สตริงใหม่ล่าสุด')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
@@ -204,12 +202,10 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: วิดีโอ + โลโก้ขวาล่าง + ปุ่มเล่นเพลงแถวเดียวกับโลโก้ (อยู่ฝั่งซ้ายของรูปขวา) + Playlist -->
+    <!-- 👉 ฝั่งขวา: วิดีโอ + โลโก้ใหม่ขวาล่าง + ปุ่มเล่นเพลงแถวเดียวกับโลโก้ + Playlist -->
     <div class="column">
         <div class="box-media">
-            <!-- โลโก้หมุนแขนเสื้อด้านล่างขวา -->
-            <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo" style="right: 15px;">
-            <!-- ปุ่มเล่นเพลงอยู่แถวเดียวกับโลโก้ (ชิดซ้ายล่างของภาพขวา) -->
+            <img src="https://archive.org/download/logopal/logopal.png" alt="Logo" class="watermark-logo" style="right: 15px;">
             <button class="overlay-play-btn" style="left: 15px;" onclick="togglePlay('https://ia601808.us.archive.org/30/items/stinghit/stinghit.mp3', 'Sting Hit Mix')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
