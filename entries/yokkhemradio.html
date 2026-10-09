@@ -30,11 +30,11 @@
             gap: 10px;
         }
 
-        /* 🎬 1. ส่วนภาพ/วิดีโอ ปรับความสูงเป็น 486px ตามที่ต้องการ */
+        /* 🎬 1. ส่วนภาพ/วิดีโอ สูง 486px */
         .box-media {
-            position: relative; /* สำคัญสำหรับจัดตำแหน่งโลโก้ทับบนวิดีโอ */
+            position: relative;
             width: 100%;
-            height: 486px; /* ปรับสูง 486px */
+            height: 486px;
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -48,29 +48,54 @@
             object-position: center top;
         }
 
-        /* 🔄 CSS สำหรับกำหนดอนิเมชันหมุนวนลูปของโลโก้ */
+        /* 🔄 อนิเมชันโลโก้หมุนวนลูป */
         @keyframes spinLogo {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* สไตล์และการจัดวางตำแหน่งโลโก้บริเวณแขนเสื้อด้านล่าง และเพิ่มขนาดใหญ่ขึ้น */
+        /* โลโก้บริเวณแขนเสื้อด้านล่าง */
         .watermark-logo {
             position: absolute;
-            bottom: 25px;     /* ระยะห่างจากขอบล่าง (โซนแขนเสื้อด้านล่าง) */
-            width: 65px;      /* เพิ่มขนาดความกว้างให้ใหญ่ขึ้น */
-            height: 65px;     /* เพิ่มขนาดความสูงให้ใหญ่ขึ้น */
+            bottom: 20px;
+            width: 65px;
+            height: 65px;
             object-fit: contain;
-            z-index: 10;      /* ให้แสดงทับอยู่บนวิดีโอ */
-            pointer-events: none; /* ป้องกันไม่ให้คลิกโดนโลโก้ */
-            animation: spinLogo 4s linear infinite; /* หมุนวนลูป รอบละ 4 วินาที */
+            z-index: 10;
+            pointer-events: none;
+            animation: spinLogo 4s linear infinite;
         }
 
-        /* 📻 2. ส่วนวิทยุ/Playlist ขนาดเล็กต่อท้ายด้านล่าง (ไม่ทับซ้อนภาพ) */
+        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงสวยๆ ให้อยู่แถวเดียวกับโลโก้ด้านล่าง */
+        .overlay-play-btn {
+            position: absolute;
+            bottom: 31px; /* จัดระดับความสูงให้อยู่กึ่งกลางพอดีกับโลโก้ */
+            background: rgba(14, 165, 233, 0.9);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        .overlay-play-btn:hover {
+            background: rgba(56, 189, 248, 1);
+            transform: scale(1.1);
+        }
+        .overlay-play-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            margin-left: 2px;
+        }
+
+        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
         .box-sub {
             width: 100%;
             background: rgba(15, 23, 42, 0.9);
@@ -80,7 +105,6 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* วิทยุด้านซ้าย */
         .player-top {
             display: flex;
             align-items: center;
@@ -124,7 +148,7 @@
             height: 28px;
         }
 
-        /* Playlist ด้านขวา */
+        /* Playlist ขวา */
         .playlist-title {
             font-size: 12px;
             font-weight: bold;
@@ -139,6 +163,7 @@
             cursor: pointer;
             transition: 0.2s;
             font-size: 11px;
+            margin-bottom: 4px;
         }
         .playlist-item:hover {
             background: rgba(56, 189, 248, 0.3);
@@ -151,11 +176,15 @@
 </head>
 <body>
 
-    <!-- 👈 ฝั่งซ้าย: วิดีโอสูง 486px + โลโก้หมุนโซนแขนเสื้อด้านล่างซ้าย -->
+    <!-- 👈 ฝั่งซ้าย: วิดีโอ + โลโก้ซ้ายล่าง + ปุ่มเล่นเพลงแถวเดียวกับโลโก้ (อยู่ฝั่งขวาของรูปซ้าย) -->
     <div class="column">
         <div class="box-media">
-            <!-- โลโก้หมุนบริเวณแขนเสื้อด้านล่างซ้าย -->
+            <!-- โลโก้หมุนแขนเสื้อด้านล่างซ้าย -->
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo" style="left: 15px;">
+            <!-- ปุ่มเล่นเพลงอยู่แถวเดียวกับโลโก้ (ชิดขวาล่างของภาพซ้าย) -->
+            <button class="overlay-play-btn" style="right: 15px;" onclick="togglePlay('https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3', 'สตริงใหม่ล่าสุด')">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
             <video autoplay loop muted playsinline>
                 <source src="https://files.catbox.moe/yc18zg.mp4" type="video/mp4">
             </video>
@@ -175,11 +204,15 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: วิดีโอสูง 486px + โลโก้หมุนโซนแขนเสื้อด้านล่างขวา -->
+    <!-- 👉 ฝั่งขวา: วิดีโอ + โลโก้ขวาล่าง + ปุ่มเล่นเพลงแถวเดียวกับโลโก้ (อยู่ฝั่งซ้ายของรูปขวา) + Playlist -->
     <div class="column">
         <div class="box-media">
-            <!-- โลโก้หมุนบริเวณแขนเสื้อด้านล่างขวา -->
+            <!-- โลโก้หมุนแขนเสื้อด้านล่างขวา -->
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo" style="right: 15px;">
+            <!-- ปุ่มเล่นเพลงอยู่แถวเดียวกับโลโก้ (ชิดซ้ายล่างของภาพขวา) -->
+            <button class="overlay-play-btn" style="left: 15px;" onclick="togglePlay('https://ia601808.us.archive.org/30/items/stinghit/stinghit.mp3', 'Sting Hit Mix')">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
             <video autoplay loop muted playsinline>
                 <source src="https://files.catbox.moe/s9d6v6.mp4" type="video/mp4">
             </video>
@@ -190,6 +223,10 @@
             <div class="playlist-item" onclick="playTrack('สตริงใหม่ล่าสุด', 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3')">
                 <div>#1 Tag Hits String 2026</div>
                 <div class="cat">Category: String</div>
+            </div>
+            <div class="playlist-item" onclick="playTrack('Sting Hit Mix', 'https://ia601808.us.archive.org/30/items/stinghit/stinghit.mp3')">
+                <div>#2 Sting Hit Mix</div>
+                <div class="cat">Category: Hit Mix</div>
             </div>
         </div>
     </div>
@@ -202,6 +239,19 @@
             titleElement.innerText = title;
             player.src = url;
             player.play();
+        }
+
+        function togglePlay(url, title) {
+            const player = document.getElementById('audio-player');
+            const titleElement = document.getElementById('current-title');
+            
+            if (player.src === url && !player.paused) {
+                player.pause();
+            } else {
+                titleElement.innerText = title;
+                player.src = url;
+                player.play();
+            }
         }
     </script>
 </body>
