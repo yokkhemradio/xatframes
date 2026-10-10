@@ -1,1 +1,321 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>MYRADIOhit Player - Sapao</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
+        /* 🌌 วิดีโอ Background ด้านหลังสุดเต็มหน้าจอ */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* 📐 จัดหน้าจอให้คอลัมน์แยกซ้ายสุด-ขวาสุดอย่างสมดุล */
+        body {
+            background: transparent;
+            color: #fff;
+            display: flex;
+            justify-content: space-between; /* ดึงให้แยกซ้าย-ขวาอยู่คนละฝั่งจอ */
+            align-items: flex-start;
+            padding: 20px;                 /* เพิ่มระยะขอบด้านข้างเล็กน้อยไม่ให้ชิดขอบจอเกินไป */
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขยับลงมา 90px */
+        .column {
+            transform: translateY(90px);
+            width: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        /* 🎬 1. ส่วนภาพ/วิดีโอหลัก สูง 486px */
+        .box-media {
+            position: relative;
+            width: 100%;
+            height: 486px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .box-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        /* 🔊 ลำโพงกลมๆ บริเวณแขนเสื้อด้านล่าง (จะขยับเมื่อเพลงเล่น) */
+        .speaker-icon {
+            position: absolute;
+            bottom: 20px;
+            width: 65px;
+            height: 65px;
+            background: radial-gradient(circle, #38bdf8 0%, #0369a1 70%, #0c4a6e 100%);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+        }
+        .speaker-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+        }
+
+        /* 📳 อนิเมชันลำโพงขยับตอนเพลงเล่น */
+        @keyframes pulseSpeaker {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+            50% { transform: scale(1.12); box-shadow: 0 0 25px rgba(56, 189, 248, 0.9); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+        }
+        .speaker-active {
+            animation: pulseSpeaker 0.8s infinite ease-in-out;
+        }
+
+        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงสวยๆ แถวเดียวกับลำโพง */
+        .overlay-play-btn {
+            position: absolute;
+            bottom: 31px;
+            background: rgba(14, 165, 233, 0.9);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+            z-index: 20;
+        }
+        .overlay-play-btn:hover {
+            background: rgba(56, 189, 248, 1);
+            transform: scale(1.1);
+        }
+        .overlay-play-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            margin-left: 2px;
+        }
+
+        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
+        .box-sub {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 8px 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .player-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .vinyl-box {
+            width: 36px;
+            height: 36px;
+            background: #000;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1e293b;
+        }
+        .vinyl-center {
+            width: 12px;
+            height: 12px;
+            background: #0ea5e9;
+            border-radius: 50%;
+        }
+        .player-info {
+            overflow: hidden;
+        }
+        .player-header {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+        .track-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #38bdf8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        audio {
+            width: 100%;
+            height: 28px;
+        }
+
+        /* Playlist ขวา */
+        .playlist-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 4px;
+        }
+        .playlist-item {
+            padding: 6px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 11px;
+            margin-bottom: 4px;
+        }
+        .playlist-item:hover {
+            background: rgba(56, 189, 248, 0.3);
+        }
+        .playlist-item .cat {
+            font-size: 9px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌌 วิดีโอพื้นหลัง Background ด้านหลังสุด -->
+    <video class="bg-video" autoplay loop muted playsinline>
+        <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
+    </video>
+
+    <!-- 👈 ฝั่งซ้าย: วิดีโอ + ลำโพงกลมๆ ซ้ายล่าง + ปุ่มเล่นเพลงฝั่งซ้าย (Latin 2026) -->
+    <div class="column">
+        <div class="box-media">
+            <!-- ลำโพงกลมๆ -->
+            <div id="speaker-left" class="speaker-icon" style="left: 15px;">
+                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+            <!-- ปุ่มเล่นเพลงฝั่งซ้าย -->
+            <button class="overlay-play-btn" style="right: 15px;" onclick="togglePlay('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <video autoplay loop muted playsinline>
+                <source src="https://files.catbox.moe/yc18zg.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="box-sub">
+            <div class="player-top">
+                <div class="vinyl-box">
+                    <div class="vinyl-center"></div>
+                </div>
+                <div class="player-info">
+                    <div class="player-header">Myradiohit Player</div>
+                    <div class="track-title" id="current-title">Select a track</div>
+                </div>
+            </div>
+            <audio id="audio-player" controls></audio>
+        </div>
+    </div>
+
+    <!-- 👉 ฝั่งขวา: วิดีโอ + ลำโพงกลมๆ ขวาล่าง + ปุ่มเล่นเพลงฝั่งขวา (Catbox) + Playlist -->
+    <div class="column">
+        <div class="box-media">
+            <!-- ลำโพงกลมๆ -->
+            <div id="speaker-right" class="speaker-icon" style="right: 15px;">
+                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            </div>
+            <!-- ปุ่มเล่นเพลงฝั่งขวา -->
+            <button class="overlay-play-btn" style="left: 15px;" onclick="togglePlay('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <video autoplay loop muted playsinline>
+                <source src="https://files.catbox.moe/s9d6v6.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <div class="box-sub">
+            <div class="playlist-title">Playlist</div>
+            <div class="playlist-item" onclick="playTrack('Latin 2026 Mix', 'https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'left')">
+                <div>#1 Latin 2026 Mix</div>
+                <div class="cat">Category: Latin</div>
+            </div>
+            <div class="playlist-item" onclick="playTrack('Hit Music 2026', 'https://files.catbox.moe/p6mtsl.mp3', 'right')">
+                <div>#2 Hit Music 2026</div>
+                <div class="cat">Category: Hits</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const player = document.getElementById('audio-player');
+        const titleElement = document.getElementById('current-title');
+        const speakerLeft = document.getElementById('speaker-left');
+        const speakerRight = document.getElementById('speaker-right');
+
+        function resetSpeakers() {
+            speakerLeft.classList.remove('speaker-active');
+            speakerRight.classList.remove('speaker-active');
+        }
+
+        function playTrack(title, url, side) {
+            titleElement.innerText = title;
+            player.src = url;
+            player.play();
+            
+            resetSpeakers();
+            if (side === 'left') {
+                speakerLeft.classList.add('speaker-active');
+            } else if (side === 'right') {
+                speakerRight.classList.add('speaker-active');
+            }
+        }
+
+        function togglePlay(url, title, side) {
+            if (player.src === url && !player.paused) {
+                player.pause();
+                resetSpeakers();
+            } else {
+                titleElement.innerText = title;
+                player.src = url;
+                player.play();
+                
+                resetSpeakers();
+                if (side === 'left') {
+                    speakerLeft.classList.add('speaker-active');
+                } else if (side === 'right') {
+                    speakerRight.classList.add('speaker-active');
+                }
+            }
+        }
+
+        player.onpause = function() {
+            resetSpeakers();
+        };
+        player.onended = function() {
+            resetSpeakers();
+        };
+    </script>
+</body>
+</html>
