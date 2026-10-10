@@ -33,12 +33,12 @@
             overflow: hidden;
         }
 
-        /* เครื่องเล่นวิทยุด้านซ้าย (เลื่อนลงมาให้เท่ากับส่วนล่างของฝั่งขวา) */
+        /* เครื่องเล่นวิทยุด้านซ้าย (เลื่อนลงมาอยู่ด้านล่างสวยๆ) */
         .player-container {
             width: 310px;
-            margin-top: 260px; /* ปรับระยะให้ลงมาตรงกับส่วนล่างตามต้องการ */
-            background: rgba(15, 23, 42, 0.92);
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            margin-top: 280px; /* ปรับระยะขยับลงมาด้านล่างตามต้องการ */
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(56, 189, 248, 0.4);
             border-radius: 12px;
             padding: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.7);
@@ -60,14 +60,18 @@
             padding: 2px 8px;
             border-radius: 10px;
             font-weight: bold;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
         }
         .track-title {
             font-size: 12px;
-            color: #94a3b8;
+            color: #38bdf8;
             margin-bottom: 12px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            background: rgba(30, 41, 59, 0.8);
+            padding: 6px 10px;
+            border-radius: 6px;
         }
 
         /* แผงปุ่มควบคุม */
@@ -114,8 +118,7 @@
         /* Playlist ด้านขวา */
         .playlist-container {
             width: 280px;
-            margin-top: 10px;
-            background: rgba(15, 23, 42, 0.92);
+            background: rgba(15, 23, 42, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 15px;
@@ -131,22 +134,30 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 5px;
             color: #38bdf8;
+            text-align: center;
         }
         .playlist-item {
-            padding: 8px;
+            padding: 10px;
             margin-bottom: 6px;
             background: rgba(30, 41, 59, 0.6);
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             transition: 0.2s;
             font-size: 12px;
+            border: 1px solid transparent;
         }
         .playlist-item:hover {
-            background: rgba(56, 189, 248, 0.3);
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+        }
+        .playlist-item.active {
+            background: rgba(16, 185, 129, 0.3);
+            border-color: #10b981;
         }
         .playlist-item .cat {
             font-size: 10px;
             color: #94a3b8;
+            margin-top: 2px;
         }
     </style>
 </head>
@@ -157,7 +168,7 @@
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย (ขยับลงมาตรงกับส่วนล่าง) -->
+    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย (อยู่ตำแหน่งล่าง) -->
     <div class="player-container">
         <div class="player-header">
             <span>🎧 GROUP RADIO MIX</span>
@@ -166,7 +177,7 @@
         <div class="track-title" id="current-title">NOW PLAYING: Select a track</div>
 
         <div class="control-panel">
-            <button class="btn-ctrl btn-play" onclick="playAudio()" title="Play">
+            <button class="btn-ctrl btn-play" onclick="resumeAudio()" title="Play">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
             <button class="btn-ctrl btn-pause" onclick="pauseAudio()" title="Pause">
@@ -189,23 +200,23 @@
     <div class="playlist-container">
         <div class="playlist-title">Playlist - Select to listen</div>
         
-        <div class="playlist-item" onclick="playTrack('1. Club Mix 2026', 'https://files.catbox.moe/ne1srr.mp3')">
+        <div class="playlist-item" id="track-0" onclick="playTrack(0, '1. Club Mix 2026', 'https://files.catbox.moe/ne1srr.mp3')">
             <div>1. Club Mix 2026</div>
             <div class="cat">Category: clubmix2026</div>
         </div>
-        <div class="playlist-item" onclick="playTrack('2. Dance Music 2026', 'https://files.catbox.moe/deel59.mp3')">
+        <div class="playlist-item" id="track-1" onclick="playTrack(1, '2. Dance Music 2026', 'https://files.catbox.moe/deel59.mp3')">
             <div>2. Dance Music 2026</div>
             <div class="cat">Category: Dance Music 2026</div>
         </div>
-        <div class="playlist-item" onclick="playTrack('3. International 2026', 'https://files.catbox.moe/p6mtsl.mp3')">
+        <div class="playlist-item" id="track-2" onclick="playTrack(2, '3. International 2026', 'https://files.catbox.moe/p6mtsl.mp3')">
             <div>3. International 2026</div>
             <div class="cat">Category: International 2026</div>
         </div>
-        <div class="playlist-item" onclick="playTrack('4. Latin Music 2026', 'https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3')">
+        <div class="playlist-item" id="track-3" onclick="playTrack(3, '4. Latin Music 2026', 'https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3')">
             <div>4. Latin Music 2026</div>
             <div class="cat">Category: Latin Music 2026</div>
         </div>
-        <div class="playlist-item" onclick="playTrack('5. International Hit', 'https://ia800706.us.archive.org/19/items/classic-rock_202607/Classic%20Rock.mp3')">
+        <div class="playlist-item" id="track-4" onclick="playTrack(4, '5. International Hit', 'https://ia800706.us.archive.org/19/items/classic-rock_202607/Classic%20Rock.mp3')">
             <div>5. International Hit</div>
             <div class="cat">Category: International Hit</div>
         </div>
@@ -214,18 +225,32 @@
     <script>
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
+        let currentIdx = -1;
 
-        function playTrack(title, url) {
+        function playTrack(index, title, url) {
+            document.querySelectorAll('.playlist-item').forEach(el => el.classList.remove('active'));
+            
+            const activeEl = document.getElementById('track-' + index);
+            if (activeEl) activeEl.classList.add('active');
+
+            currentIdx = index;
             titleElement.innerText = "NOW PLAYING: " + title;
+
+            player.pause();
+            player.currentTime = 0;
             player.src = url;
-            player.play().catch(e => console.log("Play blocked"));
+            player.load();
+            
+            player.play().catch(error => {
+                console.log("Autoplay or stream restricted:", error);
+            });
         }
 
-        function playAudio() {
+        function resumeAudio() {
             if (player.src) {
-                player.play().catch(e => console.log("Play blocked"));
+                player.play().catch(e => console.log(e));
             } else {
-                playTrack('1. Club Mix 2026', 'https://files.catbox.moe/ne1srr.mp3');
+                playTrack(0, '1. Club Mix 2026', 'https://files.catbox.moe/ne1srr.mp3');
             }
         }
 
@@ -237,6 +262,7 @@
             player.pause();
             player.currentTime = 0;
             titleElement.innerText = "NOW PLAYING: Stopped";
+            document.querySelectorAll('.playlist-item').forEach(el => el.classList.remove('active'));
         }
 
         function changeVolume(val) {
