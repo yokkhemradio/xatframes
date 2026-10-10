@@ -232,7 +232,8 @@
                     <div class="track-title" id="current-title">Select a track</div>
                 </div>
             </div>
-            <audio id="audio-player" controls preload="metadata"></audio>
+            <!-- เพิ่ม crossorigin="anonymous" แก้ปัญหาการดึงไฟล์ข้ามเว็บ -->
+            <audio id="audio-player" controls crossorigin="anonymous" preload="auto"></audio>
         </div>
     </div>
 
@@ -267,12 +268,24 @@
         const vinylLeft = document.getElementById('vinyl-left');
         const vinylRight = document.getElementById('vinyl-right');
 
+        let currentSide = null;
+
         function resetVinyls() {
             vinylLeft.classList.remove('vinyl-active');
             vinylRight.classList.remove('vinyl-active');
         }
 
+        function setVinylActive(side) {
+            resetVinyls();
+            if (side === 'left') {
+                vinylLeft.classList.add('vinyl-active');
+            } else if (side === 'right') {
+                vinylRight.classList.add('vinyl-active');
+            }
+        }
+
         async function handlePlayToggle(url, title, side) {
+            // ถ้ากดปุ่มซ้ำของเพลงเดิมที่กำลังเล่นอยู่ -> ให้หยุดเล่น
             if (player.src === url && !player.paused) {
                 player.pause();
                 resetVinyls();
@@ -280,25 +293,27 @@
             }
 
             try {
+                // เปลี่ยน URL เพลงถ้าไม่เหมือนเดิม
                 if (player.src !== url) {
                     player.src = url;
                     titleElement.innerText = title;
+                    player.load(); // โหลดไฟล์ใหม่ให้สมบูรณ์
                 }
                 
+                currentSide = side;
                 await player.play();
-                
-                resetVinyls();
-                if (side === 'left') {
-                    vinylLeft.classList.add('vinyl-active');
-                } else if (side === 'right') {
-                    vinylRight.classList.add('vinyl-active');
-                }
+                setVinylActive(side);
+
             } catch (error) {
                 console.error("Playback Error: ", error);
-                alert("กรุณากดปุ่ม Play ที่แถบเล่นเพลงด้านล่างอีกครั้ง");
+                // หากถูกเบราว์เซอร์บล็อกการเล่นอัตโนมัติ ให้ผู้ใช้นำเม้าส์ไปกดปุ่ม Play ที่แท็บด้านล่าง
             }
         }
 
+        // เมื่อกดเล่นผ่านแถบควบคุมด้านล่างตรงๆ
+        player.onplay = () => {
+            if (currentSide) setVinylActive(currentSide);
+        };
         player.onpause = resetVinyls;
         player.onended = resetVinyls;
     </script>
