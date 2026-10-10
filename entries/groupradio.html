@@ -63,7 +63,7 @@
             opacity: 0.9;
         }
 
-        /* 💽 แผ่นเสียงหมุนสวยๆ แทนไอคอนลำโพง */
+        /* 💽 แผ่นเสียงหมุนสวยๆ */
         .vinyl-icon {
             position: absolute;
             bottom: 20px;
@@ -210,13 +210,13 @@
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: Club Mix 2026 -->
+    <!-- 👈 ฝั่งซ้าย: https://files.catbox.moe/ne1srr.mp3 -->
     <div class="column">
         <div class="box-media">
             <div id="vinyl-left" class="vinyl-icon" style="left: 15px;">
                 <div class="vinyl-center-dot"></div>
             </div>
-            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
+            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://files.catbox.moe/ne1srr.mp3', 'Left Song Track', 'left')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
             <img src="https://ia601006.us.archive.org/17/items/06_20261010_202610/06.png" alt="Left Image" class="content-img">
@@ -236,13 +236,13 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: DanceMusic.mp3 จาก GitHub ของคุณ -->
+    <!-- 👉 ฝั่งขวา: https://files.catbox.moe/deel59.mp3 -->
     <div class="column">
         <div class="box-media">
             <div id="vinyl-right" class="vinyl-icon" style="right: 15px;">
                 <div class="vinyl-center-dot"></div>
             </div>
-            <button class="overlay-play-btn" style="left: 15px;" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/DanceMusic.mp3', 'Dance Music Mix', 'right')">
+            <button class="overlay-play-btn" style="left: 15px;" onclick="handlePlayToggle('https://files.catbox.moe/deel59.mp3', 'Right Song Track', 'right')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
             <img src="https://ia600608.us.archive.org/8/items/07_20261010/07.png" alt="Right Image" class="content-img">
@@ -250,13 +250,13 @@
 
         <div class="box-sub">
             <div class="playlist-title">Playlist</div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
-                <div>#1 BASS BOOSTED CLUB MIX 2026</div>
-                <div class="cat">Category: Club / Dance</div>
+            <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/ne1srr.mp3', 'Left Song Track', 'left')">
+                <div>#1 Left Song Track</div>
+                <div class="cat">Category: Catbox Stream</div>
             </div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/DanceMusic.mp3', 'Dance Music Mix', 'right')">
-                <div>#2 Dance Music Mix</div>
-                <div class="cat">Category: Dance</div>
+            <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/deel59.mp3', 'Right Song Track', 'right')">
+                <div>#2 Right Song Track</div>
+                <div class="cat">Category: Catbox Stream</div>
             </div>
         </div>
     </div>
