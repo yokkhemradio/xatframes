@@ -28,15 +28,15 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 20px; /* ปรับ Padding รอบหน้าต่างเป็น 20px เพื่อให้ขอบสวยงาม */
+            padding: 10px;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* เครื่องเล่นวิทยุด้านซ้าย (ปรับให้ห่างจากขอบบน 20px ตามต้องการ) */
+        /* เครื่องเล่นวิทยุด้านซ้าย (เลื่อนลงมาให้เท่ากับส่วนล่างของฝั่งขวา) */
         .player-container {
             width: 310px;
-            margin-top: 50px; /* ปรับให้ห่างจากขอบบน 20px */
+            margin-top: 260px; /* ปรับระยะให้ลงมาตรงกับส่วนล่างตามต้องการ */
             background: rgba(15, 23, 42, 0.92);
             border: 1px solid rgba(56, 189, 248, 0.3);
             border-radius: 12px;
@@ -114,7 +114,7 @@
         /* Playlist ด้านขวา */
         .playlist-container {
             width: 280px;
-            margin-top: 10px; /* ปรับให้ขอบบนสอดคล้องกับฝั่งซ้าย (20px) */
+            margin-top: 10px;
             background: rgba(15, 23, 42, 0.92);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -157,7 +157,7 @@
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย (ขยับขึ้นไปชิดขอบบนห่าง 20px) -->
+    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย (ขยับลงมาตรงกับส่วนล่าง) -->
     <div class="player-container">
         <div class="player-header">
             <span>🎧 GROUP RADIO MIX</span>
