@@ -209,13 +209,13 @@
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: Latin 2026 -->
+    <!-- 👈 ฝั่งซ้าย: เล่นเพลง clubmix2026.mp3 จาก GitHub ของคุณ -->
     <div class="column">
         <div class="box-media">
             <div id="speaker-left" class="speaker-icon" style="left: 15px;">
                 <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
             </div>
-            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
+            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://raw.githubusercontent.com/yokkhemradio/xatframes/main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
             <img src="https://ia601006.us.archive.org/17/items/06_20261010_202610/06.png" alt="Left Image" class="content-img">
@@ -249,9 +249,9 @@
 
         <div class="box-sub">
             <div class="playlist-title">Playlist</div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
-                <div>#1 Latin 2026 Mix</div>
-                <div class="cat">Category: Latin</div>
+            <div class="playlist-item" onclick="handlePlayToggle('https://raw.githubusercontent.com/yokkhemradio/xatframes/main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
+                <div>#1 BASS BOOSTED CLUB MIX 2026</div>
+                <div class="cat">Category: Club / Dance</div>
             </div>
             <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
                 <div>#2 Hit Music 2026</div>
@@ -272,7 +272,6 @@
         }
 
         async function handlePlayToggle(url, title, side) {
-            // ถ้าเพลงเดียวกันเล่นอยู่แล้ว ให้สั่งหยุด
             if (player.src === url && !player.paused) {
                 player.pause();
                 resetSpeakers();
@@ -280,13 +279,11 @@
             }
 
             try {
-                // อัปเดตเพลงใหม่และข้อความ
                 if (player.src !== url) {
                     player.src = url;
                     titleElement.innerText = title;
                 }
                 
-                // สั่งเล่นเพลงแบบ Async ป้องกัน Browser Autoplay Block
                 await player.play();
                 
                 resetSpeakers();
@@ -297,7 +294,7 @@
                 }
             } catch (error) {
                 console.error("Playback Error: ", error);
-                alert("ไม่สามารถเล่นไฟล์เพลงนี้ได้ ชั่วคราว (กรุณากดปุ่ม Play ที่แถบเล่นเพลงด้านล่างด้วยตนเอง)");
+                alert("กรุณากดปุ่ม Play ที่แถบเล่นเพลงด้านล่างอีกครั้ง");
             }
         }
 
