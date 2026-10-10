@@ -11,6 +11,7 @@
             font-family: Arial, sans-serif;
         }
 
+        /* 🌌 วิดีโอ Background ด้านหลังสุดเต็มหน้าจอ */
         .bg-video {
             position: fixed;
             top: 0;
@@ -21,6 +22,7 @@
             z-index: -1;
         }
 
+        /* 📐 จัดหน้าจอให้คอลัมน์แยกซ้ายสุด-ขวาสุดอย่างสมดุล */
         body {
             background: transparent;
             color: #fff;
@@ -33,6 +35,7 @@
             overflow: hidden;
         }
 
+        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขยับลงมา 90px */
         .column {
             transform: translateY(90px);
             width: 280px;
@@ -42,6 +45,7 @@
             z-index: 2;
         }
 
+        /* 🎬 1. ส่วนภาพหลัก (กลืนกับ BG 100%) */
         .box-media {
             position: relative;
             width: 100%;
@@ -59,13 +63,14 @@
             opacity: 0.9;
         }
 
-        .speaker-icon {
+        /* 💽 แผ่นเสียงหมุนสวยๆ แทนไอคอนลำโพง */
+        .vinyl-icon {
             position: absolute;
             bottom: 20px;
             width: 65px;
             height: 65px;
-            background: radial-gradient(circle, #38bdf8 0%, #0369a1 70%, #0c4a6e 100%);
-            border: 3px solid rgba(255, 255, 255, 0.8);
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 60%, #000 100%);
+            border: 3px solid rgba(56, 189, 248, 0.8);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -73,21 +78,24 @@
             z-index: 10;
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
         }
-        .speaker-icon svg {
-            width: 32px;
-            height: 32px;
-            fill: #fff;
+        .vinyl-center-dot {
+            width: 22px;
+            height: 22px;
+            background: #0ea5e9;
+            border-radius: 50%;
+            border: 2px solid #fff;
         }
 
-        @keyframes pulseSpeaker {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
-            50% { transform: scale(1.12); box-shadow: 0 0 25px rgba(56, 189, 248, 0.9); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+        /* 🌀 อนิเมชันหมุนแผ่นเสียงตอนเพลงเล่น */
+        @keyframes spinVinyl {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .speaker-active {
-            animation: pulseSpeaker 0.8s infinite ease-in-out;
+        .vinyl-active {
+            animation: spinVinyl 2s linear infinite;
         }
 
+        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงบนภาพ */
         .overlay-play-btn {
             position: absolute;
             bottom: 31px;
@@ -116,6 +124,7 @@
             margin-left: 2px;
         }
 
+        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
         .box-sub {
             width: 100%;
             background: rgba(15, 23, 42, 0.85);
@@ -168,6 +177,7 @@
             height: 28px;
         }
 
+        /* Playlist ขวา */
         .playlist-title {
             font-size: 12px;
             font-weight: bold;
@@ -195,15 +205,16 @@
 </head>
 <body>
 
+    <!-- 🌌 วิดีโอพื้นหลัง Background -->
     <video class="bg-video" autoplay loop muted playsinline>
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: ใช้ jsDelivr CDN ดึงเพลงจาก GitHub ของคุณ -->
+    <!-- 👈 ฝั่งซ้าย: Club Mix 2026 -->
     <div class="column">
         <div class="box-media">
-            <div id="speaker-left" class="speaker-icon" style="left: 15px;">
-                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            <div id="vinyl-left" class="vinyl-icon" style="left: 15px;">
+                <div class="vinyl-center-dot"></div>
             </div>
             <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -225,13 +236,13 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา -->
+    <!-- 👉 ฝั่งขวา: DanceMusic.mp3 จาก GitHub ของคุณ -->
     <div class="column">
         <div class="box-media">
-            <div id="speaker-right" class="speaker-icon" style="right: 15px;">
-                <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+            <div id="vinyl-right" class="vinyl-icon" style="right: 15px;">
+                <div class="vinyl-center-dot"></div>
             </div>
-            <button class="overlay-play-btn" style="left: 15px;" onclick="handlePlayToggle('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
+            <button class="overlay-play-btn" style="left: 15px;" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/DanceMusic.mp3', 'Dance Music Mix', 'right')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
             <img src="https://ia600608.us.archive.org/8/items/07_20261010/07.png" alt="Right Image" class="content-img">
@@ -243,9 +254,9 @@
                 <div>#1 BASS BOOSTED CLUB MIX 2026</div>
                 <div class="cat">Category: Club / Dance</div>
             </div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
-                <div>#2 Hit Music 2026</div>
-                <div class="cat">Category: Hits</div>
+            <div class="playlist-item" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/DanceMusic.mp3', 'Dance Music Mix', 'right')">
+                <div>#2 Dance Music Mix</div>
+                <div class="cat">Category: Dance</div>
             </div>
         </div>
     </div>
@@ -253,18 +264,18 @@
     <script>
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
-        const speakerLeft = document.getElementById('speaker-left');
-        const speakerRight = document.getElementById('speaker-right');
+        const vinylLeft = document.getElementById('vinyl-left');
+        const vinylRight = document.getElementById('vinyl-right');
 
-        function resetSpeakers() {
-            speakerLeft.classList.remove('speaker-active');
-            speakerRight.classList.remove('speaker-active');
+        function resetVinyls() {
+            vinylLeft.classList.remove('vinyl-active');
+            vinylRight.classList.remove('vinyl-active');
         }
 
         async function handlePlayToggle(url, title, side) {
             if (player.src === url && !player.paused) {
                 player.pause();
-                resetSpeakers();
+                resetVinyls();
                 return;
             }
 
@@ -276,11 +287,11 @@
                 
                 await player.play();
                 
-                resetSpeakers();
+                resetVinyls();
                 if (side === 'left') {
-                    speakerLeft.classList.add('speaker-active');
+                    vinylLeft.classList.add('vinyl-active');
                 } else if (side === 'right') {
-                    speakerRight.classList.add('speaker-active');
+                    vinylRight.classList.add('vinyl-active');
                 }
             } catch (error) {
                 console.error("Playback Error: ", error);
@@ -288,8 +299,8 @@
             }
         }
 
-        player.onpause = resetSpeakers;
-        player.onended = resetSpeakers;
+        player.onpause = resetVinyls;
+        player.onended = resetVinyls;
     </script>
 </body>
 </html>
