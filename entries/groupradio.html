@@ -10,25 +10,38 @@
             padding: 0;
             font-family: Arial, sans-serif;
         }
+
+        /* 🌌 วิดีโอพื้นหลัง Background เต็มหน้าจอ */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+        }
+
         body {
             background: transparent;
             color: #fff;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start; /* ใช้ค่าเดิมที่กดดังชัวร์ */
+            align-items: flex-start; /* ชิดด้านบนตามค่าเดิมที่กดดัง */
             padding: 10px;
             height: 100vh;
             overflow: hidden;
         }
-        /* เครื่องเล่นวิทยุด้านซ้าย (ใช้ margin-top ดันลงมาตรงกลางแทน เพื่อไม่ให้พิกัดคลิกเพี้ยนใน xat) */
+
+        /* เครื่องเล่นวิทยุด้านซ้าย */
         .player-container {
             width: 280px;
-            margin-top: 120px; /* ปรับตัวเลขนี้เพื่อให้ลงมาตรงกลางตามต้องการ */
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 2;
         }
         .player-header {
             font-size: 12px;
@@ -71,17 +84,17 @@
             height: 35px;
         }
 
-        /* Playlist ด้านขวา (ใช้ margin-top ดันลงมาเท่ากัน) */
+        /* Playlist ด้านขวา */
         .playlist-container {
             width: 280px;
-            margin-top: 120px; /* ปรับตัวเลขนี้เพื่อให้ลงมาตรงกลางตามต้องการ */
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            max-height: 75vh;
+            max-height: 90vh;
             overflow-y: auto;
+            z-index: 2;
         }
         .playlist-title {
             font-size: 14px;
@@ -109,6 +122,11 @@
     </style>
 </head>
 <body>
+
+    <!-- 🌌 วิดีโอพื้นหลัง Background -->
+    <video class="bg-video" autoplay loop muted playsinline>
+        <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
+    </video>
 
     <!-- ส่วนเครื่องเล่นเพลง (ซ้าย)[cite: 1] -->
     <div class="player-container">
