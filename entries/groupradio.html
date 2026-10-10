@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>MYRADIOhit Player - Sapao</title>
+    <title>MYRADIOhit Player - Group Radio</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,9 +27,9 @@
             background: transparent;
             color: #fff;
             display: flex;
-            justify-content: space-between; /* ดึงให้แยกซ้าย-ขวาอยู่คนละฝั่งจอ */
+            justify-content: space-between;
             align-items: flex-start;
-            padding: 20px;                 /* เพิ่มระยะขอบด้านข้างเล็กน้อยไม่ให้ชิดขอบจอเกินไป */
+            padding: 20px;
             width: 100vw;
             height: 100vh;
             overflow: hidden;
@@ -45,22 +45,23 @@
             z-index: 2;
         }
 
-        /* 🎬 1. ส่วนภาพ/วิดีโอหลัก สูง 486px */
+        /* 🎬 1. ส่วนภาพหลัก (เอาพื้นหลังกล่องและกรอบออก ให้กลืนกับวิดีโอ BG 100%) */
         .box-media {
             position: relative;
             width: 100%;
             height: 486px;
-            background: rgba(15, 23, 42, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
+            background: transparent; /* โปร่งใสสนิท ไม่มีกรอบและไม่มีสีพื้นหลังกล่อง */
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .box-media video {
+
+        /* ปรับแต่งภาพซ้าย/ขวาให้กลืนเข้ากับวิดีโอแบ็คกราวด์ด้านหลัง */
+        .box-media img.content-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center top;
+            mix-blend-mode: screen; /* ทำให้ส่วนสีดำของภาพกลืนหายไปกับวิดีโอพื้นหลัง */
+            opacity: 0.9;            /* ความโปร่งใสของภาพ */
         }
 
         /* 🔊 ลำโพงกลมๆ บริเวณแขนเสื้อด้านล่าง (จะขยับเมื่อเพลงเล่น) */
@@ -123,10 +124,10 @@
             margin-left: 2px;
         }
 
-        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
+        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง (ยังคงความคมชัดเพื่อให้ใช้งานกดง่าย) */
         .box-sub {
             width: 100%;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(15, 23, 42, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
             padding: 8px 10px;
@@ -209,7 +210,7 @@
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: วิดีโอ + ลำโพงกลมๆ ซ้ายล่าง + ปุ่มเล่นเพลงฝั่งซ้าย (Latin 2026) -->
+    <!-- 👈 ฝั่งซ้าย: ภาพกลืนกับ BG + ลำโพงกลมๆ ซ้ายล่าง + ปุ่มเล่นเพลงฝั่งซ้าย (Latin 2026) -->
     <div class="column">
         <div class="box-media">
             <!-- ลำโพงกลมๆ -->
@@ -220,9 +221,8 @@
             <button class="overlay-play-btn" style="right: 15px;" onclick="togglePlay('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <video autoplay loop muted playsinline>
-                <source src="https://files.catbox.moe/yc18zg.mp4" type="video/mp4">
-            </video>
+            <!-- ภาพด้านซ้าย -->
+            <img src="https://ia601006.us.archive.org/17/items/06_20261010_202610/06.png" alt="Left Image" class="content-img">
         </div>
 
         <div class="box-sub">
@@ -239,7 +239,7 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: วิดีโอ + ลำโพงกลมๆ ขวาล่าง + ปุ่มเล่นเพลงฝั่งขวา (Catbox) + Playlist -->
+    <!-- 👉 ฝั่งขวา: ภาพกลืนกับ BG + ลำโพงกลมๆ ขวาล่าง + ปุ่มเล่นเพลงฝั่งขวา (Catbox) + Playlist -->
     <div class="column">
         <div class="box-media">
             <!-- ลำโพงกลมๆ -->
@@ -250,9 +250,8 @@
             <button class="overlay-play-btn" style="left: 15px;" onclick="togglePlay('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <video autoplay loop muted playsinline>
-                <source src="https://files.catbox.moe/s9d6v6.mp4" type="video/mp4">
-            </video>
+            <!-- ภาพด้านขวา -->
+            <img src="https://ia600608.us.archive.org/8/items/07_20261010/07.png" alt="Right Image" class="content-img">
         </div>
 
         <div class="box-sub">
