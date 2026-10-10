@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>MYRADIOhit Player - Group Radio</title>
+    <title>GroupRaddio Player</title>
     <style>
         * {
             box-sizing: border-box;
@@ -10,312 +10,136 @@
             padding: 0;
             font-family: Arial, sans-serif;
         }
-
-        /* 🌌 วิดีโอ Background ด้านหลังสุดเต็มหน้าจอ */
-        .bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-        }
-
-        /* 📐 จัดหน้าจอให้คอลัมน์แยกซ้ายสุด-ขวาสุดอย่างสมดุล */
         body {
             background: transparent;
             color: #fff;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            padding: 20px;
-            width: 100vw;
+            padding: 10px;
             height: 100vh;
             overflow: hidden;
         }
-
-        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขยับลงมา 90px */
-        .column {
-            transform: translateY(90px);
+        /* เครื่องเล่นวิทยุด้านซ้าย */
+        .player-container {
             width: 280px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 2;
-        }
-
-        /* 🎬 1. ส่วนภาพหลัก (กลืนกับ BG 100%) */
-        .box-media {
-            position: relative;
-            width: 100%;
-            height: 486px;
-            background: transparent;
-            overflow: hidden;
-        }
-
-        .box-media img.content-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            mix-blend-mode: screen;
-            opacity: 0.9;
-        }
-
-        /* 💽 แผ่นเสียงหมุนสวยๆ */
-        .vinyl-icon {
-            position: absolute;
-            bottom: 20px;
-            width: 65px;
-            height: 65px;
-            background: radial-gradient(circle, #1e293b 0%, #0f172a 60%, #000 100%);
-            border: 3px solid rgba(56, 189, 248, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-        }
-        .vinyl-center-dot {
-            width: 22px;
-            height: 22px;
-            background: #0ea5e9;
-            border-radius: 50%;
-            border: 2px solid #fff;
-        }
-
-        /* 🌀 อนิเมชันหมุนแผ่นเสียงตอนเพลงเล่น */
-        @keyframes spinVinyl {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .vinyl-active {
-            animation: spinVinyl 2s linear infinite;
-        }
-
-        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงบนภาพ */
-        .overlay-play-btn {
-            position: absolute;
-            bottom: 31px;
-            background: rgba(14, 165, 233, 0.9);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
-            z-index: 20;
-        }
-        .overlay-play-btn:hover {
-            background: rgba(56, 189, 248, 1);
-            transform: scale(1.1);
-        }
-        .overlay-play-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-            margin-left: 2px;
-        }
-
-        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
-        .box-sub {
-            width: 100%;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            padding: 8px 10px;
+            padding: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-
-        .player-top {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
+        .player-header {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 10px;
         }
         .vinyl-box {
-            width: 36px;
-            height: 36px;
+            width: 120px;
+            height: 120px;
             background: #000;
             border-radius: 50%;
-            flex-shrink: 0;
+            margin: 15px auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #1e293b;
+            border: 4px solid #1e293b;
+            box-shadow: 0 0 10px rgba(0,0,0,0.8);
         }
         .vinyl-center {
-            width: 12px;
-            height: 12px;
+            width: 40px;
+            height: 40px;
             background: #0ea5e9;
             border-radius: 50%;
         }
-        .player-info {
-            overflow: hidden;
-        }
-        .player-header {
-            font-size: 10px;
-            color: #94a3b8;
+        .now-playing {
+            font-size: 11px;
+            color: #38bdf8;
+            margin-bottom: 5px;
         }
         .track-title {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: bold;
-            color: #38bdf8;
+            margin-bottom: 15px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
         audio {
             width: 100%;
-            height: 28px;
+            height: 35px;
         }
 
-        /* Playlist ขวา */
+        /* Playlist ด้านขวา */
+        .playlist-container {
+            width: 280px;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
         .playlist-title {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 4px;
+            padding-bottom: 5px;
         }
         .playlist-item {
-            padding: 6px;
+            padding: 8px;
+            margin-bottom: 6px;
             background: rgba(30, 41, 59, 0.6);
             border-radius: 4px;
             cursor: pointer;
             transition: 0.2s;
-            font-size: 11px;
-            margin-bottom: 4px;
+            font-size: 12px;
         }
         .playlist-item:hover {
             background: rgba(56, 189, 248, 0.3);
         }
         .playlist-item .cat {
-            font-size: 9px;
+            font-size: 10px;
             color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง Background -->
-    <video class="bg-video" autoplay loop muted playsinline>
-        <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
-    </video>
-
-    <!-- 👈 ฝั่งซ้าย: https://files.catbox.moe/ne1srr.mp3 -->
-    <div class="column">
-        <div class="box-media">
-            <div id="vinyl-left" class="vinyl-icon" style="left: 15px;">
-                <div class="vinyl-center-dot"></div>
-            </div>
-            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://files.catbox.moe/ne1srr.mp3', 'Left Song Track', 'left')">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <img src="https://ia601006.us.archive.org/17/items/06_20261010_202610/06.png" alt="Left Image" class="content-img">
+    <!-- ส่วนเครื่องเล่นเพลง (ซ้าย)[cite: 1] -->
+    <div class="player-container">
+        <div class="player-header">Group Radio Player</div>
+        <div class="vinyl-box">
+            <div class="vinyl-center"></div>
         </div>
-
-        <div class="box-sub">
-            <div class="player-top">
-                <div class="vinyl-box">
-                    <div class="vinyl-center"></div>
-                </div>
-                <div class="player-info">
-                    <div class="player-header">Myradiohit Player</div>
-                    <div class="track-title" id="current-title">Select a track</div>
-                </div>
-            </div>
-            <!-- เพิ่ม crossorigin="anonymous" แก้ปัญหาการดึงไฟล์ข้ามเว็บ -->
-            <audio id="audio-player" controls crossorigin="anonymous" preload="auto"></audio>
-        </div>
+        <div class="now-playing">NOW PLAYING</div>
+        <div class="track-title" id="current-title">Select a track to start[cite: 1]</div>
+        <audio id="audio-player" controls></audio>
     </div>
 
-    <!-- 👉 ฝั่งขวา: https://files.catbox.moe/deel59.mp3 -->
-    <div class="column">
-        <div class="box-media">
-            <div id="vinyl-right" class="vinyl-icon" style="right: 15px;">
-                <div class="vinyl-center-dot"></div>
-            </div>
-            <button class="overlay-play-btn" style="left: 15px;" onclick="handlePlayToggle('https://files.catbox.moe/deel59.mp3', 'Right Song Track', 'right')">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <img src="https://ia600608.us.archive.org/8/items/07_20261010/07.png" alt="Right Image" class="content-img">
+    <!-- ส่วนรายการเพลง Playlist (ขวา)[cite: 1] -->
+    <div class="playlist-container">
+        <div class="playlist-title">Playlist</div>
+        
+        <div class="playlist-item" onclick="playTrack('club mix 2026', 'https://files.catbox.moe/ne1srr.mp3')">
+            <div>clubmix2026</div>
+            <div class="cat">Category: clubmix2026</div>
         </div>
-
-        <div class="box-sub">
-            <div class="playlist-title">Playlist</div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/ne1srr.mp3', 'Left Song Track', 'left')">
-                <div>#1 Left Song Track</div>
-                <div class="cat">Category: Catbox Stream</div>
-            </div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/deel59.mp3', 'Right Song Track', 'right')">
-                <div>#2 Right Song Track</div>
-                <div class="cat">Category: Catbox Stream</div>
-            </div>
-        </div>
+        
+        <!-- เพิ่มเพลงอื่นๆ ต่อตรงนี้ได้เลยโดยใช้รูปแบบด้านบน -->
     </div>
 
     <script>
-        const player = document.getElementById('audio-player');
-        const titleElement = document.getElementById('current-title');
-        const vinylLeft = document.getElementById('vinyl-left');
-        const vinylRight = document.getElementById('vinyl-right');
-
-        let currentSide = null;
-
-        function resetVinyls() {
-            vinylLeft.classList.remove('vinyl-active');
-            vinylRight.classList.remove('vinyl-active');
+        function playTrack(title, url) {
+            const player = document.getElementById('audio-player');
+            const titleElement = document.getElementById('current-title');
+            
+            titleElement.innerText = title;
+            player.src = url;
+            player.play();
         }
-
-        function setVinylActive(side) {
-            resetVinyls();
-            if (side === 'left') {
-                vinylLeft.classList.add('vinyl-active');
-            } else if (side === 'right') {
-                vinylRight.classList.add('vinyl-active');
-            }
-        }
-
-        async function handlePlayToggle(url, title, side) {
-            // ถ้ากดปุ่มซ้ำของเพลงเดิมที่กำลังเล่นอยู่ -> ให้หยุดเล่น
-            if (player.src === url && !player.paused) {
-                player.pause();
-                resetVinyls();
-                return;
-            }
-
-            try {
-                // เปลี่ยน URL เพลงถ้าไม่เหมือนเดิม
-                if (player.src !== url) {
-                    player.src = url;
-                    titleElement.innerText = title;
-                    player.load(); // โหลดไฟล์ใหม่ให้สมบูรณ์
-                }
-                
-                currentSide = side;
-                await player.play();
-                setVinylActive(side);
-
-            } catch (error) {
-                console.error("Playback Error: ", error);
-                // หากถูกเบราว์เซอร์บล็อกการเล่นอัตโนมัติ ให้ผู้ใช้นำเม้าส์ไปกดปุ่ม Play ที่แท็บด้านล่าง
-            }
-        }
-
-        // เมื่อกดเล่นผ่านแถบควบคุมด้านล่างตรงๆ
-        player.onplay = () => {
-            if (currentSide) setVinylActive(currentSide);
-        };
-        player.onpause = resetVinyls;
-        player.onended = resetVinyls;
     </script>
 </body>
 </html>
