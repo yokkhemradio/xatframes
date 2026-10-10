@@ -11,7 +11,6 @@
             font-family: Arial, sans-serif;
         }
 
-        /* 🌌 วิดีโอ Background ด้านหลังสุดเต็มหน้าจอ */
         .bg-video {
             position: fixed;
             top: 0;
@@ -22,7 +21,6 @@
             z-index: -1;
         }
 
-        /* 📐 จัดหน้าจอให้คอลัมน์แยกซ้ายสุด-ขวาสุดอย่างสมดุล */
         body {
             background: transparent;
             color: #fff;
@@ -35,7 +33,6 @@
             overflow: hidden;
         }
 
-        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขยับลงมา 90px */
         .column {
             transform: translateY(90px);
             width: 280px;
@@ -45,7 +42,6 @@
             z-index: 2;
         }
 
-        /* 🎬 1. ส่วนภาพหลัก (กลืนกับ BG 100%) */
         .box-media {
             position: relative;
             width: 100%;
@@ -63,7 +59,6 @@
             opacity: 0.9;
         }
 
-        /* 🔊 ลำโพงกลมๆ บริเวณแขนเสื้อด้านล่าง */
         .speaker-icon {
             position: absolute;
             bottom: 20px;
@@ -84,7 +79,6 @@
             fill: #fff;
         }
 
-        /* 📳 อนิเมชันลำโพงขยับตอนเพลงเล่น */
         @keyframes pulseSpeaker {
             0% { transform: scale(1); box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
             50% { transform: scale(1.12); box-shadow: 0 0 25px rgba(56, 189, 248, 0.9); }
@@ -94,7 +88,6 @@
             animation: pulseSpeaker 0.8s infinite ease-in-out;
         }
 
-        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงบนภาพ */
         .overlay-play-btn {
             position: absolute;
             bottom: 31px;
@@ -123,7 +116,6 @@
             margin-left: 2px;
         }
 
-        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
         .box-sub {
             width: 100%;
             background: rgba(15, 23, 42, 0.85);
@@ -176,7 +168,6 @@
             height: 28px;
         }
 
-        /* Playlist ขวา */
         .playlist-title {
             font-size: 12px;
             font-weight: bold;
@@ -204,18 +195,17 @@
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง Background -->
     <video class="bg-video" autoplay loop muted playsinline>
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: เล่นเพลง clubmix2026.mp3 จาก GitHub ของคุณ -->
+    <!-- 👈 ฝั่งซ้าย: ใช้ jsDelivr CDN ดึงเพลงจาก GitHub ของคุณ -->
     <div class="column">
         <div class="box-media">
             <div id="speaker-left" class="speaker-icon" style="left: 15px;">
                 <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
             </div>
-            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://raw.githubusercontent.com/yokkhemradio/xatframes/main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
+            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
             <img src="https://ia601006.us.archive.org/17/items/06_20261010_202610/06.png" alt="Left Image" class="content-img">
@@ -235,7 +225,7 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: Catbox Hit Music -->
+    <!-- 👉 ฝั่งขวา -->
     <div class="column">
         <div class="box-media">
             <div id="speaker-right" class="speaker-icon" style="right: 15px;">
@@ -249,7 +239,7 @@
 
         <div class="box-sub">
             <div class="playlist-title">Playlist</div>
-            <div class="playlist-item" onclick="handlePlayToggle('https://raw.githubusercontent.com/yokkhemradio/xatframes/main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
+            <div class="playlist-item" onclick="handlePlayToggle('https://cdn.jsdelivr.net/gh/yokkhemradio/xatframes@main/entries/audio/clubmix2026.mp3', 'BASS BOOSTED CLUB MIX 2026', 'left')">
                 <div>#1 BASS BOOSTED CLUB MIX 2026</div>
                 <div class="cat">Category: Club / Dance</div>
             </div>
