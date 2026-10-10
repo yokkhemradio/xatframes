@@ -33,9 +33,10 @@
             overflow: hidden;
         }
 
-        /* เครื่องเล่นวิทยุด้านซ้าย (สไตล์ตามรูปตัวอย่าง) */
+        /* เครื่องเล่นวิทยุด้านซ้าย (เลื่อนลงมาให้เท่ากับส่วนล่างของฝั่งขวา) */
         .player-container {
             width: 310px;
+            margin-top: 260px; /* ปรับระยะให้ลงมาตรงกับส่วนล่างตามต้องการ */
             background: rgba(15, 23, 42, 0.92);
             border: 1px solid rgba(56, 189, 248, 0.3);
             border-radius: 12px;
@@ -69,7 +70,7 @@
             text-overflow: ellipsis;
         }
 
-        /* แผงปุ่มควบคุมสไตล์ใหม่ (Play, Pause, Stop) */
+        /* แผงปุ่มควบคุม */
         .control-panel {
             display: flex;
             align-items: center;
@@ -94,7 +95,7 @@
         .btn-ctrl:hover { transform: scale(1.1); }
         .btn-ctrl svg { width: 16px; height: 16px; fill: currentColor; }
 
-        /* แถบปรับเสียง Volume Slider */
+        /* แถบปรับเสียง */
         .volume-box {
             display: flex;
             align-items: center;
@@ -113,6 +114,7 @@
         /* Playlist ด้านขวา */
         .playlist-container {
             width: 280px;
+            margin-top: 10px;
             background: rgba(15, 23, 42, 0.92);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 8px;
@@ -155,7 +157,7 @@
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย (ดีไซน์ตามรูปตัวอย่าง) -->
+    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย (ขยับลงมาตรงกับส่วนล่าง) -->
     <div class="player-container">
         <div class="player-header">
             <span>🎧 GROUP RADIO MIX</span>
@@ -164,27 +166,22 @@
         <div class="track-title" id="current-title">NOW PLAYING: Select a track</div>
 
         <div class="control-panel">
-            <!-- ปุ่ม Play -->
             <button class="btn-ctrl btn-play" onclick="playAudio()" title="Play">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <!-- ปุ่ม Pause -->
             <button class="btn-ctrl btn-pause" onclick="pauseAudio()" title="Pause">
                 <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <!-- ปุ่ม Stop -->
             <button class="btn-ctrl btn-stop" onclick="stopAudio()" title="Stop">
                 <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
             </button>
         </div>
 
-        <!-- แถบปรับเสียง -->
         <div class="volume-box">
             <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
             <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" oninput="changeVolume(this.value)">
         </div>
 
-        <!-- แท็กเสียงซ่อนไว้เบื้องหลังเพื่อให้ทำงานร่วมกับปุ่มกดได้สมบูรณ์ -->
         <audio id="audio-player"></audio>
     </div>
 
@@ -228,7 +225,6 @@
             if (player.src) {
                 player.play().catch(e => console.log("Play blocked"));
             } else {
-                // ถ้ายังไม่ได้เลือกเพลง ให้เล่นเพลงแรกเป็นค่าเริ่มต้น
                 playTrack('1. Club Mix 2026', 'https://files.catbox.moe/ne1srr.mp3');
             }
         }
