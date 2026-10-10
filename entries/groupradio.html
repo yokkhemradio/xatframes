@@ -45,26 +45,25 @@
             z-index: 2;
         }
 
-        /* 🎬 1. ส่วนภาพหลัก (เอาพื้นหลังกล่องและกรอบออก ให้กลืนกับวิดีโอ BG 100%) */
+        /* 🎬 1. ส่วนภาพหลัก (กลืนกับ BG 100%) */
         .box-media {
             position: relative;
             width: 100%;
             height: 486px;
-            background: transparent; /* โปร่งใสสนิท ไม่มีกรอบและไม่มีสีพื้นหลังกล่อง */
+            background: transparent;
             overflow: hidden;
         }
 
-        /* ปรับแต่งภาพซ้าย/ขวาให้กลืนเข้ากับวิดีโอแบ็คกราวด์ด้านหลัง */
         .box-media img.content-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center top;
-            mix-blend-mode: screen; /* ทำให้ส่วนสีดำของภาพกลืนหายไปกับวิดีโอพื้นหลัง */
-            opacity: 0.9;            /* ความโปร่งใสของภาพ */
+            mix-blend-mode: screen;
+            opacity: 0.9;
         }
 
-        /* 🔊 ลำโพงกลมๆ บริเวณแขนเสื้อด้านล่าง (จะขยับเมื่อเพลงเล่น) */
+        /* 🔊 ลำโพงกลมๆ บริเวณแขนเสื้อด้านล่าง */
         .speaker-icon {
             position: absolute;
             bottom: 20px;
@@ -95,7 +94,7 @@
             animation: pulseSpeaker 0.8s infinite ease-in-out;
         }
 
-        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงสวยๆ แถวเดียวกับลำโพง */
+        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลงบนภาพ */
         .overlay-play-btn {
             position: absolute;
             bottom: 31px;
@@ -124,7 +123,7 @@
             margin-left: 2px;
         }
 
-        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง (ยังคงความคมชัดเพื่อให้ใช้งานกดง่าย) */
+        /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
         .box-sub {
             width: 100%;
             background: rgba(15, 23, 42, 0.85);
@@ -205,23 +204,20 @@
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง Background ด้านหลังสุด -->
+    <!-- 🌌 วิดีโอพื้นหลัง Background -->
     <video class="bg-video" autoplay loop muted playsinline>
         <source src="https://ia601007.us.archive.org/30/items/mo_20261010/mo.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: ภาพกลืนกับ BG + ลำโพงกลมๆ ซ้ายล่าง + ปุ่มเล่นเพลงฝั่งซ้าย (Latin 2026) -->
+    <!-- 👈 ฝั่งซ้าย: Latin 2026 -->
     <div class="column">
         <div class="box-media">
-            <!-- ลำโพงกลมๆ -->
             <div id="speaker-left" class="speaker-icon" style="left: 15px;">
                 <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
             </div>
-            <!-- ปุ่มเล่นเพลงฝั่งซ้าย -->
-            <button class="overlay-play-btn" style="right: 15px;" onclick="togglePlay('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
+            <button class="overlay-play-btn" style="right: 15px;" onclick="handlePlayToggle('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <!-- ภาพด้านซ้าย -->
             <img src="https://ia601006.us.archive.org/17/items/06_20261010_202610/06.png" alt="Left Image" class="content-img">
         </div>
 
@@ -235,32 +231,29 @@
                     <div class="track-title" id="current-title">Select a track</div>
                 </div>
             </div>
-            <audio id="audio-player" controls></audio>
+            <audio id="audio-player" controls preload="metadata"></audio>
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: ภาพกลืนกับ BG + ลำโพงกลมๆ ขวาล่าง + ปุ่มเล่นเพลงฝั่งขวา (Catbox) + Playlist -->
+    <!-- 👉 ฝั่งขวา: Catbox Hit Music -->
     <div class="column">
         <div class="box-media">
-            <!-- ลำโพงกลมๆ -->
             <div id="speaker-right" class="speaker-icon" style="right: 15px;">
                 <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
             </div>
-            <!-- ปุ่มเล่นเพลงฝั่งขวา -->
-            <button class="overlay-play-btn" style="left: 15px;" onclick="togglePlay('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
+            <button class="overlay-play-btn" style="left: 15px;" onclick="handlePlayToggle('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <!-- ภาพด้านขวา -->
             <img src="https://ia600608.us.archive.org/8/items/07_20261010/07.png" alt="Right Image" class="content-img">
         </div>
 
         <div class="box-sub">
             <div class="playlist-title">Playlist</div>
-            <div class="playlist-item" onclick="playTrack('Latin 2026 Mix', 'https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'left')">
+            <div class="playlist-item" onclick="handlePlayToggle('https://ia600604.us.archive.org/13/items/latin-2026/Latin2026.mp3', 'Latin 2026 Mix', 'left')">
                 <div>#1 Latin 2026 Mix</div>
                 <div class="cat">Category: Latin</div>
             </div>
-            <div class="playlist-item" onclick="playTrack('Hit Music 2026', 'https://files.catbox.moe/p6mtsl.mp3', 'right')">
+            <div class="playlist-item" onclick="handlePlayToggle('https://files.catbox.moe/p6mtsl.mp3', 'Hit Music 2026', 'right')">
                 <div>#2 Hit Music 2026</div>
                 <div class="cat">Category: Hits</div>
             </div>
@@ -278,27 +271,23 @@
             speakerRight.classList.remove('speaker-active');
         }
 
-        function playTrack(title, url, side) {
-            titleElement.innerText = title;
-            player.src = url;
-            player.play();
-            
-            resetSpeakers();
-            if (side === 'left') {
-                speakerLeft.classList.add('speaker-active');
-            } else if (side === 'right') {
-                speakerRight.classList.add('speaker-active');
-            }
-        }
-
-        function togglePlay(url, title, side) {
+        async function handlePlayToggle(url, title, side) {
+            // ถ้าเพลงเดียวกันเล่นอยู่แล้ว ให้สั่งหยุด
             if (player.src === url && !player.paused) {
                 player.pause();
                 resetSpeakers();
-            } else {
-                titleElement.innerText = title;
-                player.src = url;
-                player.play();
+                return;
+            }
+
+            try {
+                // อัปเดตเพลงใหม่และข้อความ
+                if (player.src !== url) {
+                    player.src = url;
+                    titleElement.innerText = title;
+                }
+                
+                // สั่งเล่นเพลงแบบ Async ป้องกัน Browser Autoplay Block
+                await player.play();
                 
                 resetSpeakers();
                 if (side === 'left') {
@@ -306,15 +295,14 @@
                 } else if (side === 'right') {
                     speakerRight.classList.add('speaker-active');
                 }
+            } catch (error) {
+                console.error("Playback Error: ", error);
+                alert("ไม่สามารถเล่นไฟล์เพลงนี้ได้ ชั่วคราว (กรุณากดปุ่ม Play ที่แถบเล่นเพลงด้านล่างด้วยตนเอง)");
             }
         }
 
-        player.onpause = function() {
-            resetSpeakers();
-        };
-        player.onended = function() {
-            resetSpeakers();
-        };
+        player.onpause = resetSpeakers;
+        player.onended = resetSpeakers;
     </script>
 </body>
 </html>
