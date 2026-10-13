@@ -6,9 +6,12 @@
     <title>Yokkhemradio Player for XatRadio</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         html, body {
@@ -18,35 +21,310 @@
             background: transparent;
         }
 
-        .radio-frame-container {
-            width: 100vw;
+        body {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px;
+            position: relative;
             height: 100vh;
-            border: none;
-            outline: none;
-            display: block;
-            background: transparent;
         }
 
-        iframe {
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -10;
+            filter: brightness(0.55);
+            pointer-events: none;
+        }
+
+        /* Left and Right Column Containers */
+        .column {
+            transform: translateY(60px);
+            width: 270px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .box-media {
+            position: relative;
             width: 100%;
-            height: 100%;
-            border: 0;
-            outline: 0;
-            background: transparent;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        @keyframes spinLogo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseLogo {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 25px rgba(14, 165, 233, 0.9)); }
+        }
+
+        .watermark-logo-spin {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            pointer-events: none;
+            animation: spinLogo 10s linear infinite;
+        }
+
+        .watermark-logo-pulse {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            pointer-events: none;
+            animation: pulseLogo 3s ease-in-out infinite;
+        }
+
+        .title-badge {
+            margin-top: 10px;
+            margin-bottom: 12px;
+            padding: 5px 14px;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 20px;
+            color: #38bdf8;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            backdrop-filter: blur(4px);
+        }
+
+        .radio-controls-box {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .button-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .btn-ctrl {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .btn-ctrl:hover {
+            transform: scale(1.12);
+            filter: brightness(1.2);
+        }
+
+        .btn-ctrl:active {
+            transform: scale(0.95);
+        }
+
+        .btn-play {
+            background: #10b981;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-pause {
+            background: #f59e0b;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+        }
+
+        .btn-stop {
+            background: #ef4444;
+            color: #ffffff;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-ctrl svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .volume-bar-container {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 20px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(6px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .volume-icon {
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #334155;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #38bdf8;
+            box-shadow: 0 0 8px #38bdf8;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .volume-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
 
-    <div class="radio-frame-container">
-        <iframe 
-            src="https://xatradio.com/player/j2xbsq4vf.html" 
-            allow="autoplay; encrypted-media; microphone; camera"
-            allowtransparency="true"
-            scrolling="no"
-            frameborder="0">
-        </iframe>
+    <!-- Native Audio Stream Engine (Guaranteed to work and play sound on click) -->
+    <audio id="audioEngine" preload="none">
+        <source src="https://files.catbox.moe/0jsiqe.mp3" type="audio/mpeg">
+    </audio>
+
+    <video autoplay loop muted playsinline class="bg-video">
+        <source src="https://files.catbox.moe/7jjbip.mp4" type="video/mp4">
+    </video>
+
+    <!-- Left Column Panel -->
+    <div class="column">
+        <div class="box-media">
+            <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo Spin" class="watermark-logo-spin">
+            <div class="title-badge">📻 YOKKHEM RADIO</div>
+            
+            <div class="radio-controls-box">
+                <div class="button-row">
+                    <button class="btn-ctrl btn-play" onclick="controlAudio('play')" title="เล่น">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button class="btn-ctrl btn-pause" onclick="controlAudio('pause')" title="พัก">
+                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="btn-ctrl btn-stop" onclick="controlAudio('stop')" title="หยุด">
+                        <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="volume-bar-container">
+                    <div class="volume-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                    </div>
+                    <input type="range" class="volume-slider" min="0" max="100" value="80" oninput="setAudioVolume(this.value)">
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- Right Column Panel -->
+    <div class="column">
+        <div class="box-media">
+            <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo Pulse" class="watermark-logo-pulse">
+            <div class="title-badge">🎙️ หยกเข้มเรดิโอ</div>
+            
+            <div class="radio-controls-box">
+                <div class="button-row">
+                    <button class="btn-ctrl btn-play" onclick="controlAudio('play')" title="เล่น">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button class="btn-ctrl btn-pause" onclick="controlAudio('pause')" title="พัก">
+                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="btn-ctrl btn-stop" onclick="controlAudio('stop')" title="หยุด">
+                        <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+                    </button>
+                </div>
+                
+                <div class="volume-bar-container">
+                    <div class="volume-icon">
+                        <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                    </div>
+                    <input type="range" class="volume-slider" min="0" max="100" value="80" oninput="setAudioVolume(this.value)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('audioEngine');
+
+        // Control playback securely
+        function controlAudio(action) {
+            if (!audio) return;
+            
+            if (action === 'play') {
+                audio.play().catch(e => console.log('Playback error:', e));
+            } else if (action === 'pause') {
+                audio.pause();
+            } else if (action === 'stop') {
+                audio.pause();
+                audio.currentTime = 0;
+            }
+        }
+
+        // Control volume and sync sliders on both sides
+        function setAudioVolume(val) {
+            const sliders = document.querySelectorAll('.volume-slider');
+            sliders.forEach(s => s.value = val);
+            
+            if (audio) {
+                audio.volume = val / 100;
+            }
+        }
+
+        // Initialize default volume level on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setAudioVolume(80);
+        });
+    </script>
 </body>
 </html>
