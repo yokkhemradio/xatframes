@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yokkhemradio Dual Columns</title>
+    <title>Yokkhemradio Dual Columns with XatRadio</title>
     <style>
         * {
             box-sizing: border-box;
@@ -28,7 +28,6 @@
             height: 100vh;
         }
 
-        /* 🎬 วิดีโอพื้นหลัง (Background Video) */
         .bg-video {
             position: fixed;
             top: 0;
@@ -41,7 +40,6 @@
             pointer-events: none;
         }
 
-        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ให้แยกห่างกันซ้ายสุด-ขวาสุด */
         .column {
             transform: translateY(60px);
             width: 270px;
@@ -52,7 +50,6 @@
             position: relative;
         }
 
-        /* 🎬 กล่องแสดงโลโก้โปร่งใส 100% */
         .box-media {
             position: relative;
             width: 100%;
@@ -69,21 +66,19 @@
             padding: 10px;
         }
 
-        /* 🔄 อนิเมชันโลโก้หมุนวนลูปฝั่งซ้าย */
         @keyframes spinLogo {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        /* 💓 อนิเมชันโลโก้เต้นตามจังหวะฝั่งขวา */
         @keyframes pulseLogo {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6)); }
             50% { transform: scale(1.08); filter: drop-shadow(0 0 25px rgba(14, 165, 233, 0.9)); }
         }
 
         .watermark-logo-spin {
-            width: 130px;
-            height: 130px;
+            width: 110px;
+            height: 110px;
             object-fit: contain;
             z-index: 10;
             pointer-events: none;
@@ -91,231 +86,77 @@
         }
 
         .watermark-logo-pulse {
-            width: 130px;
-            height: 130px;
+            width: 110px;
+            height: 110px;
             object-fit: contain;
             z-index: 10;
             pointer-events: none;
             animation: pulseLogo 3s ease-in-out infinite;
         }
 
-        /* 🏷️ กล่องข้อความพรีเมียมโปร่งใส */
         .title-badge {
-            margin-top: 10px;
-            margin-bottom: 5px;
-            padding: 5px 14px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            padding: 4px 12px;
             background: rgba(14, 165, 233, 0.15);
             border: 1px solid rgba(56, 189, 248, 0.4);
             border-radius: 20px;
             color: #38bdf8;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             letter-spacing: 1px;
             text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
         }
 
-        /* 🎛️ แผงควบคุมวิทยุสไตล์โมเดิร์น (พื้นหลังโปร่งใส) */
-        .radio-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+        .radio-frame-container {
             width: 100%;
+            height: 75px;
             background: transparent;
-            padding: 5px;
-        }
-
-        /* กลุ่มปุ่มควบคุม (เล่น, พัก, หยุด) */
-        .btn-group {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .control-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
             border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.2s ease;
+            margin-bottom: 8px;
         }
 
-        .control-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: #ffffff;
-        }
-
-        .btn-play {
-            background: #10b981; /* สีเขียว */
-        }
-        .btn-play:hover {
-            background: #059669;
-            transform: scale(1.08);
-        }
-
-        .btn-pause {
-            background: #f59e0b; /* สีส้มเหลือง */
-        }
-        .btn-pause:hover {
-            background: #d97706;
-            transform: scale(1.08);
-        }
-
-        .btn-stop {
-            background: #ef4444; /* สีแดง */
-        }
-        .btn-stop:hover {
-            background: #dc2626;
-            transform: scale(1.08);
-        }
-
-        /* แถบปรับระดับเสียง */
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 85%;
-            background: rgba(15, 23, 42, 0.4);
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            backdrop-filter: blur(4px);
-        }
-
-        .volume-container svg {
-            width: 16px;
-            height: 16px;
-            fill: #38bdf8;
-            flex-shrink: 0;
-        }
-
-        .volume-slider {
-            flex-grow: 1;
-            height: 6px;
-            -webkit-appearance: none;
-            appearance: none;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 3px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #0ea5e9;
-            cursor: pointer;
-            box-shadow: 0 0 6px rgba(14, 165, 233, 0.8);
+        .radio-frame-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: transparent;
         }
     </style>
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง -->
     <video autoplay loop muted playsinline class="bg-video">
         <source src="https://files.catbox.moe/7jjbip.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 คอลัมน์ฝั่งซ้าย: โลโก้หมุน + แผงควบคุมวิทยุ -->
     <div class="column">
         <div class="box-media">
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo Spin" class="watermark-logo-spin">
             <div class="title-badge">📻 YOKKHEM RADIO</div>
             
-            <div class="radio-controls">
-                <div class="btn-group">
-                    <button class="control-btn btn-play" onclick="playAudio('audio-left', 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3')" title="เล่น">
-                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
-                    <button class="control-btn btn-pause" onclick="pauseAudio('audio-left')" title="พัก">
-                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                    <button class="control-btn btn-stop" onclick="stopAudio('audio-left')" title="หยุด">
-                        <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-                    </button>
-                </div>
-                <div class="volume-container">
-                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                    <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" oninput="setVolume('audio-left', this.value)">
-                </div>
+            <div class="radio-frame-container">
+                <iframe id="radioFrame1" src="https://xatradio.com/player/j2xbsq4vf.html" allow="autoplay"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 👉 คอลัมน์ฝั่งขวา: โลโก้เรืองแสง + แผงควบคุมวิทยุ -->
     <div class="column">
         <div class="box-media">
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo Pulse" class="watermark-logo-pulse">
             <div class="title-badge">🎙️ หยกเข้มเรดิโอ</div>
             
-            <div class="radio-controls">
-                <div class="btn-group">
-                    <button class="control-btn btn-play" onclick="playAudio('audio-right', 'https://files.catbox.moe/0jsiqe.mp3')" title="เล่น">
-                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                    </button>
-                    <button class="control-btn btn-pause" onclick="pauseAudio('audio-right')" title="พัก">
-                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-                    </button>
-                    <button class="control-btn btn-stop" onclick="stopAudio('audio-right')" title="หยุด">
-                        <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-                    </button>
-                </div>
-                <div class="volume-container">
-                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                    <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" oninput="setVolume('audio-right', this.value)">
-                </div>
+            <div class="radio-frame-container">
+                <iframe id="radioFrame2" src="https://xatradio.com/player/j2xbsq4vf.html" allow="autoplay"></iframe>
             </div>
         </div>
     </div>
 
-    <!-- 🎵 เครื่องเล่นเสียงแยกอิสระซ้าย/ขวา -->
-    <audio id="audio-left" preload="none"></audio>
-    <audio id="audio-right" preload="none"></audio>
-
-    <script>
-        function playAudio(audioId, url) {
-            const player = document.getElementById(audioId);
-            const leftPlayer = document.getElementById('audio-left');
-            const rightPlayer = document.getElementById('audio-right');
-
-            // หยุดอีกฝั่งหนึ่งเพื่อไม่ให้เสียงตีกัน
-            if (audioId === 'audio-left') {
-                rightPlayer.pause();
-            } else {
-                leftPlayer.pause();
-            }
-
-            if (player.src !== url) {
-                player.src = url;
-            }
-            player.play().catch(e => console.log('Audio autoplay blocked', e));
-        }
-
-        function pauseAudio(audioId) {
-            const player = document.getElementById(audioId);
-            player.pause();
-        }
-
-        function stopAudio(audioId) {
-            const player = document.getElementById(audioId);
-            player.pause();
-            player.currentTime = 0;
-        }
-
-        function setVolume(audioId, volume) {
-            const player = document.getElementById(audioId);
-            player.volume = volume;
-        }
-    </script>
 </body>
 </html>
