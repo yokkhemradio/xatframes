@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MYRADIOhit Player & Vertical Snooker</title>
+    <title>Yokkhemradio Player & Vertical Snooker</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none;
             -webkit-user-select: none;
             -webkit-touch-callout: none;
@@ -23,8 +23,9 @@
         body {
             color: #fff;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
             padding: 10px;
             position: relative;
         }
@@ -38,14 +39,13 @@
             height: 100vh;
             object-fit: cover;
             z-index: 0;
-            filter: brightness(0.6);
+            filter: brightness(0.55);
             pointer-events: none;
         }
 
         /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ให้ตรงกับ xat layout */
         .column {
-            margin-top: 80px;
-            width: 280px;
+            width: 270px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -53,16 +53,16 @@
             position: relative;
         }
 
-        /* 🎬 1. ส่วนกล่องแสดงโลโก้หมุน สูง 486px */
+        /* 🎬 1. ส่วนกล่องแสดงโลโก้หมุน พรีเมียม */
         .box-media {
             position: relative;
             width: 100%;
-            height: 486px;
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
+            height: 480px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85), rgba(30, 41, 59, 0.85));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(56, 189, 248, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -75,52 +75,54 @@
         }
 
         .watermark-logo {
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             object-fit: contain;
             z-index: 10;
             pointer-events: none;
-            animation: spinLogo 6s linear infinite;
+            animation: spinLogo 8s linear infinite;
+            filter: drop-shadow(0 0 10px rgba(56,189,248,0.5));
         }
 
         /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลง */
         .overlay-play-btn {
             position: absolute;
             bottom: 20px;
-            right: 15px;
-            background: rgba(14, 165, 233, 0.9);
+            right: 20px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 46px;
-            height: 46px;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.5);
+            transition: all 0.3s ease;
             z-index: 20;
         }
         .overlay-play-btn:hover {
-            background: rgba(56, 189, 248, 1);
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
             transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.8);
         }
         .overlay-play-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             fill: currentColor;
             margin-left: 2px;
         }
 
-        /* 🎱 กล่องเกมสนุกเกอร์ฝั่งขวา */
+        /* 🎱 กล่องเกมสนุกเกอร์ฝั่งขวา ดีไซน์พรีเมียม */
         .snooker-container {
             width: 100%;
-            height: 486px;
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+            height: 480px;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.9));
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 14px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6), inset 0 0 15px rgba(56, 189, 248, 0.1);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -129,80 +131,80 @@
         }
 
         .snooker-header {
-            padding: 8px;
+            padding: 10px;
             background: rgba(0, 0, 0, 0.6);
-            font-size: 12px;
+            font-size: 14px;
             text-align: center;
             color: #38bdf8;
             font-weight: bold;
+            letter-spacing: 0.5px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            pointer-events: none;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         canvas {
             display: block;
             width: 100%;
-            height: calc(100% - 36px);
+            height: 380px;
+            background: #065F46;
             cursor: crosshair;
             touch-action: none;
-            position: relative;
-            z-index: 30;
         }
 
-        .snooker-controls {
-            padding: 6px 12px;
-            background: rgba(0, 0, 0, 0.7);
+        /* แผงแสดงคะแนนและรีเซ็ตด้านล่าง */
+        .snooker-panel {
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 11px;
-            z-index: 30;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px;
         }
 
         .reset-btn {
-            background: #0ea5e9;
-            color: white;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            color: #fff;
             border: none;
-            padding: 5px 12px;
-            border-radius: 4px;
+            padding: 6px 14px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: bold;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(14, 165, 233, 0.4);
         }
-        .reset-btn:hover { background: #38bdf8; }
-
-        .hint-text {
-            color: #a7f3d0;
-            font-size: 10px;
+        .reset-btn:hover { 
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง (Background Video) -->
+    <!-- 🌌 วิดีโอพื้นหลัง -->
     <video autoplay loop muted playsinline class="bg-video">
         <source src="https://files.catbox.moe/7jjbip.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 ฝั่งซ้าย: โลโก้หมุน + ปุ่มเล่นเพลงอย่างเดียว -->
+    <!-- 👈 ฝั่งซ้าย: โลโก้หมุนพรีเมียม + ปุ่มเล่นเพลง -->
     <div class="column">
         <div class="box-media">
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo">
-            <button class="overlay-play-btn" onclick="togglePlay('https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3')">
+            <button class="overlay-play-btn" onclick="togglePlay('https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3')" title="เล่น/หยุดเพลง">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: เกมสนุกเกอร์แนวตั้ง -->
+    <!-- 👉 ฝั่งขวา: เกมสนุกเกอร์แนวตั้งพรีเมียม -->
     <div class="column">
         <div class="snooker-container">
-            <div class="snooker-header">🎱 xat Vertical Snooker</div>
+            <div class="snooker-header">🎱 หยกเข้มเรดิโอ</div>
             <canvas id="snookerCanvas"></canvas>
-            <div class="snooker-controls">
-                <span>คะแนน: <b id="score" style="color:#f59e0b;">0</b></span>
-                <span class="hint-text">คลิกเพื่อยิง!</span>
+            
+            <div class="snooker-panel">
+                <span>คะแนน: <b id="score" style="color:#f59e0b; font-size:15px; margin-left:4px;">0</b></span>
                 <button class="reset-btn" onclick="initSnooker()">เริ่มใหม่</button>
             </div>
         </div>
@@ -211,7 +213,6 @@
     <audio id="audio-player"></audio>
 
     <script>
-        // 🎵 ระบบเล่นเสียงเพลง
         function togglePlay(url) {
             const player = document.getElementById('audio-player');
             if (player.src === url && !player.paused) {
@@ -222,35 +223,31 @@
             }
         }
 
-        // 🎱 สคริปต์เกมสนุกเกอร์
         const canvas = document.getElementById('snookerCanvas');
         const ctx = canvas.getContext('2d');
 
         let balls = [];
         let pockets = [];
         let score = 0;
-        
-        let mousePos = { x: 140, y: 100 };
+        let aimAngle = -Math.PI / 2;
         const BALL_RADIUS = 7;
-        const FRICTION = 0.985;
-        const HIT_POWER = 13; // กำหนดความแรงในการแทง
+        const FRICTION = 0.982;
+        const HIT_POWER = 11;
+
+        // ตัวแปรสำหรับ xatframe Mouse/Touch Handler
+        let mouseX = 135;
+        let mouseY = 100;
 
         function resizeCanvas() {
-            const rect = canvas.getBoundingClientRect();
-            if (rect.width > 0 && rect.height > 0) {
-                canvas.width = rect.width;
-                canvas.height = rect.height;
-            } else {
-                canvas.width = 280;
-                canvas.height = 450;
-            }
+            canvas.width = 270;
+            canvas.height = 380;
             initSnooker();
         }
 
         function initSnooker() {
-            if (!canvas.width || !canvas.height) return;
             balls = [];
             score = 0;
+            aimAngle = -Math.PI / 2;
             document.getElementById('score').innerText = score;
 
             const w = canvas.width;
@@ -270,14 +267,14 @@
             // ⚪ ลูกขาว (ด้านล่าง)
             balls.push({
                 x: w / 2,
-                y: h - 80,
+                y: h - 70,
                 vx: 0, vy: 0,
                 color: '#FFFFFF',
                 isWhite: true
             });
 
             // 🔴 ลูกสีเรียงสามเหลี่ยม (ด้านบน)
-            const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#F97316', '#14B8A6'];
+            const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#F97316', '#14B8A6', '#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#F97316'];
             const startX = w / 2;
             const startY = 80;
             const rows = 5; 
@@ -298,10 +295,53 @@
             }
         }
 
+        function getCanvasPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (canvas.width / rect.width),
+                y: (clientY - rect.top) * (canvas.height / rect.height)
+            };
+        }
+
+        function updateAim(e) {
+            const pos = getCanvasPos(e);
+            const whiteBall = balls.find(b => b.isWhite);
+            if (whiteBall) {
+                mouseX = pos.x;
+                mouseY = pos.y;
+                aimAngle = Math.atan2(mouseY - whiteBall.y, mouseX - whiteBall.x);
+            }
+        }
+
+        function shoot() {
+            const whiteBall = balls.find(b => b.isWhite);
+            const isMoving = balls.some(b => Math.hypot(b.vx, b.vy) > 0.1);
+
+            if (whiteBall && !isMoving) {
+                whiteBall.vx = Math.cos(aimAngle) * HIT_POWER;
+                whiteBall.vy = Math.sin(aimAngle) * HIT_POWER;
+            }
+        }
+
+        // Event Listeners ทำงานแม่นยำบน xatframe
+        canvas.addEventListener('mousemove', updateAim);
+        canvas.addEventListener('touchmove', (e) => { updateAim(e); e.preventDefault(); }, { passive: false });
+
+        canvas.addEventListener('click', (e) => {
+            updateAim(e);
+            shoot();
+        });
+        canvas.addEventListener('touchend', (e) => {
+            shoot();
+            e.preventDefault();
+        }, { passive: false });
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // พื้นโต๊ะสนุกเกอร์
+            // พื้นโต๊ะสนุกเกอร์สีเขียวเข้มพรีเมียม
             ctx.fillStyle = '#065F46';
             ctx.fillRect(6, 6, canvas.width - 12, canvas.height - 12);
             ctx.strokeStyle = '#047857';
@@ -312,20 +352,12 @@
             pockets.forEach(p => {
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                ctx.fillStyle = '#111827';
+                ctx.fillStyle = '#0f172a';
                 ctx.fill();
-                ctx.strokeStyle = '#374151';
-                ctx.lineWidth = 1;
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 1.5;
                 ctx.stroke();
             });
-
-            // เส้นเมือง (เส้นขาวโซนตั้งลูก)
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(255,255,255,0.25)';
-            ctx.lineWidth = 1;
-            ctx.moveTo(10, canvas.height - 80);
-            ctx.lineTo(canvas.width - 10, canvas.height - 80);
-            ctx.stroke();
 
             // วาดลูกสนุกเกอร์
             balls.forEach(b => {
@@ -338,51 +370,37 @@
                 ctx.stroke();
             });
 
-            // เล็งและไม้คิว
+            // วาดเส้นเล็งและไม้คิว
             const whiteBall = balls.find(b => b.isWhite);
-            const isMoving = balls.some(b => Math.abs(b.vx) > 0.05 || Math.abs(b.vy) > 0.05);
+            const isMoving = balls.some(b => Math.hypot(b.vx, b.vy) > 0.1);
 
             if (whiteBall && !isMoving) {
-                const dx = mousePos.x - whiteBall.x;
-                const dy = mousePos.y - whiteBall.y;
-                const aimAngle = Math.atan2(dy, dx);
-
-                // 🎯 1. เส้นเล็งทิศทาง
+                // เส้นเล็ง
                 ctx.beginPath();
                 ctx.setLineDash([4, 4]);
                 ctx.moveTo(whiteBall.x, whiteBall.y);
                 ctx.lineTo(
-                    whiteBall.x + Math.cos(aimAngle) * 300,
-                    whiteBall.y + Math.sin(aimAngle) * 300
+                    whiteBall.x + Math.cos(aimAngle) * 180,
+                    whiteBall.y + Math.sin(aimAngle) * 180
                 );
                 ctx.strokeStyle = '#38bdf8';
                 ctx.lineWidth = 1.5;
                 ctx.stroke();
                 ctx.setLineDash([]);
 
-                // 🏏 2. ไม้คิวจ่ออยู่ฝั่งตรงข้ามเป้าหมาย
-                const cueLength = 120;
+                // ไม้คิว
+                const cueLength = 90;
                 const cueGap = BALL_RADIUS + 6;
-
                 const cueStartX = whiteBall.x - Math.cos(aimAngle) * cueGap;
                 const cueStartY = whiteBall.y - Math.sin(aimAngle) * cueGap;
                 const cueEndX = cueStartX - Math.cos(aimAngle) * cueLength;
                 const cueEndY = cueStartY - Math.sin(aimAngle) * cueLength;
 
-                // ด้ามไม้คิว
                 ctx.beginPath();
                 ctx.moveTo(cueStartX, cueStartY);
                 ctx.lineTo(cueEndX, cueEndY);
                 ctx.lineWidth = 4;
                 ctx.strokeStyle = '#d97706';
-                ctx.stroke();
-
-                // หัวไม้คิว
-                ctx.beginPath();
-                ctx.moveTo(cueStartX, cueStartY);
-                ctx.lineTo(cueStartX - Math.cos(aimAngle) * 6, cueStartY - Math.sin(aimAngle) * 6);
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#ffffff';
                 ctx.stroke();
             }
         }
@@ -394,27 +412,25 @@
                 b.vx *= FRICTION;
                 b.vy *= FRICTION;
 
-                if (Math.abs(b.vx) < 0.04) b.vx = 0;
-                if (Math.abs(b.vy) < 0.04) b.vy = 0;
+                if (Math.abs(b.vx) < 0.03) b.vx = 0;
+                if (Math.abs(b.vy) < 0.03) b.vy = 0;
 
-                // การชนขอบโต๊ะ
+                // ชนขอบ
                 if (b.x - BALL_RADIUS < 6) { b.x = 6 + BALL_RADIUS; b.vx *= -1; }
                 if (b.x + BALL_RADIUS > canvas.width - 6) { b.x = canvas.width - 6 - BALL_RADIUS; b.vx *= -1; }
                 if (b.y - BALL_RADIUS < 6) { b.y = 6 + BALL_RADIUS; b.vy *= -1; }
                 if (b.y + BALL_RADIUS > canvas.height - 6) { b.y = canvas.height - 6 - BALL_RADIUS; b.vy *= -1; }
 
-                // ตรวจการลงหลุม
+                // ลงหลุม
                 pockets.forEach(p => {
                     const dist = Math.hypot(b.x - p.x, b.y - p.y);
                     if (dist < p.r) {
                         if (b.isWhite) {
-                            // ลูกขาวลงหลุม -> รีเซ็ตกลับจุดเดิม
                             b.x = canvas.width / 2;
-                            b.y = canvas.height - 80;
+                            b.y = canvas.height - 70;
                             b.vx = 0;
                             b.vy = 0;
                         } else {
-                            // ลูกสีลงหลุม -> บวกคะแนน
                             balls.splice(i, 1);
                             score += 10;
                             document.getElementById('score').innerText = score;
@@ -423,11 +439,12 @@
                 });
             });
 
-            // ตรวจการชนกันระหว่างลูกบอล
+            // ชนกันเอง
             for (let i = 0; i < balls.length; i++) {
                 for (let j = i + 1; j < balls.length; j++) {
                     const b1 = balls[i];
                     const b2 = balls[j];
+                    if (!b2) continue;
                     const dx = b2.x - b1.x;
                     const dy = b2.y - b1.y;
                     const dist = Math.hypot(dx, dy);
@@ -463,65 +480,9 @@
             requestAnimationFrame(loop);
         }
 
-        // คำนวณพิกัดเมาส์/นิ้วให้แม่นยำแม้รันอยู่ใน xatframe
-        function getCanvasPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            let clientX, clientY;
-
-            if (e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else if (e.changedTouches && e.changedTouches.length > 0) {
-                clientX = e.changedTouches[0].clientX;
-                clientY = e.changedTouches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
-            }
-
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
-        }
-
-        function updateAim(e) {
-            mousePos = getCanvasPos(e);
-        }
-
-        function shootBall(e) {
-            if (e.cancelable) e.preventDefault();
-            mousePos = getCanvasPos(e);
-
-            const whiteBall = balls.find(b => b.isWhite);
-            const isMoving = balls.some(b => Math.abs(b.vx) > 0.05 || Math.abs(b.vy) > 0.05);
-
-            if (whiteBall && !isMoving) {
-                const dx = mousePos.x - whiteBall.x;
-                const dy = mousePos.y - whiteBall.y;
-                const aimAngle = Math.atan2(dy, dx);
-
-                // ยิงลูกขาวพุ่งตรงไปยังตำแหน่งเล็ง
-                whiteBall.vx = Math.cos(aimAngle) * HIT_POWER;
-                whiteBall.vy = Math.sin(aimAngle) * HIT_POWER;
-            }
-        }
-
-        // ผูก Event Listeners สำหรับ Desktop & Mobile Touch Screen
-        canvas.addEventListener('mousemove', updateAim, false);
-        canvas.addEventListener('click', shootBall, false);
-
-        canvas.addEventListener('touchmove', (e) => { updateAim(e); if(e.cancelable) e.preventDefault(); }, { passive: false });
-        canvas.addEventListener('touchstart', (e) => { updateAim(e); }, { passive: false });
-        canvas.addEventListener('touchend', shootBall, { passive: false });
-
-        window.addEventListener('resize', resizeCanvas);
-
         window.onload = () => {
-            setTimeout(() => {
-                resizeCanvas();
-                loop();
-            }, 100);
+            resizeCanvas();
+            loop();
         };
     </script>
 </body>
