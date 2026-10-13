@@ -41,22 +41,21 @@
             pointer-events: none;
         }
 
-        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ให้แยกห่างกันซ้ายสุด-ขวาสุดเหมือนเดิม */
+        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ให้แยกห่างกันซ้ายสุด-ขวาสุด */
         .column {
-            transform: translateY(90px);
+            transform: translateY(60px);
             width: 270px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 15px;
             z-index: 10;
             position: relative;
         }
 
-        /* 🎬 กล่องแสดงโลโก้พรีเมียม (ปรับโปร่งใส) */
+        /* 🎬 กล่องแสดงโลโก้โปร่งใส 100% */
         .box-media {
             position: relative;
             width: 100%;
-            height: 486px;
             background: transparent;
             border: none;
             border-radius: 16px;
@@ -67,6 +66,7 @@
             align-items: center;
             justify-content: center;
             backdrop-filter: none;
+            padding: 10px;
         }
 
         /* 🔄 อนิเมชันโลโก้หมุนวนลูปฝั่งซ้าย */
@@ -82,8 +82,8 @@
         }
 
         .watermark-logo-spin {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             object-fit: contain;
             z-index: 10;
             pointer-events: none;
@@ -91,56 +91,131 @@
         }
 
         .watermark-logo-pulse {
-            width: 140px;
-            height: 140px;
+            width: 130px;
+            height: 130px;
             object-fit: contain;
             z-index: 10;
             pointer-events: none;
             animation: pulseLogo 3s ease-in-out infinite;
         }
 
-        /* 🏷️ กล่องข้อความพรีเมียม */
+        /* 🏷️ กล่องข้อความพรีเมียมโปร่งใส */
         .title-badge {
-            margin-top: 15px;
-            padding: 6px 16px;
-            background: rgba(14, 165, 233, 0.2);
-            border: 1px solid rgba(56, 189, 248, 0.5);
+            margin-top: 10px;
+            margin-bottom: 5px;
+            padding: 5px 14px;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.4);
             border-radius: 20px;
             color: #38bdf8;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             letter-spacing: 1px;
             text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
         }
 
-        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลง */
-        .overlay-play-btn {
-            position: absolute;
-            bottom: 25px;
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-            color: #fff;
+        /* 🎛️ แผงควบคุมวิทยุสไตล์โมเดิร์น (พื้นหลังโปร่งใส) */
+        .radio-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            background: transparent;
+            padding: 5px;
+        }
+
+        /* กลุ่มปุ่มควบคุม (เล่น, พัก, หยุด) */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
             border: none;
-            border-radius: 50px;
-            padding: 10px 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .control-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #ffffff;
+        }
+
+        .btn-play {
+            background: #10b981; /* สีเขียว */
+        }
+        .btn-play:hover {
+            background: #059669;
+            transform: scale(1.08);
+        }
+
+        .btn-pause {
+            background: #f59e0b; /* สีส้มเหลือง */
+        }
+        .btn-pause:hover {
+            background: #d97706;
+            transform: scale(1.08);
+        }
+
+        .btn-stop {
+            background: #ef4444; /* สีแดง */
+        }
+        .btn-stop:hover {
+            background: #dc2626;
+            transform: scale(1.08);
+        }
+
+        /* แถบปรับระดับเสียง */
+        .volume-container {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 13px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.5);
-            transition: all 0.3s ease;
-            z-index: 20;
+            width: 85%;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            backdrop-filter: blur(4px);
         }
-        .overlay-play-btn:hover {
-            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.8);
-        }
-        .overlay-play-btn svg {
+
+        .volume-container svg {
             width: 16px;
             height: 16px;
-            fill: currentColor;
+            fill: #38bdf8;
+            flex-shrink: 0;
+        }
+
+        .volume-slider {
+            flex-grow: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(14, 165, 233, 0.8);
         }
     </style>
 </head>
@@ -151,61 +226,95 @@
         <source src="https://files.catbox.moe/7jjbip.mp4" type="video/mp4">
     </video>
 
-    <!-- 👈 คอลัมน์ฝั่งซ้าย: โลโก้หมุน + ปุ่มควบคุมเพลงเดิม -->
+    <!-- 👈 คอลัมน์ฝั่งซ้าย: โลโก้หมุน + แผงควบคุมวิทยุ -->
     <div class="column">
         <div class="box-media">
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo Spin" class="watermark-logo-spin">
             <div class="title-badge">📻 YOKKHEM RADIO</div>
-            <button class="overlay-play-btn" onclick="togglePlay('audio-left', 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3', 'play-text-left')">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <span id="play-text-left">เล่นเพลง</span>
-            </button>
+            
+            <div class="radio-controls">
+                <div class="btn-group">
+                    <button class="control-btn btn-play" onclick="playAudio('audio-left', 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3')" title="เล่น">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button class="control-btn btn-pause" onclick="pauseAudio('audio-left')" title="พัก">
+                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="control-btn btn-stop" onclick="stopAudio('audio-left')" title="หยุด">
+                        <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+                    </button>
+                </div>
+                <div class="volume-container">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" oninput="setVolume('audio-left', this.value)">
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- 👉 คอลัมน์ฝั่งขวา: โลโก้เรืองแสง + เพลงใหม่ของคุณ -->
+    <!-- 👉 คอลัมน์ฝั่งขวา: โลโก้เรืองแสง + แผงควบคุมวิทยุ -->
     <div class="column">
         <div class="box-media">
             <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo Pulse" class="watermark-logo-pulse">
             <div class="title-badge">🎙️ หยกเข้มเรดิโอ</div>
-            <button class="overlay-play-btn" onclick="togglePlay('audio-right', 'https://files.catbox.moe/0jsiqe.mp3', 'play-text-right')">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                <span id="play-text-right">เล่นเพลง</span>
-            </button>
+            
+            <div class="radio-controls">
+                <div class="btn-group">
+                    <button class="control-btn btn-play" onclick="playAudio('audio-right', 'https://files.catbox.moe/0jsiqe.mp3')" title="เล่น">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                    <button class="control-btn btn-pause" onclick="pauseAudio('audio-right')" title="พัก">
+                        <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </button>
+                    <button class="control-btn btn-stop" onclick="stopAudio('audio-right')" title="หยุด">
+                        <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+                    </button>
+                </div>
+                <div class="volume-container">
+                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" oninput="setVolume('audio-right', this.value)">
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- 🎵 เครื่องเล่นเสียงแยกอิสระซ้าย/ขวา -->
-    <audio id="audio-left"></audio>
-    <audio id="audio-right"></audio>
+    <audio id="audio-left" preload="none"></audio>
+    <audio id="audio-right" preload="none"></audio>
 
     <script>
-        function togglePlay(audioId, url, textId) {
+        function playAudio(audioId, url) {
             const player = document.getElementById(audioId);
             const leftPlayer = document.getElementById('audio-left');
             const rightPlayer = document.getElementById('audio-right');
-            const btnText = document.getElementById(textId);
-            const textLeft = document.getElementById('play-text-left');
-            const textRight = document.getElementById('play-text-right');
 
-            // หยุดเพลงฝั่งตรงข้ามเพื่อให้เล่นไม่ทับกัน
+            // หยุดอีกฝั่งหนึ่งเพื่อไม่ให้เสียงตีกัน
             if (audioId === 'audio-left') {
                 rightPlayer.pause();
-                if(textRight) textRight.innerText = "เล่นเพลง";
             } else {
                 leftPlayer.pause();
-                if(textLeft) textLeft.innerText = "เล่นเพลง";
             }
 
-            if (player.src === url && !player.paused) {
-                player.pause();
-                if(btnText) btnText.innerText = "เล่นเพลง";
-            } else {
+            if (player.src !== url) {
                 player.src = url;
-                player.play().then(() => {
-                    if(btnText) btnText.innerText = "หยุดเพลง";
-                }).catch(e => console.log('Audio autoplay blocked'));
             }
+            player.play().catch(e => console.log('Audio autoplay blocked', e));
+        }
+
+        function pauseAudio(audioId) {
+            const player = document.getElementById(audioId);
+            player.pause();
+        }
+
+        function stopAudio(audioId) {
+            const player = document.getElementById(audioId);
+            player.pause();
+            player.currentTime = 0;
+        }
+
+        function setVolume(audioId, volume) {
+            const player = document.getElementById(audioId);
+            player.volume = volume;
         }
     </script>
 </body>
