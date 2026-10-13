@@ -309,7 +309,6 @@
             // เล็ง & แทง
             const whiteBall = balls.find(b => b.isWhite);
             if (whiteBall && whiteBall.vx === 0 && whiteBall.vy === 0) {
-                // คำนวณมุมชี้จากลูกขาวไปหาเมาส์
                 const dx = mousePos.x - whiteBall.x;
                 const dy = mousePos.y - whiteBall.y;
                 const aimAngle = Math.atan2(dy, dx); 
@@ -333,16 +332,14 @@
                 ctx.fillStyle = '#38bdf8';
                 ctx.fill();
 
-                // 2. ไม้คิววางอยู่ด้านหลังลูกขาว (หัวไม้ชี้เข้าหาลูกขาวและชี้ไปทิศทางเล็ง)
+                // 2. ไม้คิววางอยู่ด้านหลังลูกขาว
                 const cueLen = 120;
-                const cueOffset = BALL_RADIUS + 4 + pullDistance * 0.4; // ระยะห่างไม้คิวที่ถอยออกเมื่อดึงง้าง
+                const cueOffset = BALL_RADIUS + 4 + pullDistance * 0.4;
                 
-                // ปลายหัวไม้คิว
                 const cueTipX = whiteBall.x - Math.cos(aimAngle) * cueOffset;
                 const cueTipY = whiteBall.y - Math.sin(aimAngle) * cueOffset;
-                // ด้ามไม้คิว
-                const cueEnd: number = cueTipX - Math.cos(aimAngle) * cueLen;
-                const cueEnd2: number = cueTipY - Math.sin(aimAngle) * cueLen;
+                const cueEnd = cueTipX - Math.cos(aimAngle) * cueLen;
+                const cueEnd2 = cueTipY - Math.sin(aimAngle) * cueLen;
 
                 ctx.beginPath();
                 ctx.moveTo(cueTipX, cueTipY);
@@ -444,7 +441,6 @@
             mousePos.y = e.clientY - rect.top;
 
             if (isMouseDown) {
-                // คำนวณระยะทางง้างถอยหลัง
                 const dist = Math.hypot(mousePos.x - dragStartPos.x, mousePos.y - dragStartPos.y);
                 pullDistance = Math.min(dist, 100);
             }
@@ -465,7 +461,6 @@
                     const dy = mousePos.y - whiteBall.y;
                     const aimAngle = Math.atan2(dy, dx);
                     
-                    // กำหนดแรงแทง (ยิ่งง้างไกลยิ่งแรง)
                     const force = Math.max(pullDistance * 0.22, 5);
 
                     whiteBall.vx = Math.cos(aimAngle) * force;
