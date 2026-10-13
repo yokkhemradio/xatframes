@@ -133,6 +133,7 @@
             width: 100%;
             height: 100%;
             cursor: crosshair;
+            touch-action: none;
         }
 
         .snooker-controls {
@@ -203,7 +204,6 @@
         let balls = [];
         let pockets = [];
         let mousePos = { x: 0, y: 0 };
-        let dragStartPos = { x: 0, y: 0 };
         let isMouseDown = false;
         let pullDistance = 0;
         let score = 0;
@@ -446,6 +446,7 @@
             }
         });
 
+        let dragStartPos = { x: 0, y: 0 };
         canvas.addEventListener('mousedown', (e) => {
             isMouseDown = true;
             const rect = canvas.getBoundingClientRect();
