@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MYRADIOhit Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         html, body {
             width: 100%;
@@ -41,7 +43,7 @@
         /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขยับลงมา 90px */
         .column {
             transform: translateY(90px);
-            width: 280px;
+            width: 340px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -49,7 +51,7 @@
             position: relative;
         }
 
-        /* 🎬 1. ส่วนกล่องแสดงโลโก้หมุน สูง 486px */
+        /* 🎬 1. ส่วนกล่องกรอบตรงกลางซ้าย-ขวา สูง 486px (เอาโลโก้หมุนออกและใส่วิทยุไว้ตรงกลาง) */
         .box-media {
             position: relative;
             width: 100%;
@@ -63,55 +65,246 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 12px;
         }
 
-        /* 🔄 อนิเมชันหมุนวนลูป */
-        @keyframes spinLogo {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        /* 💙 ตัวการ์ดเครื่องเล่นวิทยุ (ปรับขนาดให้พอดีในกรอบซ้าย-ขวา) */
+        .player-card {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background: url('https://files.catbox.moe/polz3l.png') center/cover no-repeat;
+            border: 2px solid #00d2ff;
+            border-radius: 18px;
+            padding: 14px 16px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
 
-        /* โลโก้หมุนตรงกลาง */
-        .watermark-logo {
-            width: 135px;
-            height: 135px;
-            object-fit: contain;
-            z-index: 10;
-            pointer-events: none;
-            animation: spinLogo 6s linear infinite;
-            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6));
-        }
-
-        /* 🎵 ปุ่มควบคุมเล่น/หยุดเพลง */
-        .overlay-play-btn {
+        .player-card::before {
+            content: '';
             position: absolute;
-            bottom: 20px;
-            background: rgba(14, 165, 233, 0.9);
-            color: #fff;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            cursor: pointer;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(2, 21, 40, 0.75) 0%, rgba(0, 8, 20, 0.85) 100%);
+            z-index: 1;
+        }
+
+        .top-section, .controls-section, .bottom-section {
+            position: relative;
+            z-index: 2;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .station-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-icon-box {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #00d2ff, #0072ff);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-            transition: all 0.25s ease;
-            z-index: 20;
+            color: #fff;
+            font-size: 14px;
+            flex-shrink: 0;
         }
-        .overlay-play-btn:hover {
-            background: rgba(56, 189, 248, 1);
-            transform: scale(1.1);
+
+        .station-text h2 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.2;
+            white-space: nowrap;
         }
-        .overlay-play-btn.playing {
-            background: #ec4899;
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.7);
+
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .overlay-play-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 65px;
+            height: 5px;
+            background: linear-gradient(to right, #00d2ff 75%, rgba(255, 255, 255, 0.2) 75%);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #80e5ff;
+            cursor: pointer;
+        }
+
+        .volume-icon {
+            color: #80e5ff;
+            font-size: 12px;
+        }
+
+        .controls-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-step {
+            background: none;
+            border: none;
+            color: #99e6ff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .btn-step:hover {
+            color: #ffffff;
+            transform: scale(1.15);
+        }
+
+        .btn-play {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #00d2ff 0%, #0072ff 100%);
+            border-radius: 12px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+
+        .btn-play:hover {
+            transform: scale(1.08);
+            background: linear-gradient(135deg, #33dcff 0%, #1a82ff 100%);
+        }
+
+        .btn-play i {
+            margin-left: 2px;
+        }
+
+        .bottom-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .bottom-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bitrate-badge {
+            background: rgba(0, 210, 255, 0.25);
+            border: 1px solid rgba(0, 210, 255, 0.5);
+            color: #80e5ff;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 7px;
+            white-space: nowrap;
+        }
+
+        .listener-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 210, 255, 0.2);
+            border: 1px solid rgba(0, 210, 255, 0.4);
+            padding: 2px 6px;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 500;
+            color: #e6f9ff;
+            white-space: nowrap;
+        }
+
+        .listener-badge i {
+            font-size: 9px;
+            color: #00d2ff;
+        }
+
+        .eq-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 12px;
+        }
+
+        .eq-bar {
+            width: 2.5px;
+            height: 100%;
+            background: linear-gradient(to top, #0072ff, #80e5ff);
+            border-radius: 3px;
+            transform-origin: bottom;
+            transform: scaleY(0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .eq-container.playing .eq-bar:nth-child(1) { animation: eqBounce 0.6s infinite alternate ease-in-out; }
+        .eq-container.playing .eq-bar:nth-child(2) { animation: eqBounce 0.4s infinite alternate ease-in-out 0.1s; }
+        .eq-container.playing .eq-bar:nth-child(3) { animation: eqBounce 0.7s infinite alternate ease-in-out 0.2s; }
+        .eq-container.playing .eq-bar:nth-child(4) { animation: eqBounce 0.5s infinite alternate ease-in-out 0.15s; }
+
+        @keyframes eqBounce {
+            0% { transform: scaleY(0.2); }
+            100% { transform: scaleY(1); }
+        }
+
+        .bottom-right {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            color: #e6f9ff;
+        }
+
+        .time-display {
+            font-weight: 700;
+            color: #ffffff;
+            font-family: monospace;
+        }
+
+        .date-display {
+            color: #80e5ff;
+            font-size: 9px;
+        }
+
+        /* 🔄 อนิเมชันแผ่นเสียงหมุน */
+        @keyframes spinLogo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         /* 📻 2. ส่วนวิทยุ/Playlist ด้านล่าง */
@@ -217,14 +410,54 @@
     <!-- 🎬 วิดีโอพื้นหลังเต็มจอ 100% วนลูปและปิดเสียงสนิท -->
     <video id="bg-video" src="https://ia601504.us.archive.org/26/items/hailuo3_202611/hailuo3.mp4" autoplay loop muted playsinline preload="auto" class="bg-video"></video>
 
-    <!-- 👈 ฝั่งซ้าย: โลโก้หมุน + ปุ่มเล่นเพลง + ตัวเล่นเพลง -->
+    <!-- 👈 ฝั่งซ้าย: วิทยุตรงกลางกรอบ + ตัวเล่นเพลง -->
     <div class="column">
         <div class="box-media">
-            <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo">
-            
-            <button id="btn-track-0" class="overlay-play-btn" style="right: 15px;" onclick="toggleTrack(0)" title="เล่น/หยุด สตริงใหม่ล่าสุด">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
+            <!-- 📻 เครื่องเล่นวิทยุฝั่งซ้าย -->
+            <div class="player-card">
+                <div class="top-section">
+                    <div class="station-info">
+                        <div class="music-icon-box">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <div class="station-text">
+                            <h2>สถานีวิทยุ</h2>
+                        </div>
+                    </div>
+                    <div class="volume-container">
+                        <input type="range" class="volume-slider" id="volume-control-left" min="0" max="100" value="75">
+                        <i class="fa-solid fa-volume-high volume-icon" id="volume-icon-left"></i>
+                    </div>
+                </div>
+
+                <div class="controls-section">
+                    <button class="btn-step" title="ถอยหลัง"><i class="fa-solid fa-step-backward"></i></button>
+                    <button class="btn-play" id="play-btn-left" title="เล่น/หยุด">
+                        <i class="fa-solid fa-play" id="play-icon-left"></i>
+                    </button>
+                    <button class="btn-step" title="ข้าม"><i class="fa-solid fa-step-forward"></i></button>
+                </div>
+
+                <div class="bottom-section">
+                    <div class="bottom-left">
+                        <span class="bitrate-badge">128 kbps</span>
+                        <div class="listener-badge">
+                            <i class="fa-solid fa-user"></i>
+                            <span class="listener-count">135</span> คนฟัง
+                        </div>
+                        <div class="eq-container" id="eq-visualizer-left">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                        </div>
+                    </div>
+                    <div class="bottom-right">
+                        <span class="date-display clock-date">00/00/0000</span>
+                        <span class="time-display clock-time">00:00:00</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="box-sub">
@@ -241,14 +474,54 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: โลโก้หมุน + ปุ่มเล่นเพลง + Playlist -->
+    <!-- 👉 ฝั่งขวา: วิทยุตรงกลางกรอบ + Playlist -->
     <div class="column">
         <div class="box-media">
-            <img src="https://xatimg.com/image/CuEn64l0inCG.png" alt="Logo" class="watermark-logo">
-            
-            <button id="btn-track-1" class="overlay-play-btn" style="left: 15px;" onclick="toggleTrack(1)" title="เล่น/หยุด Sting Hit Mix">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
+            <!-- 📻 เครื่องเล่นวิทยุฝั่งขวา -->
+            <div class="player-card">
+                <div class="top-section">
+                    <div class="station-info">
+                        <div class="music-icon-box">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <div class="station-text">
+                            <h2>สถานีวิทยุ</h2>
+                        </div>
+                    </div>
+                    <div class="volume-container">
+                        <input type="range" class="volume-slider" id="volume-control-right" min="0" max="100" value="75">
+                        <i class="fa-solid fa-volume-high volume-icon" id="volume-icon-right"></i>
+                    </div>
+                </div>
+
+                <div class="controls-section">
+                    <button class="btn-step" title="ถอยหลัง"><i class="fa-solid fa-step-backward"></i></button>
+                    <button class="btn-play" id="play-btn-right" title="เล่น/หยุด">
+                        <i class="fa-solid fa-play" id="play-icon-right"></i>
+                    </button>
+                    <button class="btn-step" title="ข้าม"><i class="fa-solid fa-step-forward"></i></button>
+                </div>
+
+                <div class="bottom-section">
+                    <div class="bottom-left">
+                        <span class="bitrate-badge">128 kbps</span>
+                        <div class="listener-badge">
+                            <i class="fa-solid fa-user"></i>
+                            <span class="listener-count">135</span> คนฟัง
+                        </div>
+                        <div class="eq-container" id="eq-visualizer-right">
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                            <div class="eq-bar"></div>
+                        </div>
+                    </div>
+                    <div class="bottom-right">
+                        <span class="date-display clock-date">00/00/0000</span>
+                        <span class="time-display clock-time">00:00:00</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="box-sub">
@@ -266,6 +539,10 @@
             </div>
         </div>
     </div>
+
+    <!-- สตรีมวิทยุซ้าย-ขวา -->
+    <audio id="radio-audio-left"></audio>
+    <audio id="radio-audio-right"></audio>
 
     <script>
         // 🎬 ปิดเสียงวิดีโอพื้นหลังสนิท 100% และเล่นวนลูปต่อเนื่อง
@@ -295,7 +572,78 @@
         setInterval(keepBgVideoPlaying, 2000);
         document.addEventListener('click', keepBgVideoPlaying, { once: true });
 
-        // 🎵 ระบบเครื่องเล่นเพลงและ Playlist
+        // 📻 ระบบวิทยุซ้าย-ขวา
+        const radioStream = "https://files.catbox.moe/9j6qln.mp3";
+
+        function setupRadioWidget(side) {
+            const audio = document.getElementById(`radio-audio-${side}`);
+            const playBtn = document.getElementById(`play-btn-${side}`);
+            const playIcon = document.getElementById(`play-icon-${side}`);
+            const volumeControl = document.getElementById(`volume-control-${side}`);
+            const volumeIcon = document.getElementById(`volume-icon-${side}`);
+            const eqVisualizer = document.getElementById(`eq-visualizer-${side}`);
+
+            audio.src = radioStream;
+            audio.volume = 0.75;
+
+            playBtn.addEventListener('click', () => {
+                if (audio.paused) {
+                    audio.play();
+                    playIcon.className = 'fa-solid fa-pause';
+                    playIcon.style.marginLeft = '0px';
+                    eqVisualizer.classList.add('playing');
+                } else {
+                    audio.pause();
+                    playIcon.className = 'fa-solid fa-play';
+                    playIcon.style.marginLeft = '2px';
+                    eqVisualizer.classList.remove('playing');
+                }
+            });
+
+            volumeControl.addEventListener('input', (e) => {
+                const val = e.target.value;
+                audio.volume = val / 100;
+                e.target.style.background = `linear-gradient(to right, #00d2ff ${val}%, rgba(255, 255, 255, 0.2) ${val}%)`;
+
+                if (val == 0) {
+                    volumeIcon.className = 'fa-solid fa-volume-xmark volume-icon';
+                } else if (val < 50) {
+                    volumeIcon.className = 'fa-solid fa-volume-low volume-icon';
+                } else {
+                    volumeIcon.className = 'fa-solid fa-volume-high volume-icon';
+                }
+            });
+        }
+
+        setupRadioWidget('left');
+        setupRadioWidget('right');
+
+        // 🕒 ระบบนาฬิกาแสดงเวลาและวันที่ (อัปเดตทั้งฝั่งซ้ายและขวา)
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+
+            document.querySelectorAll('.clock-time').forEach(el => el.innerText = `${hours}:${minutes}:${seconds}`);
+            document.querySelectorAll('.clock-date').forEach(el => el.innerText = `${day}/${month}/${year}`);
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 👥 สุ่มอัปเดตจำนวนคนฟังสด (อัปเดตทั้งฝั่งซ้ายและขวา)
+        let currentListeners = 135;
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 5) - 2;
+            currentListeners = Math.max(100, currentListeners + change);
+            document.querySelectorAll('.listener-count').forEach(el => el.innerText = currentListeners.toLocaleString());
+        }, 4000);
+
+        // 🎵 ระบบเครื่องเล่นเพลงและ Playlist ด้านล่าง
         const playlist = [
             {
                 title: 'สตริงใหม่ล่าสุด (Tag Hits String 2026)',
@@ -312,26 +660,13 @@
         const titleElement = document.getElementById('current-title');
         const vinyl = document.getElementById('vinyl');
 
-        const playIconSVG = '<svg viewBox="0 0 24 24" style="margin-left:2px;"><path d="M8 5v14l11-7z"/></svg>';
-        const pauseIconSVG = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-
         function updateUI(isPlaying) {
             playlist.forEach((_, idx) => {
-                const btn = document.getElementById(`btn-track-${idx}`);
                 const item = document.getElementById(`item-${idx}`);
-
-                if (idx === currentIndex && isPlaying) {
-                    btn.innerHTML = pauseIconSVG;
-                    btn.classList.add('playing');
+                if (idx === currentIndex) {
                     item.classList.add('active');
                 } else {
-                    btn.innerHTML = playIconSVG;
-                    btn.classList.remove('playing');
-                    if (idx === currentIndex) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
+                    item.classList.remove('active');
                 }
             });
 
@@ -347,18 +682,6 @@
             titleElement.innerText = playlist[index].title;
             player.src = playlist[index].url;
             player.play();
-        }
-
-        function toggleTrack(index) {
-            if (currentIndex === index) {
-                if (player.paused) {
-                    player.play();
-                } else {
-                    player.pause();
-                }
-            } else {
-                playTrack(index);
-            }
         }
 
         player.addEventListener('play', () => updateUI(true));
