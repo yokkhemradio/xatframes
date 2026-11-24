@@ -40,10 +40,10 @@
             pointer-events: none;
         }
 
-        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขยับลงมา 90px */
+        /* จัดโครงสร้างคอลัมน์ซ้าย-ขวา ขนาด 280px เท่าเดิม ขยับลงมา 90px */
         .column {
             transform: translateY(90px);
-            width: 340px;
+            width: 280px;
             display: flex;
             flex-direction: column;
             gap: 12px;
@@ -51,7 +51,7 @@
             position: relative;
         }
 
-        /* 🎬 1. ส่วนกล่องกรอบตรงกลางซ้าย-ขวา สูง 486px (เอาโลโก้หมุนออกและใส่วิทยุไว้ตรงกลาง) */
+        /* 🎬 1. ส่วนกล่องกรอบตรงกลางซ้าย-ขวา ขนาดเท่าเดิม (280x486px) */
         .box-media {
             position: relative;
             width: 100%;
@@ -65,35 +65,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 12px;
+            padding: 10px;
         }
 
-        /* 💙 ตัวการ์ดเครื่องเล่นวิทยุ (ปรับขนาดให้พอดีในกรอบซ้าย-ขวา) */
+        /* 💙 ตัวการ์ดเครื่องเล่นวิทยุ (เอาบีจีออก พื้นหลังโปร่งใส และขนาดพอดีกับกรอบ 280px) */
         .player-card {
             position: relative;
             width: 100%;
-            height: 160px;
-            background: url('https://files.catbox.moe/polz3l.png') center/cover no-repeat;
-            border: 2px solid #00d2ff;
-            border-radius: 18px;
-            padding: 14px 16px;
+            height: 150px;
+            background: transparent;
+            border: 1.5px solid #00d2ff;
+            border-radius: 16px;
+            padding: 12px;
             color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
             overflow: hidden;
-        }
-
-        .player-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(2, 21, 40, 0.75) 0%, rgba(0, 8, 20, 0.85) 100%);
-            z-index: 1;
         }
 
         .top-section, .controls-section, .bottom-section {
@@ -111,42 +99,43 @@
         .station-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .music-icon-box {
-            width: 34px;
-            height: 34px;
+            width: 28px;
+            height: 28px;
             background: linear-gradient(135deg, #00d2ff, #0072ff);
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 14px;
+            font-size: 12px;
             flex-shrink: 0;
         }
 
         .station-text h2 {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 600;
             color: #ffffff;
             line-height: 1.2;
             white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
         }
 
         .volume-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
         }
 
         .volume-slider {
             -webkit-appearance: none;
             appearance: none;
-            width: 65px;
-            height: 5px;
-            background: linear-gradient(to right, #00d2ff 75%, rgba(255, 255, 255, 0.2) 75%);
+            width: 50px;
+            height: 4px;
+            background: linear-gradient(to right, #00d2ff 75%, rgba(255, 255, 255, 0.3) 75%);
             border-radius: 5px;
             outline: none;
             cursor: pointer;
@@ -155,8 +144,8 @@
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 12px;
-            height: 12px;
+            width: 11px;
+            height: 11px;
             border-radius: 50%;
             background: #80e5ff;
             cursor: pointer;
@@ -164,23 +153,24 @@
 
         .volume-icon {
             color: #80e5ff;
-            font-size: 12px;
+            font-size: 11px;
         }
 
         .controls-section {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .btn-step {
             background: none;
             border: none;
             color: #99e6ff;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             transition: color 0.2s, transform 0.2s;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
         }
 
         .btn-step:hover {
@@ -189,16 +179,16 @@
         }
 
         .btn-play {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: linear-gradient(135deg, #00d2ff 0%, #0072ff 100%);
-            border-radius: 12px;
+            border-radius: 10px;
             border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #ffffff;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
             transition: transform 0.15s ease, background 0.2s ease;
         }
@@ -222,36 +212,36 @@
         .bottom-left {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
         }
 
         .bitrate-badge {
-            background: rgba(0, 210, 255, 0.25);
+            background: rgba(0, 210, 255, 0.2);
             border: 1px solid rgba(0, 210, 255, 0.5);
             color: #80e5ff;
-            font-size: 9px;
+            font-size: 8px;
             font-weight: 600;
-            padding: 2px 6px;
-            border-radius: 7px;
+            padding: 1px 5px;
+            border-radius: 6px;
             white-space: nowrap;
         }
 
         .listener-badge {
             display: flex;
             align-items: center;
-            gap: 4px;
-            background: rgba(0, 210, 255, 0.2);
+            gap: 3px;
+            background: rgba(0, 210, 255, 0.15);
             border: 1px solid rgba(0, 210, 255, 0.4);
-            padding: 2px 6px;
-            border-radius: 7px;
-            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 6px;
+            font-size: 9px;
             font-weight: 500;
             color: #e6f9ff;
             white-space: nowrap;
         }
 
         .listener-badge i {
-            font-size: 9px;
+            font-size: 8px;
             color: #00d2ff;
         }
 
@@ -259,11 +249,11 @@
             display: flex;
             align-items: flex-end;
             gap: 2px;
-            height: 12px;
+            height: 10px;
         }
 
         .eq-bar {
-            width: 2.5px;
+            width: 2px;
             height: 100%;
             background: linear-gradient(to top, #0072ff, #80e5ff);
             border-radius: 3px;
@@ -285,9 +275,10 @@
         .bottom-right {
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-size: 10px;
+            gap: 4px;
+            font-size: 9px;
             color: #e6f9ff;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
         }
 
         .time-display {
@@ -298,7 +289,7 @@
 
         .date-display {
             color: #80e5ff;
-            font-size: 9px;
+            font-size: 8px;
         }
 
         /* 🔄 อนิเมชันแผ่นเสียงหมุน */
@@ -410,7 +401,7 @@
     <!-- 🎬 วิดีโอพื้นหลังเต็มจอ 100% วนลูปและปิดเสียงสนิท -->
     <video id="bg-video" src="https://ia601504.us.archive.org/26/items/hailuo3_202611/hailuo3.mp4" autoplay loop muted playsinline preload="auto" class="bg-video"></video>
 
-    <!-- 👈 ฝั่งซ้าย: วิทยุตรงกลางกรอบ + ตัวเล่นเพลง -->
+    <!-- 👈 ฝั่งซ้าย: วิทยุโปร่งใสตรงกลางกรอบ + ตัวเล่นเพลง -->
     <div class="column">
         <div class="box-media">
             <!-- 📻 เครื่องเล่นวิทยุฝั่งซ้าย -->
@@ -474,7 +465,7 @@
         </div>
     </div>
 
-    <!-- 👉 ฝั่งขวา: วิทยุตรงกลางกรอบ + Playlist -->
+    <!-- 👉 ฝั่งขวา: วิทยุโปร่งใสตรงกลางกรอบ + Playlist -->
     <div class="column">
         <div class="box-media">
             <!-- 📻 เครื่องเล่นวิทยุฝั่งขวา -->
@@ -603,7 +594,7 @@
             volumeControl.addEventListener('input', (e) => {
                 const val = e.target.value;
                 audio.volume = val / 100;
-                e.target.style.background = `linear-gradient(to right, #00d2ff ${val}%, rgba(255, 255, 255, 0.2) ${val}%)`;
+                e.target.style.background = `linear-gradient(to right, #00d2ff ${val}%, rgba(255, 255, 255, 0.3) ${val}%)`;
 
                 if (val == 0) {
                     volumeIcon.className = 'fa-solid fa-volume-xmark volume-icon';
