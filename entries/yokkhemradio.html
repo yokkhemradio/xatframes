@@ -11,7 +11,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* 🌌 วิดีโอพื้นหลัง Background เต็มหน้าจอ */
+        /* 🌌 วิดีโอพื้นหลังเต็มหน้าจอ ปิดเสียงสนิท */
         .bg-video {
             position: fixed;
             top: 0;
@@ -23,39 +23,39 @@
             pointer-events: none;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            height: 100%;
             background: transparent;
             color: #fff;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 10px;
-            height: 100vh;
             overflow: hidden;
         }
 
-        /* เครื่องเล่นวิทยุด้านซ้าย (ตำแหน่งเดิมที่กดติดใน xatframes + พื้นหลังโปร่งใส) */
+        /* 📌 วางชิดขอบซ้ายสุด (พ้นรัศมีกล่องแชท xat บัง) */
         .player-container {
-            width: 310px;
-            margin-top: 60px;
+            position: fixed;
+            top: 15px;
+            left: 10px;
+            width: 275px;
             background: transparent;
-            border: 1.5px solid rgba(56, 189, 248, 0.55);
+            border: 1.5px solid rgba(56, 189, 248, 0.65);
             border-radius: 12px;
-            padding: 15px;
-            z-index: 2;
+            padding: 12px 14px;
+            z-index: 9999;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
+
         .player-header {
             font-size: 13px;
             font-weight: bold;
             color: #38bdf8;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .live-badge {
-            background: rgba(239, 68, 68, 0.85);
+            background: rgba(239, 68, 68, 0.9);
             color: #fff;
             font-size: 10px;
             padding: 2px 8px;
@@ -65,7 +65,7 @@
         .track-title {
             font-size: 12px;
             color: #ffffff;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -76,25 +76,25 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .btn-ctrl {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-            transition: 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+            transition: transform 0.15s;
         }
         .btn-play { background: #10b981; color: #fff; }
         .btn-pause { background: #f59e0b; color: #fff; }
         .btn-stop { background: #ef4444; color: #fff; }
         .btn-ctrl:hover { transform: scale(1.1); }
-        .btn-ctrl svg { width: 16px; height: 16px; fill: currentColor; }
+        .btn-ctrl svg { width: 16px; height: 16px; fill: currentColor; pointer-events: none; }
 
         /* แถบปรับเสียง (โปร่งใส) */
         .volume-box {
@@ -102,45 +102,48 @@
             align-items: center;
             gap: 8px;
             background: transparent;
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            padding: 7px 12px;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            padding: 6px 10px;
             border-radius: 20px;
         }
-        .volume-box svg { width: 16px; height: 16px; fill: #38bdf8; }
+        .volume-box svg { width: 16px; height: 16px; fill: #38bdf8; flex-shrink: 0; }
         .volume-slider {
             width: 100%;
             accent-color: #38bdf8;
             cursor: pointer;
         }
 
-        /* Playlist ด้านขวา (ตำแหน่งเดิมที่กดติดใน xatframes + พื้นหลังโปร่งใส) */
+        /* 📌 วางชิดขอบขวาสุด (พ้นรัศมีกล่องแชท xat บัง) */
         .playlist-container {
-            width: 280px;
-            margin-top: 10px;
+            position: fixed;
+            top: 15px;
+            right: 10px;
+            width: 275px;
             background: transparent;
-            border: 1.5px solid rgba(56, 189, 248, 0.55);
-            border-radius: 10px;
-            padding: 15px;
-            max-height: 90vh;
+            border: 1.5px solid rgba(56, 189, 248, 0.65);
+            border-radius: 12px;
+            padding: 12px 14px;
+            max-height: 85vh;
             overflow-y: auto;
-            z-index: 2;
+            z-index: 9999;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
         .playlist-title {
             font-size: 13px;
             font-weight: bold;
-            margin-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             padding-bottom: 5px;
             color: #38bdf8;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         .playlist-item {
-            padding: 8px;
+            padding: 8px 10px;
             margin-bottom: 6px;
             background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-left: 3px solid transparent;
             border-radius: 6px;
             cursor: pointer;
@@ -154,7 +157,7 @@
             background: rgba(56, 189, 248, 0.25);
         }
         .playlist-item.active {
-            background: rgba(14, 165, 233, 0.25);
+            background: rgba(14, 165, 233, 0.3);
             border-left: 3px solid #38bdf8;
         }
         .playlist-item .cat {
@@ -166,57 +169,61 @@
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง Background ตัวใหม่ (ปิดเสียงสนิท) -->
+    <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท) -->
     <video id="bg-video" class="bg-video" src="https://ia601504.us.archive.org/26/items/hailuo3_202611/hailuo3.mp4" autoplay loop muted playsinline></video>
 
-    <!-- ส่วนเครื่องเล่นเพลงด้านซ้าย -->
+    <!-- 🎧 เครื่องเล่นเพลงด้านซ้ายบน (ชิดขอบซ้าย) -->
     <div class="player-container">
         <div class="player-header">
-            <span>🎧 MYRADIOHIT PLAYER</span>
-            <span class="live-badge">LIVE</span>
+            <span>🎧  หยกเข้มเรดิโอ เพลงเพราะ</span>
+            <span class="live-badge" id="status-badge">READY</span>
         </div>
-        <div class="track-title" id="current-title">กำลังเตรียมพร้อม: เลือกเพลงไทยเพื่อฟัง</div>
+        <div class="track-title" id="current-title">เลือกเพลงไทยจากด้านขวาเพื่อฟัง</div>
 
         <div class="control-panel">
-            <button class="btn-ctrl btn-play" onclick="playAudio()" title="เล่น (Play)">
+            <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
-            <button class="btn-ctrl btn-pause" onclick="pauseAudio()" title="พัก (Pause)">
+            <button type="button" class="btn-ctrl btn-pause" id="btn-pause" title="พักชั่วคราว (Pause)">
                 <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
             </button>
-            <button class="btn-ctrl btn-stop" onclick="stopAudio()" title="หยุด (Stop)">
+            <button type="button" class="btn-ctrl btn-stop" id="btn-stop" title="หยุดเล่น (Stop)">
                 <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
             </button>
         </div>
 
         <div class="volume-box">
             <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" oninput="changeVolume(this.value)">
+            <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" id="volume-slider">
         </div>
-
-        <audio id="audio-player"></audio>
     </div>
 
-    <!-- ส่วนรายการเพลงไทย Playlist ด้านขวา -->
+    <!-- 📻 รายการเพลงไทยด้านขวาบน (ชิดขอบขวา) -->
     <div class="playlist-container">
         <div class="playlist-title">
-            <span>รายการเพลงไทย (PLAYLIST)</span>
+            <span>รายการเพลงไทย</span>
             <span style="font-size: 10px;">AUTO-NEXT</span>
         </div>
         
-        <div id="item-0" class="playlist-item" onclick="selectTrack(0)">
-            <div>1. สตริงใหม่ล่าสุด (Tag Hits String 2026)</div>
+        <div id="item-0" class="playlist-item">
+            <div>1. เพลงไทยแนะนำ (New Hit 2026)</div>
+            <div class="cat">หมวดหมู่: เพลงฮิตแนะนำ</div>
+        </div>
+        <div id="item-1" class="playlist-item">
+            <div>2. สตริงใหม่ล่าสุด (Tag Hits String 2026)</div>
             <div class="cat">หมวดหมู่: เพลงสตริงฮิต</div>
         </div>
-        <div id="item-1" class="playlist-item" onclick="selectTrack(1)">
-            <div>2. Sting Hit Mix (รวมฮิตสตริงต่อเนื่อง)</div>
+        <div id="item-2" class="playlist-item">
+            <div>3. Sting Hit Mix (รวมฮิตสตริงต่อเนื่อง)</div>
             <div class="cat">หมวดหมู่: Hit Mix</div>
         </div>
-        <div id="item-2" class="playlist-item" onclick="selectTrack(2)">
-            <div>3. สถานีวิทยุสด (MYRADIOHIT LIVE)</div>
+        <div id="item-3" class="playlist-item">
+            <div>4. สถานีวิทยุสด (MYRADIOHIT LIVE)</div>
             <div class="cat">หมวดหมู่: Live Radio 128 kbps</div>
         </div>
     </div>
+
+    <audio id="audio-player" preload="none"></audio>
 
     <script>
         // บังคับปิดเสียงวิดีโอพื้นหลัง 100%
@@ -224,25 +231,31 @@
         bgVideo.muted = true;
         bgVideo.volume = 0;
 
-        // รายการเพลงไทยทั้งหมด
+        // รายการเพลงไทยทั้งหมด (เรียงลำดับใหม่ตามต้องการ)
         const tracks = [
             {
-                title: '1. สตริงใหม่ล่าสุด (Tag Hits String 2026)',
+                title: '1. เพลงไทยแนะนำ (New Hit 2026)',
+                url: 'https://files.catbox.moe/f2ngzy.mp3'
+            },
+            {
+                title: '2. สตริงใหม่ล่าสุด (Tag Hits String 2026)',
                 url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3'
             },
             {
-                title: '2. Sting Hit Mix (รวมฮิตสตริงต่อเนื่อง)',
+                title: '3. Sting Hit Mix (รวมฮิตสตริงต่อเนื่อง)',
                 url: 'https://ia601808.us.archive.org/30/items/stinghit/stinghit.mp3'
             },
             {
-                title: '3. สถานีวิทยุสด (MYRADIOHIT LIVE)',
+                title: '4. สถานีวิทยุสด (MYRADIOHIT LIVE)',
                 url: 'https://files.catbox.moe/9j6qln.mp3'
             }
         ];
 
         let currentIndex = 0;
+        let isPaused = false;
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
+        const statusBadge = document.getElementById('status-badge');
 
         function highlightTrack(index) {
             tracks.forEach((_, idx) => {
@@ -255,34 +268,70 @@
 
         function selectTrack(index) {
             currentIndex = index;
-            titleElement.innerText = "กำลังเล่น: " + tracks[index].title;
+            isPaused = false;
+            player.pause();
             player.src = tracks[index].url;
+            player.load();
+            
+            titleElement.innerText = "กำลังเล่น: " + tracks[index].title;
+            statusBadge.innerText = "PLAYING";
+            statusBadge.style.background = "#10b981";
             highlightTrack(index);
-            player.play().catch(e => console.log("Play blocked"));
+
+            player.play().catch(e => {
+                statusBadge.innerText = "ERROR";
+                console.log("Play blocked:", e);
+            });
         }
 
-        function playAudio() {
-            if (player.src) {
-                player.play().catch(e => console.log("Play blocked"));
+        // ผูกปุ่มควบคุมด้วย EventListener โดยตรง
+        document.getElementById('btn-play').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isPaused && player.src) {
+                isPaused = false;
+                player.play();
+                titleElement.innerText = "กำลังเล่น: " + tracks[currentIndex].title;
+                statusBadge.innerText = "PLAYING";
+                statusBadge.style.background = "#10b981";
             } else {
-                selectTrack(0);
+                selectTrack(currentIndex);
             }
-        }
+        });
 
-        function pauseAudio() {
-            player.pause();
-            titleElement.innerText = "พักการเล่น: " + tracks[currentIndex].title;
-        }
+        document.getElementById('btn-pause').addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!player.paused) {
+                player.pause();
+                isPaused = true;
+                titleElement.innerText = "พักชั่วคราว: " + tracks[currentIndex].title;
+                statusBadge.innerText = "PAUSED";
+                statusBadge.style.background = "#f59e0b";
+            }
+        });
 
-        function stopAudio() {
+        document.getElementById('btn-stop').addEventListener('click', (e) => {
+            e.stopPropagation();
             player.pause();
-            player.currentTime = 0;
+            player.removeAttribute('src');
+            player.load();
+            isPaused = false;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
-        }
+            statusBadge.innerText = "STOPPED";
+            statusBadge.style.background = "#ef4444";
+            highlightTrack(-1);
+        });
 
-        function changeVolume(val) {
-            player.volume = val;
-        }
+        document.getElementById('volume-slider').addEventListener('input', (e) => {
+            player.volume = e.target.value;
+        });
+
+        // ผูกคลิกรายการเพลงด้านขวา
+        tracks.forEach((_, idx) => {
+            document.getElementById(`item-${idx}`).addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectTrack(idx);
+            });
+        });
 
         // เล่นเพลงถัดไปอัตโนมัติเมื่อจบเพลง
         player.addEventListener('ended', () => {
