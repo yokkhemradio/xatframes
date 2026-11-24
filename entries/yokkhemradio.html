@@ -31,7 +31,7 @@
             overflow: hidden;
         }
 
-        /* 📌 วิทยุทดลองวางไว้บนสุดชิดขวา เพื่อให้กดใช้งานได้ง่าย */
+        /* 📌 วิทยุทดลองวางไว้บนสุดชิดขวา */
         .top-radio-container {
             position: fixed;
             top: 5px;
@@ -54,6 +54,22 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 6px;
+        }
+
+        .open-ext-btn {
+            background: rgba(56, 189, 248, 0.25);
+            border: 1px solid rgba(56, 189, 248, 0.6);
+            color: #fde047;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .open-ext-btn:hover {
+            background: rgba(56, 189, 248, 0.45);
         }
 
         .radio-frame-box {
@@ -64,17 +80,17 @@
             background: rgba(0, 0, 0, 0.25);
         }
 
-        /* 📌 ตัวเล่นวิทยุหลักและรายการ ถัดลงมาด้านขวา */
+        /* 📌 ตัวเล่นวิทยุหลักและแถบสถานะ ถัดลงมาด้านขวา */
         .player-container {
             position: fixed;
-            top: 235px;
+            top: 242px;
             right: 10px;
             width: 245px;
             background: transparent;
             border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
             padding: 10px 12px;
-            max-height: 62vh;
+            max-height: 60vh;
             overflow-y: auto;
             z-index: 2147483646;
             pointer-events: auto;
@@ -235,11 +251,11 @@
     <!-- 📻 วิทยุทดลองวางไว้บนสุด -->
     <div class="top-radio-container" id="top-radio">
         <div class="top-radio-label">
-            <span>📻 ทดลองฟังวิทยุ (บนสุด)</span>
-            <span style="font-size: 9px; color: #fde047;">RADIO 9</span>
+            <span>📻 RADIO 9</span>
+            <a class="open-ext-btn" href="https://radio.plathong.net/main/player/?server=radio9&port=7264" target="_blank" rel="noopener noreferrer">เปิดหน้าต่างใหม่</a>
         </div>
         <div class="radio-frame-box">
-            <iframe src="https://radio.plathong.net/main/player/?server=radio9&port=7264" width="100%" height="185" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <iframe src="https://radio.plathong.net/main/player/?server=radio9&port=7264" width="100%" height="180" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -249,7 +265,7 @@
             <span>🎧 หยกเข้มเรดิโอ</span>
             <span class="live-badge" id="status-badge">READY</span>
         </div>
-        <div class="track-title" id="current-title">✨ กดฟังวิทยุต่อเนื่องได้เลยครับ</div>
+        <div class="track-title" id="current-title">✨ กด Play เพื่อฟังเพลงต่อเนื่องได้เลยครับ</div>
 
         <div class="control-panel">
             <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
@@ -270,7 +286,7 @@
 
         <!-- ✨ ข้อความเชิญชวน -->
         <div class="after-tracks-note">
-            🎶 ทดลองกดวิทยุด้านบน หรือกด Play เพื่อฟังเพลงต่อเนื่องได้เลยครับ<br>
+            🎶 กด Play ด้านบนเพื่อฟังเพลงต่อเนื่องได้เลยครับ<br>
             เปิดฟังเพลินๆ ตลอดทั้งวันกับ หยกเข้มเรดิโอ เพลงเพราะ ✨
         </div>
 
@@ -297,7 +313,7 @@
         bgVideo.muted = true;
         bgVideo.volume = 0;
 
-        // เพลงชุดต่อเนื่องสำหรับปุ่มควบคุม
+        // เพลงชุดต่อเนื่องสำหรับปุ่มควบคุมหลัก
         const tracks = [
             {
                 title: 'ชุดต่อเนื่อง (1/4): เพลงไทยแนะนำ 2026',
