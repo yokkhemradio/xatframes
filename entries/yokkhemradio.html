@@ -31,7 +31,7 @@
             overflow: hidden;
         }
 
-        /* 📌 วิทยุด้านซ้ายเลื่อนเข้ากึ่งกลางแนวตั้งให้ดูสวยงาม */
+        /* 📌 วิทยุด้านซ้ายกึ่งกลางแนวตั้ง */
         .player-container {
             position: fixed;
             top: 50%;
@@ -123,7 +123,7 @@
             cursor: pointer;
         }
 
-        /* 📌 วางชิดขอบขวาด้านบน */
+        /* 📌 กรอบรายการเพลงด้านขวา */
         .playlist-container {
             position: fixed;
             top: 15px;
@@ -133,12 +133,50 @@
             border: 1.5px solid rgba(56, 189, 248, 0.65);
             border-radius: 12px;
             padding: 12px 14px;
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
             z-index: 99999;
             pointer-events: auto;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
+
+        /* ✨ รูปภาพสวยๆ ในกรอบด้านขวา */
+        .right-banner-box {
+            width: 100%;
+            height: 95px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            margin-bottom: 8px;
+            position: relative;
+        }
+        .right-banner-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .banner-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #e0f2fe;
+            background: rgba(0, 0, 0, 0.35);
+            text-align: center;
+        }
+
+        .invite-text {
+            font-size: 11px;
+            color: #fde047;
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
         .playlist-title {
             font-size: 13px;
             font-weight: bold;
@@ -183,13 +221,13 @@
     <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท) -->
     <video id="bg-video" class="bg-video" src="https://ia601504.us.archive.org/26/items/hailuo3_202611/hailuo3.mp4" autoplay loop muted playsinline></video>
 
-    <!-- 🎧 เครื่องเล่นเพลงด้านซ้าย (กึ่งกลางแนวตั้ง) -->
+    <!-- 🎧 เครื่องเล่นเพลงด้านซ้าย -->
     <div class="player-container">
         <div class="player-header">
             <span>🎧 หยกเข้มเรดิโอ เพลงเพราะ</span>
             <span class="live-badge" id="status-badge">READY</span>
         </div>
-        <div class="track-title" id="current-title">กด Play หรือเลือกรายการด้านขวา</div>
+        <div class="track-title" id="current-title">✨ กดฟังเพลงเพราะๆ ได้เลยครับ</div>
 
         <div class="control-panel">
             <button type="button" class="btn-ctrl btn-play" onclick="handlePlay()" title="เล่น (Play)">
@@ -209,8 +247,16 @@
         </div>
     </div>
 
-    <!-- 📻 รายการเพลงไทยด้านขวาบน -->
+    <!-- 📻 กรอบรายการเพลงไทยด้านขวา -->
     <div class="playlist-container">
+        <!-- 🖼️ รูปภาพสวยๆ ในกรอบด้านขวา -->
+        <div class="right-banner-box">
+            <img src="https://files.catbox.moe/polz3l.png" alt="หยกเข้มเรดิโอ">
+            <div class="banner-caption">🎶 หยกเข้มเรดิโอ • ฟังเพลินตลอดวัน</div>
+        </div>
+
+        <div class="invite-text">👇 แตะเลือกเพลงด้านล่างเพื่อเริ่มฟังได้เลยครับ 👇</div>
+
         <div class="playlist-title">
             <span>รายการเพลงไทย</span>
             <span style="font-size: 10px;">AUTO-NEXT</span>
@@ -218,11 +264,11 @@
         
         <div id="item-0" class="playlist-item" onclick="startPlaylist(0)">
             <div>1. รวมเพลงเพราะต่อเนื่อง</div>
-            <div class="cat">เล่นต่อเนื่อง: เพลงฮิต 2026 → สตริงใหม่ → Hit Mix</div>
+            <div class="cat">กดฟังเพลงที่ 1 ได้เลย • เล่นต่อเนื่อง 3 เพลงรวด</div>
         </div>
         <div id="item-1" class="playlist-item" onclick="startPlaylist(3)">
             <div>2. เพลงสตริงใหม่ล่าสุด</div>
-            <div class="cat">หมวดหมู่: Live Radio 128 kbps</div>
+            <div class="cat">ฟังต่อได้ทันที • เพลงฮิตติดชาร์ต ฟังสนุกทุกช่วงเวลา</div>
         </div>
     </div>
 
@@ -238,7 +284,7 @@
         const tracks = [
             {
                 group: 0,
-                title: 'ชุดต่อเนื่อง (1/3): เพลงไทยแนะนำ 2026',
+                title: 'เพลงที่ 1 (1/3): เพลงไทยแนะนำ 2026',
                 url: 'https://files.catbox.moe/f2ngzy.mp3'
             },
             {
@@ -253,13 +299,14 @@
             },
             {
                 group: 1,
-                title: 'เพลงสตริงใหม่ล่าสุด',
+                title: 'เพลงที่ 2: เพลงสตริงใหม่ล่าสุด',
                 url: 'https://files.catbox.moe/9j6qln.mp3'
             }
         ];
 
         let currentIndex = 0;
         let isPaused = false;
+        let currentVolume = 1;
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
         const statusBadge = document.getElementById('status-badge');
@@ -274,10 +321,12 @@
             isPaused = false;
             
             player.pause();
+            player.muted = false;
+            player.volume = currentVolume;
             player.src = tracks[index].url;
             player.load();
             
-            titleElement.innerText = tracks[index].title;
+            titleElement.innerText = "กำลังเล่น: " + tracks[index].title;
             statusBadge.innerText = "PLAYING";
             statusBadge.style.background = "#10b981";
             highlightGroup(tracks[index].group);
@@ -290,8 +339,10 @@
         function handlePlay() {
             if (isPaused && player.src) {
                 isPaused = false;
+                player.muted = false;
+                player.volume = currentVolume;
                 player.play();
-                titleElement.innerText = tracks[currentIndex].title;
+                titleElement.innerText = "กำลังเล่น: " + tracks[currentIndex].title;
                 statusBadge.innerText = "PLAYING";
                 statusBadge.style.background = "#10b981";
             } else {
@@ -302,30 +353,36 @@
         function handlePause() {
             player.pause();
             isPaused = true;
-            titleElement.innerText = "พักชั่วคราว: " + tracks[currentIndex].title;
+            titleElement.innerText = "พักชั่วคราว • กด Play เพื่อฟังต่อ";
             statusBadge.innerText = "PAUSED";
             statusBadge.style.background = "#f59e0b";
         }
 
         function handleStop() {
             player.pause();
+            player.muted = true;
+            player.volume = 0;
             player.currentTime = 0;
-            player.src = "";
             player.removeAttribute('src');
+            player.src = '';
             player.load();
             isPaused = false;
             currentIndex = 0;
-            titleElement.innerText = "หยุดเล่นเพลงแล้ว";
+            titleElement.innerText = "หยุดเล่นแล้ว • แตะเพลงเพื่อฟังใหม่";
             statusBadge.innerText = "STOPPED";
             statusBadge.style.background = "#ef4444";
             highlightGroup(-1);
         }
 
         function changeVolume(val) {
-            player.volume = val;
+            currentVolume = parseFloat(val);
+            player.volume = currentVolume;
+            if (currentVolume > 0) {
+                player.muted = false;
+            }
         }
 
-        // เมื่อเพลงจบ: ถ้าอยู่ในชุด 3 เพลงต่อเนื่อง (index 0, 1, 2) จะเล่นวนต่อเนื่องกันทั้ง 3 เพลงอัตโนมัติ
+        // เมื่อเพลงจบ: ถ้าอยู่ในชุด 3 เพลงต่อเนื่อง จะเล่นวนต่อเนื่องกันทั้ง 3 เพลงอัตโนมัติ
         player.addEventListener('ended', () => {
             if (tracks[currentIndex].group === 0) {
                 const nextInMix = (currentIndex + 1) % 3;
