@@ -136,7 +136,7 @@
             100% { transform: translateX(-100%); }
         }
 
-        /* 📌 กรอบรายชื่อเพลงตามไทม์ไลน์ ใต้กล่องเพลง */
+        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
         .playlist-container {
             position: fixed;
             top: 175px;
@@ -216,8 +216,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .song-time {
-            font-family: monospace;
+        .song-tag {
             font-size: 9px;
             color: #38bdf8;
             flex-shrink: 0;
@@ -324,18 +323,18 @@
         </div>
     </div>
 
-    <!-- 📻 กล่องรายชื่อเพลงตามไทม์ไลน์ ใต้กล่องเพลง -->
+    <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
         <div class="playlist-title">
             <span>รายชื่อเพลง</span>
-            <span style="font-size: 10px;" id="song-count-label">33 เพลง</span>
+            <span style="font-size: 10px;" id="song-count-label">4 เพลง</span>
         </div>
 
         <div class="song-list" id="song-list"></div>
 
         <!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
         <div class="after-tracks-note">
-            🎶 เปลี่ยนชื่อเพลงตามเวลาอัตโนมัติ หรือแตะเลือกฟังได้เลยครับ<br>
+            🎶 เล่นจบเพลงแล้วขึ้นเพลงต่อไปอัตโนมัติครับ<br>
             เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ เพลงเพราะ ✨
         </div>
 
@@ -362,45 +361,15 @@
         bgVideo.muted = true;
         bgVideo.volume = 0;
 
-        const AUDIO_URL = 'https://files.catbox.moe/9kjrgk.mp3';
-
-        const chapters = [
-            { time: '00:00', seconds: 0, title: 'ไม่ดี...มีทำไม' },
-            { time: '03:59', seconds: 239, title: 'รักแย่ก็แค่...Move On' },
-            { time: '07:19', seconds: 439, title: 'คนจำไม่เคยลืม คนลืมไม่เคยจำ' },
-            { time: '11:12', seconds: 672, title: 'ฉันยังเชื่อในตัวเธอ' },
-            { time: '14:59', seconds: 899, title: 'คนถัดไปไม่มีจริง' },
-            { time: '19:08', seconds: 1148, title: 'วิวาห์สุดท้าย' },
-            { time: '23:23', seconds: 1403, title: 'ไปไกลๆไม่คืนดี' },
-            { time: '26:54', seconds: 1614, title: 'ฤดูฝนคนเจ็บ' },
-            { time: '30:50', seconds: 1850, title: 'อธิษฐานให้ฉันลืมเธอ' },
-            { time: '35:10', seconds: 2110, title: 'ลืมแฟนเก่ายังไง' },
-            { time: '39:10', seconds: 2350, title: 'เป็นแฟนเก่ามันไม่ง่าย' },
-            { time: '43:34', seconds: 2614, title: 'กำลังใจใกล้ฉัน' },
-            { time: '47:07', seconds: 2827, title: 'นักซัปพอร์ตที่ดี' },
-            { time: '50:48', seconds: 3048, title: 'เก่งที่สุดคือเรื่องจำ' },
-            { time: '54:28', seconds: 3268, title: 'สั้นๆ ง่ายๆ' },
-            { time: '58:15', seconds: 3495, title: 'เรื่องมันเศร้า ขอเล่าข้างๆ' },
-            { time: '1:01:49', seconds: 3709, title: 'ให้อภัยไม่ลง' },
-            { time: '1:05:15', seconds: 3915, title: 'ไปจบกับคนเก่าให้ได้ก่อน' },
-            { time: '1:09:26', seconds: 4166, title: 'หยุดชั่วคราว (Pause)' },
-            { time: '1:13:39', seconds: 4419, title: 'ความรักกำลัง Landing' },
-            { time: '1:17:01', seconds: 4621, title: 'ทฤษฎีรถไฟ' },
-            { time: '1:20:52', seconds: 4852, title: 'HBD ที่ไม่มีเธอ' },
-            { time: '1:24:18', seconds: 5058, title: 'เย็นชา ชาเย็น' },
-            { time: '1:27:12', seconds: 5232, title: 'ความทรงจำ (วันนี้ในอดีต)' },
-            { time: '1:30:52', seconds: 5452, title: 'เรื่องแฟนเก่าไปเล่าไกลๆ' },
-            { time: '1:34:21', seconds: 5661, title: 'กลับมาเพื่อบอกลาถาวร' },
-            { time: '1:38:13', seconds: 5893, title: 'ฤดูฝนคนเหงา' },
-            { time: '1:41:57', seconds: 6117, title: 'แค่รักอย่างเดียวไม่พอ' },
-            { time: '1:45:27', seconds: 6327, title: 'สะดวกรัก 24 ชั่วโมง' },
-            { time: '1:48:47', seconds: 6527, title: 'เศรษฐีดู(ใบ)' },
-            { time: '1:51:57', seconds: 6717, title: 'ฮีลใจที่ชายทะเล' },
-            { time: '1:54:57', seconds: 6897, title: 'พรุ่งนี้...ยังอยากมีเธอให้รัก' },
-            { time: '1:59:08', seconds: 7148, title: 'ความรักยังมีลมหายใจ' }
+        // รายชื่อเพลงแยกแทร็กเพื่อเปลี่ยนและเล่นเพลงถัดไปได้ต่อเนื่องแน่นอน
+        const tracks = [
+            { title: 'ไม่ดี...มีทำไม', url: 'https://files.catbox.moe/9kjrgk.mp3' },
+            { title: 'เพลงไทยแนะนำ 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
+            { title: 'สตริงใหม่ล่าสุด 2026', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
+            { title: 'Sting Hit Mix', url: 'https://ia601808.us.archive.org/30/items/stinghit/stinghit.mp3' }
         ];
 
-        let currentChapterIndex = 0;
+        let currentIndex = 0;
         let isPaused = false;
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
@@ -410,7 +379,7 @@
         const marqueeBox = document.getElementById('marquee-box');
         const marqueeText = document.getElementById('marquee-text');
 
-        document.getElementById('song-count-label').innerText = `${chapters.length} เพลง`;
+        document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
 
         function bindAction(el, fn) {
             el.addEventListener('pointerdown', (e) => {
@@ -432,18 +401,12 @@
             }
         }
 
-        function syncMarqueeTitle(ch, prefix = 'กำลังเล่น') {
-            marqueeText.innerText = `🎶 ${prefix}: ${ch.title} (${ch.time}) • หยกเข้มเรดิโอ เพลงเพราะ 🎶`;
+        function syncMarqueeTitle(track, prefix = 'กำลังเล่น') {
+            marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ เพลงเพราะ 🎶`;
         }
 
-        function updateActiveChapterUI(index, autoScroll = false) {
-            currentChapterIndex = index;
-            const ch = chapters[index];
-            syncMarqueeTitle(ch, isPaused ? 'พักชั่วคราว' : 'กำลังเล่น');
-            if (!isPaused && player.src) {
-                titleElement.innerText = `🎵 ${ch.title}`;
-            }
-            for (let i = 0; i < chapters.length; i++) {
+        function highlightSong(index, autoScroll = false) {
+            for (let i = 0; i < tracks.length; i++) {
                 const row = document.getElementById('song-' + i);
                 if (row) row.classList.toggle('active', i === index);
             }
@@ -455,81 +418,51 @@
             }
         }
 
-        function findChapterBySeconds(sec) {
-            let found = 0;
-            for (let i = 0; i < chapters.length; i++) {
-                if (sec >= chapters[i].seconds) {
-                    found = i;
-                } else {
-                    break;
-                }
-            }
-            return found;
-        }
-
         function renderSongList() {
             songListEl.innerHTML = '';
-            chapters.forEach((ch, idx) => {
+            tracks.forEach((track, idx) => {
                 const row = document.createElement('div');
                 row.id = 'song-' + idx;
-                row.className = 'song-row' + (idx === currentChapterIndex ? ' active' : '');
+                row.className = 'song-row' + (idx === currentIndex ? ' active' : '');
 
                 const nameSpan = document.createElement('span');
                 nameSpan.className = 'song-name';
-                nameSpan.innerText = `${idx + 1}. ${ch.title}`;
+                nameSpan.innerText = `${idx + 1}. ${track.title}`;
 
-                const timeSpan = document.createElement('span');
-                timeSpan.className = 'song-time';
-                timeSpan.innerText = ch.time;
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'song-tag';
+                tagSpan.innerText = 'NEXT';
 
                 row.appendChild(nameSpan);
-                row.appendChild(timeSpan);
-                bindAction(row, () => playChapter(idx));
+                row.appendChild(tagSpan);
+                bindAction(row, () => startPlaylist(idx));
                 songListEl.appendChild(row);
             });
         }
 
-        function ensureSrcLoaded() {
-            if (!player.src || !player.src.includes('9kjrgk.mp3')) {
-                player.src = AUDIO_URL;
-                player.load();
-            }
-        }
-
-        function playChapter(index = 0) {
+        function startPlaylist(index = 0) {
+            currentIndex = index;
             isPaused = false;
-            ensureSrcLoaded();
+
+            player.pause();
             player.muted = false;
             player.volume = 1;
+            player.src = tracks[currentIndex].url;
+            player.load();
 
-            const targetSec = chapters[index].seconds;
-            const applySeekAndPlay = () => {
-                try {
-                    player.currentTime = targetSec;
-                } catch (_) {}
-                updateActiveChapterUI(index, true);
-                statusBadge.innerText = "RADIO";
-                statusBadge.style.background = "#10b981";
-                setPlayingVisuals(true);
+            titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
+            syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+            statusBadge.innerText = "RADIO";
+            statusBadge.style.background = "#10b981";
+            highlightSong(currentIndex, true);
+            setPlayingVisuals(true);
 
-                const p = player.play();
-                if (p !== undefined) {
-                    p.catch(() => {
-                        statusBadge.innerText = "TAP PLAY";
-                        setPlayingVisuals(false);
-                    });
-                }
-            };
-
-            if (player.readyState >= 1) {
-                applySeekAndPlay();
-            } else {
-                const onLoaded = () => {
-                    player.removeEventListener('loadedmetadata', onLoaded);
-                    applySeekAndPlay();
-                };
-                player.addEventListener('loadedmetadata', onLoaded);
-                player.load();
+            const p = player.play();
+            if (p !== undefined) {
+                p.catch(() => {
+                    statusBadge.innerText = "TAP PLAY";
+                    setPlayingVisuals(false);
+                });
             }
         }
 
@@ -538,24 +471,22 @@
                 isPaused = false;
                 player.muted = false;
                 player.volume = 1;
-                const idx = findChapterBySeconds(player.currentTime || 0);
-                updateActiveChapterUI(idx, false);
-                titleElement.innerText = `🎵 ${chapters[idx].title}`;
+                titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
+                syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
                 statusBadge.innerText = "RADIO";
                 statusBadge.style.background = "#10b981";
                 setPlayingVisuals(true);
                 player.play().catch(() => {});
             } else {
-                playChapter(currentChapterIndex);
+                startPlaylist(currentIndex);
             }
         }
 
         function handlePause() {
             player.pause();
             isPaused = true;
-            const ch = chapters[currentChapterIndex];
-            titleElement.innerText = `พัก: ${ch.title}`;
-            syncMarqueeTitle(ch, 'พักชั่วคราว');
+            titleElement.innerText = `พัก: ${tracks[currentIndex].title}`;
+            syncMarqueeTitle(tracks[currentIndex], 'พักชั่วคราว');
             statusBadge.innerText = "PAUSED";
             statusBadge.style.background = "#f59e0b";
             setPlayingVisuals(false);
@@ -570,29 +501,23 @@
             player.src = '';
             player.load();
             isPaused = false;
-            currentChapterIndex = 0;
+            currentIndex = 0;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
             marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • กด Play เพื่อฟังต่อได้เลยครับ 🎶";
             statusBadge.innerText = "STOPPED";
             statusBadge.style.background = "#ef4444";
-            updateActiveChapterUI(0, false);
+            highlightSong(0, false);
             setPlayingVisuals(false);
         }
 
-        player.addEventListener('timeupdate', () => {
-            if (isPaused) return;
-            const idx = findChapterBySeconds(player.currentTime || 0);
-            if (idx !== currentChapterIndex) {
-                updateActiveChapterUI(idx, true);
-            }
-        });
-
+        // จบเพลงปั๊บ ขึ้นเพลงต่อไปทันทีและวนซ้ำครบชุด
         player.addEventListener('ended', () => {
-            playChapter(0);
+            const nextIndex = (currentIndex + 1) % tracks.length;
+            startPlaylist(nextIndex);
         });
 
         renderSongList();
-        syncMarqueeTitle(chapters[0], 'พร้อมเล่น');
+        syncMarqueeTitle(tracks[0], 'พร้อมเล่น');
         bindAction(document.getElementById('btn-play'), handlePlay);
         bindAction(document.getElementById('btn-pause'), handlePause);
         bindAction(document.getElementById('btn-stop'), handleStop);
