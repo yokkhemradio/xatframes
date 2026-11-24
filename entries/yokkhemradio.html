@@ -31,7 +31,7 @@
             overflow: hidden;
         }
 
-        /* 📌 เครื่องเล่นด้านซ้าย: ขยับพ้นแถบไอคอนซ้ายสุดของ xat และอยู่กึ่งกลางแนวตั้ง */
+        /* 📌 เครื่องเล่นด้านซ้าย */
         .player-container {
             position: fixed;
             top: 50%;
@@ -125,17 +125,17 @@
             cursor: pointer;
         }
 
-        /* 📌 กรอบรายการเพลงด้านขวา: ขยับลงมาพ้นแถบเมนูบนและขอบแชท */
+        /* 📌 กรอบรายการเพลงด้านขวา */
         .playlist-container {
             position: fixed;
-            top: 95px;
-            right: 12px;
+            top: 15px;
+            right: 10px;
             width: 245px;
             background: transparent;
             border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
             padding: 10px 12px;
-            max-height: 78vh;
+            max-height: 85vh;
             overflow-y: auto;
             z-index: 2147483647;
             pointer-events: auto;
@@ -188,6 +188,62 @@
             text-align: center;
             line-height: 1.45;
         }
+
+        /* 📊 EQ + นาฬิกาและวันที่ ใต้ข้อความด้านขวา */
+        .right-footer-widget {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .eq-box {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 16px;
+        }
+
+        .eq-bar {
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to top, #0072ff, #38bdf8);
+            border-radius: 2px;
+            transform-origin: bottom;
+            transform: scaleY(0.25);
+        }
+
+        .eq-box.playing .eq-bar:nth-child(1) { animation: eqMove 0.55s infinite alternate ease-in-out; }
+        .eq-box.playing .eq-bar:nth-child(2) { animation: eqMove 0.4s infinite alternate ease-in-out 0.1s; }
+        .eq-box.playing .eq-bar:nth-child(3) { animation: eqMove 0.65s infinite alternate ease-in-out 0.2s; }
+        .eq-box.playing .eq-bar:nth-child(4) { animation: eqMove 0.48s infinite alternate ease-in-out 0.15s; }
+        .eq-box.playing .eq-bar:nth-child(5) { animation: eqMove 0.6s infinite alternate ease-in-out 0.05s; }
+
+        @keyframes eqMove {
+            0% { transform: scaleY(0.2); }
+            100% { transform: scaleY(1); }
+        }
+
+        .clock-box {
+            text-align: right;
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .clock-time {
+            font-family: monospace;
+            font-size: 11px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .clock-date {
+            font-size: 9px;
+            color: #38bdf8;
+        }
     </style>
 </head>
 <body>
@@ -237,10 +293,25 @@
             <div class="cat">หมวดหมู่: สตริงใหม่ล่าสุด ฟังต่อได้ทันที</div>
         </div>
 
-        <!-- ✨ ข้อความต่อจากเพลงที่ 2 -->
+        <!-- ✨ ข้อความเชิญชวนต่อจากเพลงที่ 2 -->
         <div class="after-tracks-note">
             🎶 แตะเลือกฟังเพลงที่ 1 หรือเพลงที่ 2 ด้านบนได้เลยครับ<br>
             เปิดฟังเพลินๆ ตลอดทั้งวันกับ หยกเข้มเรดิโอ เพลงเพราะ ✨
+        </div>
+
+        <!-- 📊 EQ + นาฬิกาและวันที่ ใต้ข้อความด้านขวา -->
+        <div class="right-footer-widget">
+            <div class="eq-box" id="eq-box">
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+                <div class="eq-bar"></div>
+            </div>
+            <div class="clock-box">
+                <div class="clock-time" id="clock-time">00:00:00</div>
+                <div class="clock-date" id="clock-date">00/00/0000</div>
+            </div>
         </div>
     </div>
 
@@ -251,7 +322,6 @@
         bgVideo.muted = true;
         bgVideo.volume = 0;
 
-        // เพลงชุดที่ 1 (3 เพลงเล่นต่อเนื่อง) และเพลงที่ 2 (สตริงใหม่ล่าสุดจาก archive.org ที่เปิดใน iframe ได้เสถียร)
         const tracks = [
             {
                 group: 0,
@@ -281,6 +351,15 @@
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
         const statusBadge = document.getElementById('status-badge');
+        const eqBox = document.getElementById('eq-box');
+
+        function setEqState(playing) {
+            if (playing) {
+                eqBox.classList.add('playing');
+            } else {
+                eqBox.classList.remove('playing');
+            }
+        }
 
         function highlightGroup(groupIdx) {
             document.getElementById('item-0').classList.toggle('active', groupIdx === 0);
@@ -301,11 +380,13 @@
             statusBadge.innerText = "PLAYING";
             statusBadge.style.background = "#10b981";
             highlightGroup(tracks[index].group);
+            setEqState(true);
 
             const p = player.play();
             if (p !== undefined) {
                 p.catch(() => {
                     statusBadge.innerText = "TAP PLAY";
+                    setEqState(false);
                 });
             }
         }
@@ -319,6 +400,7 @@
                 titleElement.innerText = tracks[currentIndex].title;
                 statusBadge.innerText = "PLAYING";
                 statusBadge.style.background = "#10b981";
+                setEqState(true);
             } else {
                 startPlaylist(currentIndex);
             }
@@ -330,6 +412,7 @@
             titleElement.innerText = "พักชั่วคราว: " + tracks[currentIndex].title;
             statusBadge.innerText = "PAUSED";
             statusBadge.style.background = "#f59e0b";
+            setEqState(false);
         }
 
         function handleStop() {
@@ -346,9 +429,9 @@
             statusBadge.innerText = "STOPPED";
             statusBadge.style.background = "#ef4444";
             highlightGroup(-1);
+            setEqState(false);
         }
 
-        // ผูกทั้ง pointerdown และ click เพื่อให้กดติดแน่นอนใน xatframes
         function bindAction(el, fn) {
             el.addEventListener('pointerdown', (e) => {
                 e.stopPropagation();
@@ -379,6 +462,22 @@
                 startPlaylist(currentIndex);
             }
         });
+
+        // 🕒 นาฬิกาเวลาและวันที่
+        function updateClock() {
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            const ss = String(now.getSeconds()).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const mo = String(now.getMonth() + 1).padStart(2, '0');
+            const yyyy = now.getFullYear();
+
+            document.getElementById('clock-time').innerText = `${hh}:${mm}:${ss}`;
+            document.getElementById('clock-date').innerText = `${dd}/${mo}/${yyyy}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
     </script>
 </body>
 </html>
