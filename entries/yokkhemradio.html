@@ -108,21 +108,32 @@
             pointer-events: none;
         }
 
-        /* แถบปรับเสียง */
-        .volume-box {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: transparent;
-            border: 1px solid rgba(56, 189, 248, 0.5);
+        /* ✨ ตัววิ่งชื่อเพลงช้าๆ นุ่มนวลแทนที่ระดับเสียงใต้ตัวเล่นเพลง */
+        .marquee-box {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(56, 189, 248, 0.55);
             padding: 5px 8px;
             border-radius: 20px;
+            position: relative;
         }
-        .volume-box svg { width: 15px; height: 15px; fill: #38bdf8; flex-shrink: 0; pointer-events: none; }
-        .volume-slider {
-            width: 100%;
-            accent-color: #38bdf8;
-            cursor: pointer;
+        .marquee-text {
+            display: inline-block;
+            white-space: nowrap;
+            font-size: 11px;
+            font-weight: bold;
+            color: #fde047;
+            transform: translateX(100%);
+            animation: marqueeSlideSlow 24s linear infinite;
+            animation-play-state: paused;
+        }
+        .marquee-box.running .marquee-text {
+            animation-play-state: running;
+        }
+        @keyframes marqueeSlideSlow {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         /* 📌 กรอบรายชื่อเพลงตามไทม์ไลน์ ใต้กล่องเพลง */
@@ -307,9 +318,9 @@
             </button>
         </div>
 
-        <div class="volume-box">
-            <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-            <input type="range" min="0" max="1" step="0.05" value="1" class="volume-slider" id="vol-slider">
+        <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ แทนที่ระดับเสียงใต้ตัวเล่นเพลง -->
+        <div class="marquee-box" id="marquee-box">
+            <div class="marquee-text" id="marquee-text">🎶 หยกเข้มเรดิโอ เพลงเพราะ • ไม่ดี...มีทำไม 🎶</div>
         </div>
     </div>
 
@@ -317,7 +328,7 @@
     <div class="playlist-container" id="right-playlist">
         <div class="playlist-title">
             <span>รายชื่อเพลง</span>
-            <span style="font-size: 10px;" id="song-count-label">32 เพลง</span>
+            <span style="font-size: 10px;" id="song-count-label">33 เพลง</span>
         </div>
 
         <div class="song-list" id="song-list"></div>
@@ -391,12 +402,13 @@
 
         let currentChapterIndex = 0;
         let isPaused = false;
-        let currentVolume = 1;
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
         const statusBadge = document.getElementById('status-badge');
         const eqBox = document.getElementById('eq-box');
         const songListEl = document.getElementById('song-list');
+        const marqueeBox = document.getElementById('marquee-box');
+        const marqueeText = document.getElementById('marquee-text');
 
         document.getElementById('song-count-label').innerText = `${chapters.length} เพลง`;
 
@@ -410,17 +422,24 @@
             });
         }
 
-        function setEqState(playing) {
+        function setPlayingVisuals(playing) {
             if (playing) {
                 eqBox.classList.add('playing');
+                marqueeBox.classList.add('running');
             } else {
                 eqBox.classList.remove('playing');
+                marqueeBox.classList.remove('running');
             }
+        }
+
+        function syncMarqueeTitle(ch, prefix = 'กำลังเล่น') {
+            marqueeText.innerText = `🎶 ${prefix}: ${ch.title} (${ch.time}) • หยกเข้มเรดิโอ เพลงเพราะ 🎶`;
         }
 
         function updateActiveChapterUI(index, autoScroll = false) {
             currentChapterIndex = index;
             const ch = chapters[index];
+            syncMarqueeTitle(ch, isPaused ? 'พักชั่วคราว' : 'กำลังเล่น');
             if (!isPaused && player.src) {
                 titleElement.innerText = `🎵 ${ch.title}`;
             }
@@ -481,7 +500,7 @@
             isPaused = false;
             ensureSrcLoaded();
             player.muted = false;
-            player.volume = currentVolume;
+            player.volume = 1;
 
             const targetSec = chapters[index].seconds;
             const applySeekAndPlay = () => {
@@ -491,13 +510,13 @@
                 updateActiveChapterUI(index, true);
                 statusBadge.innerText = "RADIO";
                 statusBadge.style.background = "#10b981";
-                setEqState(true);
+                setPlayingVisuals(true);
 
                 const p = player.play();
                 if (p !== undefined) {
                     p.catch(() => {
                         statusBadge.innerText = "TAP PLAY";
-                        setEqState(false);
+                        setPlayingVisuals(false);
                     });
                 }
             };
@@ -518,13 +537,13 @@
             if (isPaused && player.src) {
                 isPaused = false;
                 player.muted = false;
-                player.volume = currentVolume;
+                player.volume = 1;
                 const idx = findChapterBySeconds(player.currentTime || 0);
                 updateActiveChapterUI(idx, false);
                 titleElement.innerText = `🎵 ${chapters[idx].title}`;
                 statusBadge.innerText = "RADIO";
                 statusBadge.style.background = "#10b981";
-                setEqState(true);
+                setPlayingVisuals(true);
                 player.play().catch(() => {});
             } else {
                 playChapter(currentChapterIndex);
@@ -536,9 +555,10 @@
             isPaused = true;
             const ch = chapters[currentChapterIndex];
             titleElement.innerText = `พัก: ${ch.title}`;
+            syncMarqueeTitle(ch, 'พักชั่วคราว');
             statusBadge.innerText = "PAUSED";
             statusBadge.style.background = "#f59e0b";
-            setEqState(false);
+            setPlayingVisuals(false);
         }
 
         function handleStop() {
@@ -552,10 +572,11 @@
             isPaused = false;
             currentChapterIndex = 0;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
+            marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • กด Play เพื่อฟังต่อได้เลยครับ 🎶";
             statusBadge.innerText = "STOPPED";
             statusBadge.style.background = "#ef4444";
             updateActiveChapterUI(0, false);
-            setEqState(false);
+            setPlayingVisuals(false);
         }
 
         player.addEventListener('timeupdate', () => {
@@ -571,15 +592,10 @@
         });
 
         renderSongList();
+        syncMarqueeTitle(chapters[0], 'พร้อมเล่น');
         bindAction(document.getElementById('btn-play'), handlePlay);
         bindAction(document.getElementById('btn-pause'), handlePause);
         bindAction(document.getElementById('btn-stop'), handleStop);
-
-        document.getElementById('vol-slider').addEventListener('input', (e) => {
-            currentVolume = parseFloat(e.target.value);
-            player.volume = currentVolume;
-            if (currentVolume > 0) player.muted = false;
-        });
 
         // 🕒 นาฬิกาเวลาและวันที่
         function updateClock() {
