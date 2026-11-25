@@ -63,7 +63,7 @@
             text-overflow: ellipsis;
         }
 
-        /* แผงปุ่มควบคุม (ซ้าย - เล่น - พัก - หยุด - ขวา) */
+        /* แผงปุ่มควบคุม (ย้อนกลับมีขีด - เล่น - พัก - หยุด - ถัดไปมีขีด) */
         .control-panel {
             display: flex;
             align-items: center;
@@ -83,8 +83,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.7);
             transition: transform 0.15s;
             pointer-events: auto;
-            font-size: 13px;
-            font-weight: bold;
         }
         .btn-nav { background: #0284c7; color: #fff; }
         .btn-play { background: #10b981; color: #fff; }
@@ -127,17 +125,41 @@
             100% { transform: translateX(-100%); }
         }
 
+        /* 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง */
+        .sub-radio-badge {
+            margin-top: 7px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            font-size: 10px;
+            font-weight: bold;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+        .sub-radio-tag {
+            background: rgba(14, 165, 233, 0.85);
+            color: #ffffff;
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 6px;
+            letter-spacing: 0.4px;
+        }
+
         /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
         .playlist-container {
             position: fixed;
-            top: 175px;
+            top: 202px;
             right: 10px;
             width: 245px;
             background: transparent;
             border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
             padding: 10px 12px;
-            max-height: calc(100vh - 188px);
+            max-height: calc(100vh - 215px);
             display: flex;
             flex-direction: column;
             z-index: 2147483646;
@@ -160,8 +182,8 @@
 
         .song-list {
             flex: 1;
-            min-height: 120px;
-            max-height: 250px;
+            min-height: 110px;
+            max-height: 230px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -294,7 +316,9 @@
         <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
 
         <div class="control-panel">
-            <button type="button" class="btn-ctrl btn-nav" id="btn-prev" title="ชุดเพลงก่อนหน้า (Prev)">◀</button>
+            <button type="button" class="btn-ctrl btn-nav" id="btn-prev" title="เพลงก่อนหน้า (Prev)">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
             <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
@@ -304,12 +328,20 @@
             <button type="button" class="btn-ctrl btn-stop" id="btn-stop" title="หยุดเล่น (Stop)">
                 <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
             </button>
-            <button type="button" class="btn-ctrl btn-nav" id="btn-next" title="ชุดเพลงถัดไป (Next)">▶</button>
+            <button type="button" class="btn-ctrl btn-nav" id="btn-next" title="เพลงถัดไป (Next)">
+                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
         </div>
 
         <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ แทนที่ระดับเสียงใต้ตัวเล่นเพลง -->
         <div class="marquee-box" id="marquee-box">
             <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
+        </div>
+
+        <!-- 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง -->
+        <div class="sub-radio-badge">
+            <span>🎧 หยกเข้มเรดิโอ</span>
+            <span class="sub-radio-tag">RADIO</span>
         </div>
     </div>
 
@@ -349,7 +381,7 @@
     <script>
         const tracks = [
             { title: 'สตริงใหม่ล่าสุด', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
-            { title: 'เพลตริง', url: 'https://ia902905.us.archive.org/5/items/thaistation/thaistation.mp3' },
+            { title: 'เพลงฮิต tiktok 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
             { title: 'สตริง 1', url: 'https://ia601906.us.archive.org/3/items/radio_202607/1.radio.mp3' },
             { title: 'สตริง 2 ชม', url: 'https://ia601501.us.archive.org/2/items/thaistation-v.-1/thaistation%20v.1.mp3' },
             { title: 'เพลงลูกทุ่ง', url: 'https://ia600903.us.archive.org/29/items/luk-thung-music/Luk%20Thung%20music.mp3' },
