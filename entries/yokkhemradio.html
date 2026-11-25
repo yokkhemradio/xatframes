@@ -83,45 +83,160 @@
             text-shadow: 0 1px 3px #000, 0 0 8px #000;
         }
 
-        /* 📻 กล่องวิทยุปลาทองด้านบนขวา แทนกล่องปุ่มควบคุมทั้งหมด */
-        .plathong-right-box {
+        /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
+        .player-container {
             position: fixed;
             top: 15px;
             right: 10px;
-            width: 280px;
-            height: 180px;
-            background: rgba(2, 6, 23, 0.45);
-            border: 1.5px solid rgba(56, 189, 248, 0.85);
+            width: 245px;
+            background: rgba(2, 6, 23, 0.35);
+            border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
-            padding: 4px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
+            padding: 10px 12px;
             z-index: 2147483647;
             pointer-events: auto;
-            overflow: hidden;
+            touch-action: manipulation;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
 
-        .plathong-right-box iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
+        .player-header {
+            font-size: 12px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .live-badge {
+            background: rgba(239, 68, 68, 0.92);
+            color: #fff;
+            font-size: 9px;
+            padding: 2px 6px;
             border-radius: 8px;
-            display: block;
+            font-weight: bold;
+            flex-shrink: 0;
         }
 
-        /* 📌 กรอบรายชื่อเพลง ใต้กล่องวิทยุปลาทองด้านขวา */
+        .track-title {
+            font-size: 11px;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* แผงปุ่มควบคุม */
+        .control-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .btn-ctrl {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            transition: transform 0.15s;
+            pointer-events: auto;
+            touch-action: manipulation;
+        }
+
+        .btn-nav { background: #0284c7; color: #fff; }
+        .btn-play { background: #10b981; color: #fff; }
+        .btn-pause { background: #f59e0b; color: #fff; }
+        .btn-stop { background: #ef4444; color: #fff; }
+        .btn-ctrl:hover { transform: scale(1.08); }
+        .btn-ctrl:active { transform: scale(0.94); }
+        .btn-ctrl svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+            pointer-events: none;
+        }
+
+        /* ✨ ตัววิ่งชื่อเพลง */
+        .marquee-box {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(56, 189, 248, 0.6);
+            padding: 5px 8px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .marquee-text {
+            display: block;
+            white-space: nowrap;
+            font-size: 11px;
+            font-weight: bold;
+            color: #fde047;
+            padding-left: 100%;
+            animation: marqueeSlide 18s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .marquee-box.running .marquee-text {
+            animation-play-state: running;
+        }
+
+        @keyframes marqueeSlide {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง */
+        .sub-radio-badge {
+            margin-top: 7px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            font-size: 10px;
+            font-weight: bold;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sub-radio-tag {
+            background: rgba(14, 165, 233, 0.9);
+            color: #ffffff;
+            font-size: 9px;
+            padding: 1px 6px;
+            border-radius: 6px;
+            letter-spacing: 0.4px;
+        }
+
+        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
         .playlist-container {
             position: fixed;
-            top: 205px;
+            top: 202px;
             right: 10px;
-            width: 280px;
+            width: 245px;
             background: rgba(2, 6, 23, 0.35);
             border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
             padding: 10px 12px;
-            max-height: calc(100vh - 218px);
+            max-height: calc(100vh - 215px);
             display: flex;
             flex-direction: column;
-            z-index: 2147483646;
+            z-index: 2147483647;
             pointer-events: auto;
             touch-action: manipulation;
             overflow: hidden;
@@ -169,8 +284,8 @@
             position: relative;
             z-index: 3;
             flex: 1;
-            min-height: 95px;
-            max-height: 210px;
+            min-height: 110px;
+            max-height: 240px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -325,12 +440,45 @@
         <div class="vinyl-copyright">© 2026 YokkhemRadio. All rights reserved.</div>
     </div>
 
-    <!-- 📻 กล่องวิทยุปลาทองด้านบนขวา แทนกล่องปุ่มควบคุมทั้งหมด -->
-    <div class="plathong-right-box" id="plathong-right-box">
-        <iframe src="https://radio.plathong.net/main/player/?server=radio9&port=7264" width="280" height="180" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
+    <div class="player-container" id="radio-player">
+        <div class="player-header">
+            <span>🎧 หยกเข้มเรดิโอ</span>
+            <span class="live-badge" id="status-badge">LOOP</span>
+        </div>
+        <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
+
+        <div class="control-panel">
+            <button type="button" class="btn-ctrl btn-nav" id="btn-prev" title="เพลงก่อนหน้า (Prev)">
+                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+            <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button type="button" class="btn-ctrl btn-pause" id="btn-pause" title="พักชั่วคราว (Pause)">
+                <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button type="button" class="btn-ctrl btn-stop" id="btn-stop" title="หยุดเล่น (Stop)">
+                <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+            </button>
+            <button type="button" class="btn-ctrl btn-nav" id="btn-next" title="เพลงถัดไป (Next)">
+                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
+        </div>
+
+        <!-- ✨ ตัววิ่งชื่อเพลง -->
+        <div class="marquee-box running" id="marquee-box">
+            <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
+        </div>
+
+        <!-- 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง -->
+        <div class="sub-radio-badge">
+            <span>🎧 หยกเข้มเรดิโอ</span>
+            <span class="sub-radio-tag">RADIO</span>
+        </div>
     </div>
 
-    <!-- 📻 กล่องรายชื่อเพลง ด้านขวาใต้กล่องวิทยุปลาทอง -->
+    <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
         <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
@@ -430,23 +578,44 @@
         ];
 
         let currentIndex = 0;
+        let isPaused = false;
         const player = document.getElementById('audio-player');
+        const titleElement = document.getElementById('current-title');
+        const statusBadge = document.getElementById('status-badge');
         const eqBox = document.getElementById('eq-box');
         const songListEl = document.getElementById('song-list');
+        const marqueeBox = document.getElementById('marquee-box');
+        const marqueeText = document.getElementById('marquee-text');
         const vinylLogo = document.getElementById('vinyl-logo');
 
         document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
 
+        function bindAction(el, fn) {
+            el.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
+                fn();
+            });
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
         function setPlayingVisuals(playing) {
             if (playing) {
                 eqBox.classList.add('playing');
+                marqueeBox.classList.add('running');
                 vinylLogo.classList.add('spinning');
                 startVinylSlideshow();
             } else {
                 eqBox.classList.remove('playing');
+                marqueeBox.classList.remove('running');
                 vinylLogo.classList.remove('spinning');
                 stopVinylSlideshow();
             }
+        }
+
+        function syncMarqueeTitle(track, prefix = 'กำลังเล่น') {
+            marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ 🎶`;
         }
 
         function highlightSong(index, autoScroll = false) {
@@ -484,6 +653,7 @@
             });
         }
 
+        /* 🎯 ดักคลิกผ่านกล่องรายชื่อเพลงโดยตรงเพื่อลดโอกาสอีเวนต์หลุดใน iframe */
         function handleSongListTrigger(e) {
             const row = e.target.closest('.song-row');
             if (!row || !songListEl.contains(row)) return;
@@ -503,6 +673,7 @@
 
         function startPlaylist(index = 0) {
             currentIndex = (index + tracks.length) % tracks.length;
+            isPaused = false;
 
             player.pause();
             player.muted = false;
@@ -510,15 +681,72 @@
             player.src = tracks[currentIndex].url;
             player.load();
 
+            titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
+            syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+            statusBadge.innerText = "LOOP";
+            statusBadge.style.background = "#10b981";
             highlightSong(currentIndex, true);
             setPlayingVisuals(true);
 
             const p = player.play();
             if (p !== undefined) {
                 p.catch(() => {
+                    statusBadge.innerText = "TAP PLAY";
                     setPlayingVisuals(false);
                 });
             }
+        }
+
+        function handlePrev() {
+            startPlaylist(currentIndex - 1);
+        }
+
+        function handleNext() {
+            startPlaylist(currentIndex + 1);
+        }
+
+        function handlePlay() {
+            if (isPaused && player.src) {
+                isPaused = false;
+                player.muted = false;
+                player.volume = 1;
+                titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
+                syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+                statusBadge.innerText = "LOOP";
+                statusBadge.style.background = "#10b981";
+                setPlayingVisuals(true);
+                player.play().catch(() => {});
+            } else {
+                startPlaylist(currentIndex);
+            }
+        }
+
+        function handlePause() {
+            player.pause();
+            isPaused = true;
+            titleElement.innerText = `พัก: ${tracks[currentIndex].title}`;
+            syncMarqueeTitle(tracks[currentIndex], 'พักชั่วคราว');
+            statusBadge.innerText = "PAUSED";
+            statusBadge.style.background = "#f59e0b";
+            setPlayingVisuals(false);
+        }
+
+        function handleStop() {
+            player.pause();
+            player.muted = true;
+            player.volume = 0;
+            player.currentTime = 0;
+            player.removeAttribute('src');
+            player.src = '';
+            player.load();
+            isPaused = false;
+            currentIndex = 0;
+            titleElement.innerText = "หยุดเล่นเพลงแล้ว";
+            marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • หยกเข้มเรดิโอ 🎶";
+            statusBadge.innerText = "STOPPED";
+            statusBadge.style.background = "#ef4444";
+            highlightSong(0, false);
+            setPlayingVisuals(false);
         }
 
         player.addEventListener('ended', () => {
@@ -526,6 +754,12 @@
         });
 
         renderSongList();
+        syncMarqueeTitle(tracks[0], 'พร้อมเล่น');
+        bindAction(document.getElementById('btn-prev'), handlePrev);
+        bindAction(document.getElementById('btn-next'), handleNext);
+        bindAction(document.getElementById('btn-play'), handlePlay);
+        bindAction(document.getElementById('btn-pause'), handlePause);
+        bindAction(document.getElementById('btn-stop'), handleStop);
 
         function updateClock() {
             const now = new Date();
