@@ -31,14 +31,14 @@
             pointer-events: none;
         }
 
-        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางแนวตั้ง ขอบซ้าย 10px เท่าขอบขวา */
+        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ ใหญ่ขึ้น หลบแถบไอคอนซ้ายสุด และชิดขอบกล่องแชท */
         .vinyl-container {
             position: fixed;
             top: 50%;
-            left: 10px;
+            left: 38px;
             transform: translateY(-50%);
-            width: 136px;
-            height: 136px;
+            width: 175px;
+            height: 175px;
             z-index: 2147483645;
             pointer-events: none;
             display: flex;
@@ -51,8 +51,8 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid rgba(56, 189, 248, 0.85);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.85), 0 0 14px rgba(56, 189, 248, 0.35);
+            border: 2.5px solid rgba(56, 189, 248, 0.9);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.45);
             animation: vinylSpin 5s linear infinite;
             animation-play-state: paused;
         }
@@ -66,16 +66,16 @@
             to { transform: rotate(360deg); }
         }
 
-        /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
+        /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา ขยับหลบขอบขวาไม่ให้บังตัวอักษรและชิดโซนแชท */
         .player-container {
             position: fixed;
-            top: 15px;
-            right: 10px;
-            width: 245px;
-            background: rgba(2, 6, 23, 0.35);
-            border: 1.5px solid rgba(56, 189, 248, 0.75);
+            top: 52px;
+            right: 22px;
+            width: 235px;
+            background: rgba(2, 6, 23, 0.45);
+            border: 1.5px solid rgba(56, 189, 248, 0.8);
             border-radius: 12px;
-            padding: 10px 12px;
+            padding: 10px 11px;
             z-index: 2147483647;
             pointer-events: auto;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
@@ -106,7 +106,7 @@
             font-size: 11px;
             font-weight: bold;
             color: #ffffff;
-            margin-bottom: 10px;
+            margin-bottom: 9px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -118,19 +118,19 @@
             align-items: center;
             justify-content: space-between;
             gap: 4px;
-            margin-bottom: 10px;
+            margin-bottom: 9px;
         }
 
         .btn-ctrl {
-            width: 36px;
-            height: 36px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
-            border: 1.5px solid rgba(255,255,255,0.4);
+            border: 1.5px solid rgba(255,255,255,0.45);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.75);
             transition: transform 0.15s;
             pointer-events: auto;
         }
@@ -142,8 +142,8 @@
         .btn-ctrl:hover { transform: scale(1.08); }
         .btn-ctrl:active { transform: scale(0.94); }
         .btn-ctrl svg {
-            width: 15px;
-            height: 15px;
+            width: 14px;
+            height: 14px;
             fill: currentColor;
             pointer-events: none;
         }
@@ -152,7 +152,7 @@
         .marquee-box {
             width: 100%;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.68);
             border: 1px solid rgba(56, 189, 248, 0.6);
             padding: 5px 8px;
             border-radius: 20px;
@@ -184,7 +184,7 @@
             margin-top: 7px;
             padding: 4px 8px;
             border-radius: 10px;
-            background: rgba(15, 23, 42, 0.55);
+            background: rgba(15, 23, 42, 0.58);
             border: 1px solid rgba(56, 189, 248, 0.4);
             font-size: 10px;
             font-weight: bold;
@@ -204,17 +204,17 @@
             letter-spacing: 0.4px;
         }
 
-        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
+        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง จัดแนวตรงกันเป๊ะ */
         .playlist-container {
             position: fixed;
-            top: 202px;
-            right: 10px;
-            width: 245px;
-            background: rgba(2, 6, 23, 0.35);
+            top: 234px;
+            right: 22px;
+            width: 235px;
+            background: rgba(2, 6, 23, 0.42);
             border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
-            padding: 10px 12px;
-            max-height: calc(100vh - 215px);
+            padding: 10px 11px;
+            max-height: calc(100vh - 252px);
             display: flex;
             flex-direction: column;
             z-index: 2147483646;
@@ -261,8 +261,8 @@
 
         .song-list {
             flex: 1;
-            min-height: 110px;
-            max-height: 240px;
+            min-height: 105px;
+            max-height: 235px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -280,8 +280,8 @@
         }
 
         .song-row {
-            padding: 5px 8px;
-            background: rgba(2, 6, 23, 0.55);
+            padding: 5px 7px;
+            background: rgba(2, 6, 23, 0.58);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-left: 3px solid transparent;
             border-radius: 5px;
@@ -329,9 +329,9 @@
 
         .after-tracks-note {
             margin-top: 7px;
-            padding: 5px 6px 2px;
+            padding: 5px 6px 3px;
             border-top: 1px dashed rgba(255, 255, 255, 0.35);
-            background: rgba(2, 6, 23, 0.5);
+            background: rgba(2, 6, 23, 0.52);
             border-radius: 6px;
             font-size: 10px;
             font-weight: 700;
@@ -404,7 +404,7 @@
     <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
     <video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
 
-    <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางแนวตั้ง ขอบซ้ายเท่ากับขอบขวา -->
+    <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางแนวตั้ง -->
     <div class="vinyl-container" id="vinyl-logo">
         <img src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
     </div>
