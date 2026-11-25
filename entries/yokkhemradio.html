@@ -223,7 +223,36 @@
             letter-spacing: 0.4px;
         }
 
-        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
+        /* 📻 กล่องตัวเล่นปลาทองด้านขวา */
+        .plathong-fixed-box {
+            display: none;
+            position: fixed;
+            top: 202px;
+            right: 10px;
+            width: 245px;
+            height: 118px;
+            background: rgba(2, 6, 23, 0.55);
+            border: 1.5px solid rgba(56, 189, 248, 0.85);
+            border-radius: 12px;
+            padding: 4px;
+            z-index: 2147483647;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        .plathong-fixed-box.active {
+            display: block;
+        }
+
+        .plathong-fixed-box iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+            display: block;
+        }
+
+        /* 📌 กรอบรายชื่อเพลง ด้านขวา */
         .playlist-container {
             position: fixed;
             top: 202px;
@@ -236,11 +265,17 @@
             max-height: calc(100vh - 215px);
             display: flex;
             flex-direction: column;
-            z-index: 2147483647;
+            z-index: 2147483646;
             pointer-events: auto;
             touch-action: manipulation;
             overflow: hidden;
+            transition: top 0.2s ease, max-height 0.2s ease;
             text-shadow: 0 1px 3px #000, 0 0 8px #000;
+        }
+
+        .playlist-container.shifted {
+            top: 326px;
+            max-height: calc(100vh - 338px);
         }
 
         /* 🖼️ ภาพพื้นหลังด้านในกรอบรายชื่อเพลง */
@@ -284,7 +319,7 @@
             position: relative;
             z-index: 3;
             flex: 1;
-            min-height: 110px;
+            min-height: 75px;
             max-height: 240px;
             overflow-y: auto;
             display: flex;
@@ -293,6 +328,10 @@
             padding-right: 2px;
             pointer-events: auto;
             touch-action: manipulation;
+        }
+
+        .playlist-container.shifted .song-list {
+            max-height: 170px;
         }
 
         .song-list::-webkit-scrollbar {
@@ -478,7 +517,12 @@
         </div>
     </div>
 
-    <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
+    <!-- 📻 กล่องตัวเล่นปลาทองด้านขวา -->
+    <div class="plathong-fixed-box" id="plathong-box">
+        <iframe id="plathong-iframe" data-src="https://radio.plathong.net/main/player/?server=radio9&port=7264" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <!-- 📻 กล่องรายชื่อเพลง ด้านขวา -->
     <div class="playlist-container" id="right-playlist">
         <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
@@ -574,7 +618,7 @@
             { title: 'เพลงลูกทุ่ง', url: 'https://ia600903.us.archive.org/29/items/luk-thung-music/Luk%20Thung%20music.mp3' },
             { title: 'เพลงใต้ ชุดใหม่', url: 'https://ia601609.us.archive.org/27/items/plangtai2/plangtai2.mp3' },
             { title: 'เพลงใต้ แนวเพราะ', url: 'https://files.catbox.moe/k4dtxi.mp3' },
-            { title: 'ปลาทอง เรดิโอ', url: 'https://radio9.plathong.net/7264/;stream.mp3?type=http' }
+            { title: 'ปลาทอง เรดิโอ', isPlathong: true }
         ];
 
         let currentIndex = 0;
@@ -587,6 +631,9 @@
         const marqueeBox = document.getElementById('marquee-box');
         const marqueeText = document.getElementById('marquee-text');
         const vinylLogo = document.getElementById('vinyl-logo');
+        const plathongBox = document.getElementById('plathong-box');
+        const plathongIframe = document.getElementById('plathong-iframe');
+        const rightPlaylist = document.getElementById('right-playlist');
 
         document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
 
@@ -616,6 +663,26 @@
 
         function syncMarqueeTitle(track, prefix = 'กำลังเล่น') {
             marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ 🎶`;
+        }
+
+        function activatePlathongBox(forceReload = true) {
+            const targetSrc = plathongIframe.getAttribute('data-src');
+            plathongBox.classList.add('active');
+            rightPlaylist.classList.add('shifted');
+            if (forceReload) {
+                plathongIframe.setAttribute('src', '');
+                setTimeout(() => {
+                    plathongIframe.setAttribute('src', targetSrc);
+                }, 40);
+            } else if (!plathongIframe.getAttribute('src')) {
+                plathongIframe.setAttribute('src', targetSrc);
+            }
+        }
+
+        function deactivatePlathongBox() {
+            plathongBox.classList.remove('active');
+            rightPlaylist.classList.remove('shifted');
+            plathongIframe.removeAttribute('src');
         }
 
         function highlightSong(index, autoScroll = false) {
@@ -653,7 +720,6 @@
             });
         }
 
-        /* 🎯 ดักคลิกผ่านกล่องรายชื่อเพลงโดยตรงเพื่อลดโอกาสอีเวนต์หลุดใน iframe */
         function handleSongListTrigger(e) {
             const row = e.target.closest('.song-row');
             if (!row || !songListEl.contains(row)) return;
@@ -674,18 +740,33 @@
         function startPlaylist(index = 0) {
             currentIndex = (index + tracks.length) % tracks.length;
             isPaused = false;
+            const currentTrack = tracks[currentIndex];
 
             player.pause();
+            highlightSong(currentIndex, true);
+
+            if (currentTrack.isPlathong) {
+                player.removeAttribute('src');
+                player.load();
+                activatePlathongBox(true);
+                titleElement.innerText = `🎵 ${currentTrack.title} • แตะเปิดเพลง`;
+                syncMarqueeTitle(currentTrack, 'แตะเปิดเพลง');
+                statusBadge.innerText = "แตะเปิดเพลง";
+                statusBadge.style.background = "#0284c7";
+                setPlayingVisuals(true);
+                return;
+            }
+
+            deactivatePlathongBox();
             player.muted = false;
             player.volume = 1;
-            player.src = tracks[currentIndex].url;
+            player.src = currentTrack.url;
             player.load();
 
-            titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
-            syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+            titleElement.innerText = `🎵 ${currentTrack.title}`;
+            syncMarqueeTitle(currentTrack, 'กำลังเล่น');
             statusBadge.innerText = "LOOP";
             statusBadge.style.background = "#10b981";
-            highlightSong(currentIndex, true);
             setPlayingVisuals(true);
 
             const p = player.play();
@@ -706,12 +787,25 @@
         }
 
         function handlePlay() {
+            const currentTrack = tracks[currentIndex];
+            if (currentTrack && currentTrack.isPlathong) {
+                isPaused = false;
+                activatePlathongBox(true);
+                titleElement.innerText = `🎵 ${currentTrack.title} • แตะเปิดเพลง`;
+                syncMarqueeTitle(currentTrack, 'แตะเปิดเพลง');
+                statusBadge.innerText = "แตะเปิดเพลง";
+                statusBadge.style.background = "#0284c7";
+                setPlayingVisuals(true);
+                return;
+            }
+
+            deactivatePlathongBox();
             if (isPaused && player.src) {
                 isPaused = false;
                 player.muted = false;
                 player.volume = 1;
-                titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
-                syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+                titleElement.innerText = `🎵 ${currentTrack.title}`;
+                syncMarqueeTitle(currentTrack, 'กำลังเล่น');
                 statusBadge.innerText = "LOOP";
                 statusBadge.style.background = "#10b981";
                 setPlayingVisuals(true);
@@ -723,6 +817,7 @@
 
         function handlePause() {
             player.pause();
+            deactivatePlathongBox();
             isPaused = true;
             titleElement.innerText = `พัก: ${tracks[currentIndex].title}`;
             syncMarqueeTitle(tracks[currentIndex], 'พักชั่วคราว');
@@ -739,6 +834,7 @@
             player.removeAttribute('src');
             player.src = '';
             player.load();
+            deactivatePlathongBox();
             isPaused = false;
             currentIndex = 0;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
