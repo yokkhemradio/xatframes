@@ -223,36 +223,82 @@
             letter-spacing: 0.4px;
         }
 
-        /* 📻 กล่องตัวเล่นปลาทองด้านขวา */
-        .plathong-fixed-box {
+        /* 🎈 กล่องวิทยุปลาทองแบบเด้งเปิด และลากย้ายไปมาได้ */
+        .plathong-popup {
             display: none;
             position: fixed;
             top: 202px;
-            right: 10px;
-            width: 245px;
-            height: 118px;
-            background: rgba(2, 6, 23, 0.55);
-            border: 1.5px solid rgba(56, 189, 248, 0.85);
+            right: 265px;
+            width: 260px;
+            background: rgba(2, 6, 23, 0.86);
+            border: 1.5px solid rgba(56, 189, 248, 0.95);
             border-radius: 12px;
-            padding: 4px;
+            padding: 6px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.45);
             z-index: 2147483647;
             pointer-events: auto;
-            overflow: hidden;
+            user-select: none;
         }
 
-        .plathong-fixed-box.active {
+        .plathong-popup.open {
             display: block;
+            animation: popupBounce 0.28s cubic-bezier(0.22, 1.35, 0.36, 1);
         }
 
-        .plathong-fixed-box iframe {
+        @keyframes popupBounce {
+            0% { transform: scale(0.72); opacity: 0; }
+            70% { transform: scale(1.04); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .plathong-drag-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 7px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            background: rgba(14, 165, 233, 0.28);
+            border: 1px solid rgba(125, 211, 252, 0.45);
+            cursor: grab;
+            touch-action: none;
+            font-size: 10.5px;
+            font-weight: 800;
+            color: #e0f2fe;
+        }
+
+        .plathong-drag-bar:active {
+            cursor: grabbing;
+        }
+
+        .plathong-close-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            background: rgba(239, 68, 68, 0.88);
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+        }
+
+        .plathong-popup iframe {
             width: 100%;
-            height: 100%;
+            height: 112px;
             border: 0;
             border-radius: 8px;
             display: block;
+            background: rgba(15, 23, 42, 0.6);
         }
 
-        /* 📌 กรอบรายชื่อเพลง ด้านขวา */
+        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง ด้านขวา */
         .playlist-container {
             position: fixed;
             top: 202px;
@@ -269,13 +315,7 @@
             pointer-events: auto;
             touch-action: manipulation;
             overflow: hidden;
-            transition: top 0.2s ease, max-height 0.2s ease;
             text-shadow: 0 1px 3px #000, 0 0 8px #000;
-        }
-
-        .playlist-container.shifted {
-            top: 326px;
-            max-height: calc(100vh - 338px);
         }
 
         /* 🖼️ ภาพพื้นหลังด้านในกรอบรายชื่อเพลง */
@@ -319,7 +359,7 @@
             position: relative;
             z-index: 3;
             flex: 1;
-            min-height: 75px;
+            min-height: 110px;
             max-height: 240px;
             overflow-y: auto;
             display: flex;
@@ -328,10 +368,6 @@
             padding-right: 2px;
             pointer-events: auto;
             touch-action: manipulation;
-        }
-
-        .playlist-container.shifted .song-list {
-            max-height: 170px;
         }
 
         .song-list::-webkit-scrollbar {
@@ -517,12 +553,16 @@
         </div>
     </div>
 
-    <!-- 📻 กล่องตัวเล่นปลาทองด้านขวา -->
-    <div class="plathong-fixed-box" id="plathong-box">
+    <!-- 🎈 กล่องวิทยุปลาทองเด้งเปิด และลากย้ายไปมาได้ -->
+    <div class="plathong-popup" id="plathong-popup">
+        <div class="plathong-drag-bar" id="plathong-drag-bar" title="ลากย้ายกล่องวิทยุปลาทอง">
+            <span>🐟 ปลาทอง เรดิโอ (ลากย้ายได้)</span>
+            <button type="button" class="plathong-close-btn" id="plathong-close-btn" title="ซ่อนกล่อง">×</button>
+        </div>
         <iframe id="plathong-iframe" data-src="https://radio.plathong.net/main/player/?server=radio9&port=7264" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
 
-    <!-- 📻 กล่องรายชื่อเพลง ด้านขวา -->
+    <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
         <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
@@ -631,9 +671,10 @@
         const marqueeBox = document.getElementById('marquee-box');
         const marqueeText = document.getElementById('marquee-text');
         const vinylLogo = document.getElementById('vinyl-logo');
-        const plathongBox = document.getElementById('plathong-box');
+        const plathongPopup = document.getElementById('plathong-popup');
         const plathongIframe = document.getElementById('plathong-iframe');
-        const rightPlaylist = document.getElementById('right-playlist');
+        const plathongDragBar = document.getElementById('plathong-drag-bar');
+        const plathongCloseBtn = document.getElementById('plathong-close-btn');
 
         document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
 
@@ -665,25 +706,67 @@
             marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ 🎶`;
         }
 
-        function activatePlathongBox(forceReload = true) {
+        function openPlathongPopup() {
             const targetSrc = plathongIframe.getAttribute('data-src');
-            plathongBox.classList.add('active');
-            rightPlaylist.classList.add('shifted');
-            if (forceReload) {
-                plathongIframe.setAttribute('src', '');
-                setTimeout(() => {
-                    plathongIframe.setAttribute('src', targetSrc);
-                }, 40);
-            } else if (!plathongIframe.getAttribute('src')) {
+            plathongPopup.classList.remove('open');
+            void plathongPopup.offsetWidth;
+            plathongPopup.classList.add('open');
+            if (!plathongIframe.getAttribute('src')) {
                 plathongIframe.setAttribute('src', targetSrc);
             }
         }
 
-        function deactivatePlathongBox() {
-            plathongBox.classList.remove('active');
-            rightPlaylist.classList.remove('shifted');
+        function closePlathongPopup() {
+            plathongPopup.classList.remove('open');
             plathongIframe.removeAttribute('src');
         }
+
+        /* 🖐️ ระบบลากกล่องวิทยุปลาทองย้ายตำแหน่งบนหน้าจอ */
+        let isDraggingPopup = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let popupStartLeft = 0;
+        let popupStartTop = 0;
+
+        plathongDragBar.addEventListener('pointerdown', (e) => {
+            if (e.target === plathongCloseBtn) return;
+            e.stopPropagation();
+            isDraggingPopup = true;
+            const rect = plathongPopup.getBoundingClientRect();
+            plathongPopup.style.left = `${rect.left}px`;
+            plathongPopup.style.top = `${rect.top}px`;
+            plathongPopup.style.right = 'auto';
+            dragStartX = e.clientX;
+            dragStartY = e.clientY;
+            popupStartLeft = rect.left;
+            popupStartTop = rect.top;
+            plathongDragBar.setPointerCapture(e.pointerId);
+        });
+
+        plathongDragBar.addEventListener('pointermove', (e) => {
+            if (!isDraggingPopup) return;
+            e.stopPropagation();
+            const dx = e.clientX - dragStartX;
+            const dy = e.clientY - dragStartY;
+            const maxLeft = Math.max(8, window.innerWidth - plathongPopup.offsetWidth - 8);
+            const maxTop = Math.max(8, window.innerHeight - plathongPopup.offsetHeight - 8);
+            const nextLeft = Math.min(maxLeft, Math.max(8, popupStartLeft + dx));
+            const nextTop = Math.min(maxTop, Math.max(8, popupStartTop + dy));
+            plathongPopup.style.left = `${nextLeft}px`;
+            plathongPopup.style.top = `${nextTop}px`;
+        });
+
+        function stopDraggingPopup(e) {
+            if (!isDraggingPopup) return;
+            isDraggingPopup = false;
+            if (e && e.pointerId !== undefined && plathongDragBar.hasPointerCapture(e.pointerId)) {
+                plathongDragBar.releasePointerCapture(e.pointerId);
+            }
+        }
+
+        plathongDragBar.addEventListener('pointerup', stopDraggingPopup);
+        plathongDragBar.addEventListener('pointercancel', stopDraggingPopup);
+        bindAction(plathongCloseBtn, closePlathongPopup);
 
         function highlightSong(index, autoScroll = false) {
             for (let i = 0; i < tracks.length; i++) {
@@ -748,7 +831,7 @@
             if (currentTrack.isPlathong) {
                 player.removeAttribute('src');
                 player.load();
-                activatePlathongBox(true);
+                openPlathongPopup();
                 titleElement.innerText = `🎵 ${currentTrack.title} • แตะเปิดเพลง`;
                 syncMarqueeTitle(currentTrack, 'แตะเปิดเพลง');
                 statusBadge.innerText = "แตะเปิดเพลง";
@@ -757,7 +840,7 @@
                 return;
             }
 
-            deactivatePlathongBox();
+            closePlathongPopup();
             player.muted = false;
             player.volume = 1;
             player.src = currentTrack.url;
@@ -790,7 +873,7 @@
             const currentTrack = tracks[currentIndex];
             if (currentTrack && currentTrack.isPlathong) {
                 isPaused = false;
-                activatePlathongBox(true);
+                openPlathongPopup();
                 titleElement.innerText = `🎵 ${currentTrack.title} • แตะเปิดเพลง`;
                 syncMarqueeTitle(currentTrack, 'แตะเปิดเพลง');
                 statusBadge.innerText = "แตะเปิดเพลง";
@@ -799,7 +882,7 @@
                 return;
             }
 
-            deactivatePlathongBox();
+            closePlathongPopup();
             if (isPaused && player.src) {
                 isPaused = false;
                 player.muted = false;
@@ -817,7 +900,7 @@
 
         function handlePause() {
             player.pause();
-            deactivatePlathongBox();
+            closePlathongPopup();
             isPaused = true;
             titleElement.innerText = `พัก: ${tracks[currentIndex].title}`;
             syncMarqueeTitle(tracks[currentIndex], 'พักชั่วคราว');
@@ -834,7 +917,7 @@
             player.removeAttribute('src');
             player.src = '';
             player.load();
-            deactivatePlathongBox();
+            closePlathongPopup();
             isPaused = false;
             currentIndex = 0;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
