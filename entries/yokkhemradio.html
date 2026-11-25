@@ -63,7 +63,7 @@
             text-overflow: ellipsis;
         }
 
-        /* แผงปุ่มควบคุม (ย้อนกลับมีขีด - เล่น - พัก - หยุด - ถัดไปมีขีด) */
+        /* แผงปุ่มควบคุม */
         .control-panel {
             display: flex;
             align-items: center;
@@ -97,7 +97,7 @@
             pointer-events: none;
         }
 
-        /* ✨ ตัววิ่งชื่อเพลงช้าๆ นุ่มนวลแทนที่ระดับเสียงใต้ตัวเล่นเพลง */
+        /* ✨ ตัววิ่งชื่อเพลงช้าๆ นุ่มนวล */
         .marquee-box {
             width: 100%;
             overflow: hidden;
@@ -164,7 +164,30 @@
             flex-direction: column;
             z-index: 2147483646;
             pointer-events: auto;
+            overflow: hidden;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+        }
+
+        /* 🖼️ ภาพพื้นหลังโปร่งจางๆ ด้านในกรอบรายชื่อเพลง */
+        .playlist-bg-art {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.28;
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 12px;
+        }
+
+        .playlist-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 0;
         }
 
         .playlist-title {
@@ -183,7 +206,7 @@
         .song-list {
             flex: 1;
             min-height: 110px;
-            max-height: 230px;
+            max-height: 240px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -333,7 +356,7 @@
             </button>
         </div>
 
-        <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ แทนที่ระดับเสียงใต้ตัวเล่นเพลง -->
+        <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ -->
         <div class="marquee-box" id="marquee-box">
             <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
         </div>
@@ -347,31 +370,35 @@
 
     <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
-        <div class="playlist-title">
-            <span>รายชื่อเพลง</span>
-            <span style="font-size: 10px;" id="song-count-label">7 เพลง</span>
-        </div>
+        <img src="https://xatimg.com/image/NehQH2V0JhNQ.png" alt="" class="playlist-bg-art">
 
-        <div class="song-list" id="song-list"></div>
-
-        <!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
-        <div class="after-tracks-note">
-            🎶 เล่นจบเพลงแล้วขึ้นเพลงต่อไปอัตโนมัติครับ<br>
-            เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
-        </div>
-
-        <!-- 📊 EQ + นาฬิกาและวันที่ -->
-        <div class="right-footer-widget">
-            <div class="eq-box" id="eq-box">
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
-                <div class="eq-bar"></div>
+        <div class="playlist-content">
+            <div class="playlist-title">
+                <span>รายชื่อเพลง</span>
+                <span style="font-size: 10px;" id="song-count-label">7 เพลง</span>
             </div>
-            <div class="clock-box">
-                <div class="clock-time" id="clock-time">00:00:00</div>
-                <div class="clock-date" id="clock-date">00/00/0000</div>
+
+            <div class="song-list" id="song-list"></div>
+
+            <!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
+            <div class="after-tracks-note">
+                🎶 เล่นจบเพลงแล้วขึ้นเพลงต่อไปอัตโนมัติครับ<br>
+                เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
+            </div>
+
+            <!-- 📊 EQ + นาฬิกาและวันที่ -->
+            <div class="right-footer-widget">
+                <div class="eq-box" id="eq-box">
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                    <div class="eq-bar"></div>
+                </div>
+                <div class="clock-box">
+                    <div class="clock-time" id="clock-time">00:00:00</div>
+                    <div class="clock-date" id="clock-date">00/00/0000</div>
+                </div>
             </div>
         </div>
     </div>
