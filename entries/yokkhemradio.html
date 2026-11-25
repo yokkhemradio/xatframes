@@ -101,7 +101,7 @@
         .marquee-box {
             width: 100%;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.35);
+            background: rgba(15, 23, 42, 0.45);
             border: 1px solid rgba(56, 189, 248, 0.55);
             padding: 5px 8px;
             border-radius: 20px;
@@ -130,7 +130,7 @@
             margin-top: 7px;
             padding: 4px 8px;
             border-radius: 10px;
-            background: rgba(15, 23, 42, 0.35);
+            background: rgba(15, 23, 42, 0.45);
             border: 1px solid rgba(56, 189, 248, 0.35);
             font-size: 10px;
             font-weight: bold;
@@ -155,8 +155,8 @@
             top: 202px;
             right: 10px;
             width: 245px;
-            background: transparent;
-            border: 1.5px solid rgba(56, 189, 248, 0.75);
+            background: rgba(2, 6, 23, 0.1);
+            border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
             padding: 10px 12px;
             max-height: calc(100vh - 215px);
@@ -165,17 +165,17 @@
             z-index: 2147483646;
             pointer-events: auto;
             overflow: hidden;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
-        /* 🖼️ ภาพพื้นหลังโปร่งจางๆ ด้านในกรอบรายชื่อเพลง */
+        /* 🖼️ ภาพพื้นหลังด้านในกรอบรายชื่อเพลง (เข้มขึ้นอีก) */
         .playlist-bg-art {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.28;
+            opacity: 0.85;
             pointer-events: none;
             z-index: 0;
             border-radius: 12px;
@@ -192,15 +192,16 @@
 
         .playlist-title {
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 800;
             margin-bottom: 6px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             padding-bottom: 5px;
-            color: #38bdf8;
+            color: #7dd3fc;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
+            text-shadow: 0 1px 3px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
         .song-list {
@@ -218,14 +219,14 @@
             width: 4px;
         }
         .song-list::-webkit-scrollbar-thumb {
-            background: rgba(56, 189, 248, 0.55);
+            background: rgba(56, 189, 248, 0.65);
             border-radius: 4px;
         }
 
         .song-row {
             padding: 5px 8px;
-            background: rgba(15, 23, 42, 0.28);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(2, 6, 23, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-left: 3px solid transparent;
             border-radius: 5px;
             cursor: pointer;
@@ -237,49 +238,62 @@
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
+            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
         .song-row:hover {
-            background: rgba(56, 189, 248, 0.28);
+            background: rgba(14, 165, 233, 0.38);
+            border-color: rgba(125, 211, 252, 0.65);
         }
         .song-row.active {
-            background: rgba(14, 165, 233, 0.38);
-            border-left: 3px solid #38bdf8;
-            color: #fde047;
-            font-weight: bold;
+            background: rgba(14, 165, 233, 0.48);
+            border-color: #38bdf8;
+            border-left: 3px solid #fde047;
+            color: #fef08a;
+            font-weight: 800;
         }
         .song-name {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: #ffffff;
+        }
+        .song-row.active .song-name {
+            color: #fef08a;
         }
         .song-tag {
             font-size: 9px;
-            color: #38bdf8;
+            font-weight: bold;
+            color: #7dd3fc;
             flex-shrink: 0;
         }
 
         /* ✨ ข้อความเชิญชวนใต้รายชื่อเพลง */
         .after-tracks-note {
             margin-top: 7px;
-            padding-top: 7px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.25);
+            padding: 5px 6px 2px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.35);
+            background: rgba(2, 6, 23, 0.28);
+            border-radius: 6px;
             font-size: 10px;
-            color: #fde047;
+            font-weight: 700;
+            color: #fef08a;
             text-align: center;
-            line-height: 1.4;
+            line-height: 1.45;
             flex-shrink: 0;
+            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
         /* 📊 EQ + นาฬิกาและวันที่ */
         .right-footer-widget {
             margin-top: 7px;
             padding-top: 7px;
-            border-top: 1px solid rgba(255, 255, 255, 0.25);
+            border-top: 1px solid rgba(255, 255, 255, 0.35);
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
+            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
         .eq-box {
@@ -324,7 +338,8 @@
 
         .clock-date {
             font-size: 9px;
-            color: #38bdf8;
+            font-weight: bold;
+            color: #7dd3fc;
         }
     </style>
 </head>
@@ -370,7 +385,7 @@
 
     <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
-        <img src="https://xatimg.com/image/NehQH2V0JhNQ.png" alt="" class="playlist-bg-art">
+        <img src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
         <div class="playlist-content">
             <div class="playlist-title">
