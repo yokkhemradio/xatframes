@@ -19,13 +19,25 @@
             overflow: hidden;
         }
 
+        /* 🌌 วิดีโอพื้นหลังเต็มหน้าจอ ปิดเสียงสนิท */
+        .bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -1;
+            pointer-events: none;
+        }
+
         /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
         .player-container {
             position: fixed;
             top: 15px;
             right: 10px;
             width: 245px;
-            background: transparent;
+            background: rgba(2, 6, 23, 0.35);
             border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
             padding: 10px 12px;
@@ -44,6 +56,7 @@
             align-items: center;
             gap: 4px;
         }
+
         .live-badge {
             background: rgba(239, 68, 68, 0.92);
             color: #fff;
@@ -53,6 +66,7 @@
             font-weight: bold;
             flex-shrink: 0;
         }
+
         .track-title {
             font-size: 11px;
             font-weight: bold;
@@ -71,6 +85,7 @@
             gap: 4px;
             margin-bottom: 10px;
         }
+
         .btn-ctrl {
             width: 36px;
             height: 36px;
@@ -84,6 +99,7 @@
             transition: transform 0.15s;
             pointer-events: auto;
         }
+
         .btn-nav { background: #0284c7; color: #fff; }
         .btn-play { background: #10b981; color: #fff; }
         .btn-pause { background: #f59e0b; color: #fff; }
@@ -97,31 +113,34 @@
             pointer-events: none;
         }
 
-        /* ✨ ตัววิ่งชื่อเพลงช้าๆ นุ่มนวล */
+        /* ✨ ตัววิ่งชื่อเพลง */
         .marquee-box {
             width: 100%;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.45);
-            border: 1px solid rgba(56, 189, 248, 0.55);
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(56, 189, 248, 0.6);
             padding: 5px 8px;
             border-radius: 20px;
             position: relative;
         }
+
         .marquee-text {
-            display: inline-block;
+            display: block;
             white-space: nowrap;
             font-size: 11px;
             font-weight: bold;
             color: #fde047;
-            transform: translateX(100%);
-            animation: marqueeSlideSlow 24s linear infinite;
+            padding-left: 100%;
+            animation: marqueeSlide 18s linear infinite;
             animation-play-state: paused;
         }
+
         .marquee-box.running .marquee-text {
             animation-play-state: running;
         }
-        @keyframes marqueeSlideSlow {
-            0% { transform: translateX(100%); }
+
+        @keyframes marqueeSlide {
+            0% { transform: translateX(0%); }
             100% { transform: translateX(-100%); }
         }
 
@@ -130,8 +149,8 @@
             margin-top: 7px;
             padding: 4px 8px;
             border-radius: 10px;
-            background: rgba(15, 23, 42, 0.45);
-            border: 1px solid rgba(56, 189, 248, 0.35);
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(56, 189, 248, 0.4);
             font-size: 10px;
             font-weight: bold;
             color: #e2e8f0;
@@ -140,8 +159,9 @@
             align-items: center;
             gap: 6px;
         }
+
         .sub-radio-tag {
-            background: rgba(14, 165, 233, 0.85);
+            background: rgba(14, 165, 233, 0.9);
             color: #ffffff;
             font-size: 9px;
             padding: 1px 6px;
@@ -155,7 +175,7 @@
             top: 202px;
             right: 10px;
             width: 245px;
-            background: rgba(2, 6, 23, 0.1);
+            background: rgba(2, 6, 23, 0.35);
             border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
             padding: 10px 12px;
@@ -165,17 +185,18 @@
             z-index: 2147483646;
             pointer-events: auto;
             overflow: hidden;
-            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
+            text-shadow: 0 1px 3px #000, 0 0 8px #000;
         }
 
-        /* 🖼️ ภาพพื้นหลังด้านในกรอบรายชื่อเพลง (เข้มขึ้นอีก) */
+        /* 🖼️ ภาพพื้นหลังด้านในกรอบรายชื่อเพลง จัดตำแหน่งให้ไม่บังใบหน้า */
         .playlist-bg-art {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            opacity: 0.85;
+            object-position: center 15%;
+            opacity: 0.45;
             pointer-events: none;
             z-index: 0;
             border-radius: 12px;
@@ -194,14 +215,13 @@
             font-size: 12px;
             font-weight: 800;
             margin-bottom: 6px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
             padding-bottom: 5px;
             color: #7dd3fc;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-shrink: 0;
-            text-shadow: 0 1px 3px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
         .song-list {
@@ -218,6 +238,7 @@
         .song-list::-webkit-scrollbar {
             width: 4px;
         }
+
         .song-list::-webkit-scrollbar-thumb {
             background: rgba(56, 189, 248, 0.65);
             border-radius: 4px;
@@ -225,8 +246,8 @@
 
         .song-row {
             padding: 5px 8px;
-            background: rgba(2, 6, 23, 0.34);
-            border: 1px solid rgba(255, 255, 255, 0.28);
+            background: rgba(2, 6, 23, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             border-left: 3px solid transparent;
             border-radius: 5px;
             cursor: pointer;
@@ -238,28 +259,32 @@
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
-            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
+
         .song-row:hover {
-            background: rgba(14, 165, 233, 0.38);
-            border-color: rgba(125, 211, 252, 0.65);
+            background: rgba(14, 165, 233, 0.42);
+            border-color: rgba(125, 211, 252, 0.6);
         }
+
         .song-row.active {
-            background: rgba(14, 165, 233, 0.48);
+            background: rgba(14, 165, 233, 0.55);
             border-color: #38bdf8;
             border-left: 3px solid #fde047;
             color: #fef08a;
             font-weight: 800;
         }
+
         .song-name {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             color: #ffffff;
         }
+
         .song-row.active .song-name {
             color: #fef08a;
         }
+
         .song-tag {
             font-size: 9px;
             font-weight: bold;
@@ -267,12 +292,11 @@
             flex-shrink: 0;
         }
 
-        /* ✨ ข้อความเชิญชวนใต้รายชื่อเพลง */
         .after-tracks-note {
             margin-top: 7px;
             padding: 5px 6px 2px;
             border-top: 1px dashed rgba(255, 255, 255, 0.35);
-            background: rgba(2, 6, 23, 0.28);
+            background: rgba(2, 6, 23, 0.5);
             border-radius: 6px;
             font-size: 10px;
             font-weight: 700;
@@ -280,20 +304,17 @@
             text-align: center;
             line-height: 1.45;
             flex-shrink: 0;
-            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
-        /* 📊 EQ + นาฬิกาและวันที่ */
         .right-footer-widget {
             margin-top: 7px;
             padding-top: 7px;
-            border-top: 1px solid rgba(255, 255, 255, 0.35);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 8px;
             flex-shrink: 0;
-            text-shadow: 0 1px 2px #000, 0 0 8px #000, 0 0 12px #000;
         }
 
         .eq-box {
@@ -345,11 +366,14 @@
 </head>
 <body>
 
+    <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
+    <video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
+
     <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
     <div class="player-container" id="radio-player">
         <div class="player-header">
             <span>🎧 หยกเข้มเรดิโอ</span>
-            <span class="live-badge" id="status-badge">READY</span>
+            <span class="live-badge" id="status-badge">LOOP</span>
         </div>
         <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
 
@@ -371,8 +395,8 @@
             </button>
         </div>
 
-        <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ -->
-        <div class="marquee-box" id="marquee-box">
+        <!-- ✨ ตัววิ่งชื่อเพลง -->
+        <div class="marquee-box running" id="marquee-box">
             <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
         </div>
 
@@ -385,7 +409,7 @@
 
     <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
-        <img src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
+        <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
         <div class="playlist-content">
             <div class="playlist-title">
@@ -397,7 +421,7 @@
 
             <!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
             <div class="after-tracks-note">
-                🎶 เล่นจบเพลงแล้วขึ้นเพลงต่อไปอัตโนมัติครับ<br>
+                🔁 วนลูบต่อเนื่องครบ 7 เพลงอัตโนมัติครับ<br>
                 เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
             </div>
 
@@ -421,6 +445,18 @@
     <audio id="audio-player" preload="auto"></audio>
 
     <script>
+        const bgVideo = document.getElementById('bg-video');
+        function keepVideoSilentLoop() {
+            bgVideo.loop = true;
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.play().catch(() => {});
+        }
+        keepVideoSilentLoop();
+        bgVideo.addEventListener('volumechange', keepVideoSilentLoop);
+        bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
+        document.addEventListener('pointerdown', keepVideoSilentLoop, { once: true });
+
         const tracks = [
             { title: 'สตริงใหม่ล่าสุด', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
             { title: 'เพลงฮิต tiktok 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
@@ -493,7 +529,7 @@
 
                 const tagSpan = document.createElement('span');
                 tagSpan.className = 'song-tag';
-                tagSpan.innerText = 'NEXT';
+                tagSpan.innerText = 'LOOP';
 
                 row.appendChild(nameSpan);
                 row.appendChild(tagSpan);
@@ -514,7 +550,7 @@
 
             titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
             syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
-            statusBadge.innerText = "RADIO";
+            statusBadge.innerText = "LOOP";
             statusBadge.style.background = "#10b981";
             highlightSong(currentIndex, true);
             setPlayingVisuals(true);
@@ -543,7 +579,7 @@
                 player.volume = 1;
                 titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
                 syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
-                statusBadge.innerText = "RADIO";
+                statusBadge.innerText = "LOOP";
                 statusBadge.style.background = "#10b981";
                 setPlayingVisuals(true);
                 player.play().catch(() => {});
