@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>MYRADIOhit Player</title>
+    <title>หยกเข้มเรดิโอ เพลงเพราะ</title>
     <style>
         * {
             box-sizing: border-box;
@@ -63,17 +63,17 @@
             text-overflow: ellipsis;
         }
 
-        /* แผงปุ่มควบคุม */
+        /* แผงปุ่มควบคุม (ซ้าย - เล่น - พัก - หยุด - ขวา) */
         .control-panel {
             display: flex;
             align-items: center;
-            justify-content: space-around;
-            gap: 8px;
+            justify-content: space-between;
+            gap: 4px;
             margin-bottom: 10px;
         }
         .btn-ctrl {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: 1.5px solid rgba(255,255,255,0.4);
             cursor: pointer;
@@ -83,15 +83,18 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.7);
             transition: transform 0.15s;
             pointer-events: auto;
+            font-size: 13px;
+            font-weight: bold;
         }
+        .btn-nav { background: #0284c7; color: #fff; }
         .btn-play { background: #10b981; color: #fff; }
         .btn-pause { background: #f59e0b; color: #fff; }
         .btn-stop { background: #ef4444; color: #fff; }
         .btn-ctrl:hover { transform: scale(1.08); }
         .btn-ctrl:active { transform: scale(0.94); }
         .btn-ctrl svg {
-            width: 16px;
-            height: 16px;
+            width: 15px;
+            height: 15px;
             fill: currentColor;
             pointer-events: none;
         }
@@ -291,6 +294,7 @@
         <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
 
         <div class="control-panel">
+            <button type="button" class="btn-ctrl btn-nav" id="btn-prev" title="ชุดเพลงก่อนหน้า (Prev)">◀</button>
             <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
                 <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             </button>
@@ -300,6 +304,7 @@
             <button type="button" class="btn-ctrl btn-stop" id="btn-stop" title="หยุดเล่น (Stop)">
                 <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
             </button>
+            <button type="button" class="btn-ctrl btn-nav" id="btn-next" title="ชุดเพลงถัดไป (Next)">▶</button>
         </div>
 
         <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ แทนที่ระดับเสียงใต้ตัวเล่นเพลง -->
@@ -424,7 +429,7 @@
         }
 
         function startPlaylist(index = 0) {
-            currentIndex = index;
+            currentIndex = (index + tracks.length) % tracks.length;
             isPaused = false;
 
             player.pause();
@@ -447,6 +452,14 @@
                     setPlayingVisuals(false);
                 });
             }
+        }
+
+        function handlePrev() {
+            startPlaylist(currentIndex - 1);
+        }
+
+        function handleNext() {
+            startPlaylist(currentIndex + 1);
         }
 
         function handlePlay() {
@@ -494,12 +507,13 @@
         }
 
         player.addEventListener('ended', () => {
-            const nextIndex = (currentIndex + 1) % tracks.length;
-            startPlaylist(nextIndex);
+            startPlaylist(currentIndex + 1);
         });
 
         renderSongList();
         syncMarqueeTitle(tracks[0], 'พร้อมเล่น');
+        bindAction(document.getElementById('btn-prev'), handlePrev);
+        bindAction(document.getElementById('btn-next'), handleNext);
         bindAction(document.getElementById('btn-play'), handlePlay);
         bindAction(document.getElementById('btn-pause'), handlePause);
         bindAction(document.getElementById('btn-stop'), handleStop);
