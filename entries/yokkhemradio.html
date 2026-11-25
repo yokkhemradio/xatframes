@@ -31,13 +31,38 @@
             pointer-events: none;
         }
 
-        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางระหว่างขอบซ้ายกับกล่องแชท (สลับ 6 ภาพ + หมุนตอนเล่นเพลง) */
+        /* 📻 กล่องปลาทองด้านซ้ายบน ขนาด 350x200 ห่างขอบซ้าย-บนเท่าฝั่งขวา */
+        .plathong-left-box {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            width: 350px;
+            height: 200px;
+            background: rgba(2, 6, 23, 0.55);
+            border: 1.5px solid rgba(56, 189, 248, 0.85);
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
+            z-index: 2147483646;
+            pointer-events: auto;
+            overflow: hidden;
+        }
+
+        .plathong-left-box iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 8px;
+            display: block;
+        }
+
+        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ ด้านล่างกล่องปลาทอง (สลับ 6 ภาพ + หมุนตอนเล่นเพลง) */
         .vinyl-container {
             position: fixed;
-            top: 50%;
+            top: calc(50% + 75px);
             left: calc((100vw - 728px) / 4 + 14px);
             transform: translate(-50%, -50%);
-            width: 175px;
+            width: 155px;
             z-index: 2147483645;
             pointer-events: none;
             display: flex;
@@ -47,8 +72,8 @@
         }
 
         .vinyl-disc {
-            width: 175px;
-            height: 175px;
+            width: 155px;
+            height: 155px;
             border-radius: 50%;
             object-fit: cover;
             border: 2.5px solid rgba(56, 189, 248, 0.9);
@@ -223,10 +248,10 @@
             letter-spacing: 0.4px;
         }
 
-        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
+        /* 📌 กรอบรายชื่อเพลง วางด้านล่างขวา / ท้ายโซน */
         .playlist-container {
             position: fixed;
-            top: 202px;
+            bottom: 14px;
             right: 10px;
             width: 245px;
             background: rgba(2, 6, 23, 0.35);
@@ -285,7 +310,7 @@
             z-index: 3;
             flex: 1;
             min-height: 110px;
-            max-height: 240px;
+            max-height: 220px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -434,6 +459,11 @@
     <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
     <video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
 
+    <!-- 📻 กล่องปลาทองด้านซ้ายบน ขนาด 350x200 -->
+    <div class="plathong-left-box" id="plathong-left-box">
+        <iframe src="https://radio.plathong.net/main/player/?server=radio9&port=7264" width="350" height="200" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
     <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ สลับหมุน 6 ภาพ -->
     <div class="vinyl-container" id="vinyl-logo">
         <img id="vinyl-disc-img" src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
@@ -478,7 +508,7 @@
         </div>
     </div>
 
-    <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
+    <!-- 📻 กล่องรายชื่อเพลง ด้านล่างขวา -->
     <div class="playlist-container" id="right-playlist">
         <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
@@ -653,7 +683,6 @@
             });
         }
 
-        /* 🎯 ดักคลิกผ่านกล่องรายชื่อเพลงโดยตรงเพื่อลดโอกาสอีเวนต์หลุดใน iframe */
         function handleSongListTrigger(e) {
             const row = e.target.closest('.song-row');
             if (!row || !songListEl.contains(row)) return;
