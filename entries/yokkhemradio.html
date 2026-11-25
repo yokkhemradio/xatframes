@@ -31,7 +31,7 @@
             pointer-events: none;
         }
 
-        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางระหว่างขอบซ้ายกับกล่องแชท */
+        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางระหว่างขอบซ้ายกับกล่องแชท (สลับ 6 ภาพ + หมุนตอนเล่นเพลง) */
         .vinyl-container {
             position: fixed;
             top: 50%;
@@ -55,6 +55,12 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.45);
             animation: vinylSpin 5s linear infinite;
             animation-play-state: paused;
+            transition: opacity 0.45s ease-in-out;
+            opacity: 1;
+        }
+
+        .vinyl-disc.fading {
+            opacity: 0.15;
         }
 
         .vinyl-container.spinning .vinyl-disc {
@@ -404,9 +410,9 @@
     <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
     <video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
 
-    <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางระหว่างขอบซ้ายกับกล่องแชท -->
+    <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ สลับหมุน 6 ภาพ -->
     <div class="vinyl-container" id="vinyl-logo">
-        <img src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
+        <img id="vinyl-disc-img" src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
     </div>
 
     <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
@@ -497,6 +503,45 @@
         bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
         document.addEventListener('pointerdown', keepVideoSilentLoop, { once: true });
 
+        /* 💿 รายการรูปแผ่นเสียงด้านซ้ายทั้งหมด 6 ภาพ */
+        const vinylImages = [
+            'https://xatimg.com/image/fjEsd5AbEVj5.png',
+            'https://xatimg.com/image/XTTbqv6zoCU8.png',
+            'https://xatimg.com/image/abliUvSPFlEw.png',
+            'https://xatimg.com/image/nJyMBgcAguvu.png',
+            'https://xatimg.com/image/UlZNA6zCRruo.png',
+            'https://xatimg.com/image/U8GScSjgqNcs.png'
+        ];
+        let vinylImgIndex = 0;
+        let vinylSlideTimer = null;
+        const vinylDiscImg = document.getElementById('vinyl-disc-img');
+
+        // โหลดภาพทั้ง 6 ล่วงหน้าเพื่อให้สลับภาพลื่นไม่สะดุด
+        vinylImages.forEach((src) => {
+            const preloadImg = new Image();
+            preloadImg.src = src;
+        });
+
+        function startVinylSlideshow() {
+            if (vinylSlideTimer) return;
+            vinylSlideTimer = setInterval(() => {
+                vinylDiscImg.classList.add('fading');
+                setTimeout(() => {
+                    vinylImgIndex = (vinylImgIndex + 1) % vinylImages.length;
+                    vinylDiscImg.src = vinylImages[vinylImgIndex];
+                    vinylDiscImg.classList.remove('fading');
+                }, 400);
+            }, 5000);
+        }
+
+        function stopVinylSlideshow() {
+            if (vinylSlideTimer) {
+                clearInterval(vinylSlideTimer);
+                vinylSlideTimer = null;
+            }
+            vinylDiscImg.classList.remove('fading');
+        }
+
         const tracks = [
             { title: 'สตริงใหม่ล่าสุด', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
             { title: 'เพลงฮิต tiktok 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
@@ -535,10 +580,12 @@
                 eqBox.classList.add('playing');
                 marqueeBox.classList.add('running');
                 vinylLogo.classList.add('spinning');
+                startVinylSlideshow();
             } else {
                 eqBox.classList.remove('playing');
                 marqueeBox.classList.remove('running');
                 vinylLogo.classList.remove('spinning');
+                stopVinylSlideshow();
             }
         }
 
