@@ -83,7 +83,7 @@
             text-shadow: 0 1px 3px #000, 0 0 8px #000;
         }
 
-        /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา (คงเดิมทั้งหมด) */
+        /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
         .player-container {
             position: fixed;
             top: 15px;
@@ -95,6 +95,7 @@
             padding: 10px 12px;
             z-index: 2147483647;
             pointer-events: auto;
+            touch-action: manipulation;
             text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
 
@@ -150,6 +151,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.7);
             transition: transform 0.15s;
             pointer-events: auto;
+            touch-action: manipulation;
         }
 
         .btn-nav { background: #0284c7; color: #fff; }
@@ -221,7 +223,7 @@
             letter-spacing: 0.4px;
         }
 
-        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง (คงเดิมทั้งหมด) */
+        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
         .playlist-container {
             position: fixed;
             top: 202px;
@@ -234,8 +236,9 @@
             max-height: calc(100vh - 215px);
             display: flex;
             flex-direction: column;
-            z-index: 2147483646;
+            z-index: 2147483647;
             pointer-events: auto;
+            touch-action: manipulation;
             overflow: hidden;
             text-shadow: 0 1px 3px #000, 0 0 8px #000;
         }
@@ -256,7 +259,8 @@
 
         .playlist-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
+            pointer-events: auto;
             display: flex;
             flex-direction: column;
             height: 100%;
@@ -277,6 +281,8 @@
         }
 
         .song-list {
+            position: relative;
+            z-index: 3;
             flex: 1;
             min-height: 110px;
             max-height: 240px;
@@ -285,6 +291,8 @@
             flex-direction: column;
             gap: 4px;
             padding-right: 2px;
+            pointer-events: auto;
+            touch-action: manipulation;
         }
 
         .song-list::-webkit-scrollbar {
@@ -297,6 +305,8 @@
         }
 
         .song-row {
+            position: relative;
+            z-index: 4;
             padding: 5px 8px;
             background: rgba(2, 6, 23, 0.55);
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -306,6 +316,7 @@
             transition: 0.15s;
             font-size: 11px;
             pointer-events: auto;
+            touch-action: manipulation;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -331,6 +342,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: #ffffff;
+            pointer-events: none;
         }
 
         .song-row.active .song-name {
@@ -342,6 +354,7 @@
             font-weight: bold;
             color: #7dd3fc;
             flex-shrink: 0;
+            pointer-events: none;
         }
 
         .after-tracks-note {
@@ -622,6 +635,7 @@
             tracks.forEach((track, idx) => {
                 const row = document.createElement('div');
                 row.id = 'song-' + idx;
+                row.dataset.index = idx;
                 row.className = 'song-row' + (idx === currentIndex ? ' active' : '');
 
                 const nameSpan = document.createElement('span');
@@ -634,10 +648,27 @@
 
                 row.appendChild(nameSpan);
                 row.appendChild(tagSpan);
-                bindAction(row, () => startPlaylist(idx));
                 songListEl.appendChild(row);
             });
         }
+
+        /* 🎯 ดักคลิกผ่านกล่องรายชื่อเพลงโดยตรงเพื่อลดโอกาสอีเวนต์หลุดใน iframe */
+        function handleSongListTrigger(e) {
+            const row = e.target.closest('.song-row');
+            if (!row || !songListEl.contains(row)) return;
+            e.stopPropagation();
+            const idx = Number(row.dataset.index);
+            if (!Number.isNaN(idx)) {
+                startPlaylist(idx);
+            }
+        }
+
+        songListEl.addEventListener('pointerdown', handleSongListTrigger);
+        songListEl.addEventListener('click', (e) => {
+            if (e.target.closest('.song-row')) {
+                e.stopPropagation();
+            }
+        });
 
         function startPlaylist(index = 0) {
             currentIndex = (index + tracks.length) % tracks.length;
