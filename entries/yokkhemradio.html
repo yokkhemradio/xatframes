@@ -31,6 +31,41 @@
             pointer-events: none;
         }
 
+        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางแนวตั้ง ขอบซ้าย 10px เท่าขอบขวา */
+        .vinyl-container {
+            position: fixed;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 136px;
+            height: 136px;
+            z-index: 2147483645;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vinyl-disc {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(56, 189, 248, 0.85);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.85), 0 0 14px rgba(56, 189, 248, 0.35);
+            animation: vinylSpin 5s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .vinyl-container.spinning .vinyl-disc {
+            animation-play-state: running;
+        }
+
+        @keyframes vinylSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
         .player-container {
             position: fixed;
@@ -369,6 +404,11 @@
     <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
     <video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
 
+    <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางแนวตั้ง ขอบซ้ายเท่ากับขอบขวา -->
+    <div class="vinyl-container" id="vinyl-logo">
+        <img src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
+    </div>
+
     <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
     <div class="player-container" id="radio-player">
         <div class="player-header">
@@ -476,6 +516,7 @@
         const songListEl = document.getElementById('song-list');
         const marqueeBox = document.getElementById('marquee-box');
         const marqueeText = document.getElementById('marquee-text');
+        const vinylLogo = document.getElementById('vinyl-logo');
 
         document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
 
@@ -493,9 +534,11 @@
             if (playing) {
                 eqBox.classList.add('playing');
                 marqueeBox.classList.add('running');
+                vinylLogo.classList.add('spinning');
             } else {
                 eqBox.classList.remove('playing');
                 marqueeBox.classList.remove('running');
+                vinylLogo.classList.remove('spinning');
             }
         }
 
