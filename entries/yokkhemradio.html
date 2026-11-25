@@ -2,25 +2,13 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>หยกเข้มเรดิโอ เพลงเพราะ</title>
+    <title>MYRADIOhit Player</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* 🌌 วิดีโอพื้นหลังเต็มหน้าจอ ปิดเสียงสนิท */
-        .bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-            pointer-events: none;
         }
 
         html, body {
@@ -294,16 +282,13 @@
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท) -->
-    <video id="bg-video" class="bg-video" src="https://ia601504.us.archive.org/26/items/hailuo3_202611/hailuo3.mp4" autoplay loop muted playsinline></video>
-
     <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
     <div class="player-container" id="radio-player">
         <div class="player-header">
             <span>🎧 หยกเข้มเรดิโอ</span>
             <span class="live-badge" id="status-badge">READY</span>
         </div>
-        <div class="track-title" id="current-title">🎵 ไม่ดี...มีทำไม</div>
+        <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
 
         <div class="control-panel">
             <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
@@ -319,7 +304,7 @@
 
         <!-- ✨ ตัววิ่งชื่อเพลงช้าๆ แทนที่ระดับเสียงใต้ตัวเล่นเพลง -->
         <div class="marquee-box" id="marquee-box">
-            <div class="marquee-text" id="marquee-text">🎶 หยกเข้มเรดิโอ เพลงเพราะ • ไม่ดี...มีทำไม 🎶</div>
+            <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
         </div>
     </div>
 
@@ -327,7 +312,7 @@
     <div class="playlist-container" id="right-playlist">
         <div class="playlist-title">
             <span>รายชื่อเพลง</span>
-            <span style="font-size: 10px;" id="song-count-label">4 เพลง</span>
+            <span style="font-size: 10px;" id="song-count-label">7 เพลง</span>
         </div>
 
         <div class="song-list" id="song-list"></div>
@@ -335,7 +320,7 @@
         <!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
         <div class="after-tracks-note">
             🎶 เล่นจบเพลงแล้วขึ้นเพลงต่อไปอัตโนมัติครับ<br>
-            เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ เพลงเพราะ ✨
+            เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
         </div>
 
         <!-- 📊 EQ + นาฬิกาและวันที่ -->
@@ -357,16 +342,14 @@
     <audio id="audio-player" preload="auto"></audio>
 
     <script>
-        const bgVideo = document.getElementById('bg-video');
-        bgVideo.muted = true;
-        bgVideo.volume = 0;
-
-        // รายชื่อเพลงแยกแทร็กเพื่อเปลี่ยนและเล่นเพลงถัดไปได้ต่อเนื่องแน่นอน
         const tracks = [
-            { title: 'ไม่ดี...มีทำไม', url: 'https://files.catbox.moe/9kjrgk.mp3' },
-            { title: 'เพลงไทยแนะนำ 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
-            { title: 'สตริงใหม่ล่าสุด 2026', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
-            { title: 'Sting Hit Mix', url: 'https://ia601808.us.archive.org/30/items/stinghit/stinghit.mp3' }
+            { title: 'สตริงใหม่ล่าสุด', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
+            { title: 'เพลตริง', url: 'https://ia902905.us.archive.org/5/items/thaistation/thaistation.mp3' },
+            { title: 'สตริง 1', url: 'https://ia601906.us.archive.org/3/items/radio_202607/1.radio.mp3' },
+            { title: 'สตริง 2 ชม', url: 'https://ia601501.us.archive.org/2/items/thaistation-v.-1/thaistation%20v.1.mp3' },
+            { title: 'เพลงลูกทุ่ง', url: 'https://ia600903.us.archive.org/29/items/luk-thung-music/Luk%20Thung%20music.mp3' },
+            { title: 'เพลงใต้ ชุดใหม่', url: 'https://ia601609.us.archive.org/27/items/plangtai2/plangtai2.mp3' },
+            { title: 'เพลงใต้ แนวเพราะ', url: 'https://files.catbox.moe/k4dtxi.mp3' }
         ];
 
         let currentIndex = 0;
@@ -402,7 +385,7 @@
         }
 
         function syncMarqueeTitle(track, prefix = 'กำลังเล่น') {
-            marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ เพลงเพราะ 🎶`;
+            marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ 🎶`;
         }
 
         function highlightSong(index, autoScroll = false) {
@@ -503,14 +486,13 @@
             isPaused = false;
             currentIndex = 0;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
-            marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • กด Play เพื่อฟังต่อได้เลยครับ 🎶";
+            marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • หยกเข้มเรดิโอ 🎶";
             statusBadge.innerText = "STOPPED";
             statusBadge.style.background = "#ef4444";
             highlightSong(0, false);
             setPlayingVisuals(false);
         }
 
-        // จบเพลงปั๊บ ขึ้นเพลงต่อไปทันทีและวนซ้ำครบชุด
         player.addEventListener('ended', () => {
             const nextIndex = (currentIndex + 1) % tracks.length;
             startPlaylist(nextIndex);
@@ -522,7 +504,6 @@
         bindAction(document.getElementById('btn-pause'), handlePause);
         bindAction(document.getElementById('btn-stop'), handleStop);
 
-        // 🕒 นาฬิกาเวลาและวันที่
         function updateClock() {
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
