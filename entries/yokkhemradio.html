@@ -1,787 +1,750 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <title>หยกเข้มเรดิโอ เพลงเพราะ</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<meta charset="UTF-8">
+<title>หยกเข้มเรดิโอ เพลงเพราะ</title>
+<style>
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            background: #020617;
-            color: #fff;
-            overflow: hidden;
-        }
+html, body {
+width: 100%;
+height: 100%;
+background: transparent;
+color: #fff;
+overflow: hidden;
+}
 
-        /* 🌌 วิดีโอพื้นหลังเต็มหน้าจอ ปิดเสียงสนิท */
-        .bg-video {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: -1;
-            pointer-events: none;
-        }
+/* 🌌 วิดีโอพื้นหลังเต็มหน้าจอ ปิดเสียงสนิท */
+.bg-video {
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+object-fit: cover;
+z-index: -1;
+pointer-events: none;
+}
 
-        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ (สลับ 6 ภาพ + หมุนตอนเล่นเพลง) */
-        .vinyl-container {
-            position: fixed;
-            top: 50%;
-            left: calc((100vw - 728px) / 4 + 14px);
-            min-left: 110px;
-            transform: translate(-50%, -50%);
-            width: 175px;
-            z-index: 2147483645;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+/* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางระหว่างขอบซ้ายกับกล่องแชท (สลับ 6 ภาพ + หมุนตลอดเวลา) */
+.vinyl-container {
+position: fixed;
+top: 50%;
+left: calc((100vw - 728px) / 4 + 14px);
+transform: translate(-50%, -50%);
+width: 175px;
+z-index: 2147483645;
+pointer-events: none;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+}
 
-        .vinyl-disc {
-            width: 175px;
-            height: 175px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2.5px solid rgba(56, 189, 248, 0.9);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.45);
-            animation: vinylSpin 5s linear infinite;
-            animation-play-state: paused;
-            transition: opacity 0.4s ease-in-out;
-            opacity: 1;
-            will-change: transform;
-        }
+.vinyl-disc {
+width: 175px;
+height: 175px;
+border-radius: 50%;
+object-fit: cover;
+border: 2.5px solid rgba(56, 189, 248, 0.9);
+box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.45);
+animation: vinylSpin 5s linear infinite;
+animation-play-state: running;
+transition: opacity 0.45s ease-in-out;
+opacity: 1;
+}
 
-        .vinyl-disc.fading {
-            opacity: 0.15;
-        }
+.vinyl-disc.fading {
+opacity: 0.15;
+}
 
-        .vinyl-container.spinning .vinyl-disc {
-            animation-play-state: running;
-        }
+@keyframes vinylSpin {
+from { transform: rotate(0deg); }
+to { transform: rotate(360deg); }
+}
 
-        @keyframes vinylSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+.vinyl-copyright {
+margin-top: 8px;
+font-size: 9.5px;
+font-weight: 600;
+color: rgba(226, 232, 240, 0.88);
+text-align: center;
+white-space: nowrap;
+letter-spacing: 0.2px;
+text-shadow: 0 1px 3px #000, 0 0 8px #000;
+}
 
-        .vinyl-copyright {
-            margin-top: 8px;
-            font-size: 9.5px;
-            font-weight: 600;
-            color: rgba(226, 232, 240, 0.88);
-            text-align: center;
-            white-space: nowrap;
-            letter-spacing: 0.2px;
-            text-shadow: 0 1px 3px #000, 0 0 8px #000;
-        }
+/* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
+.player-container {
+position: fixed;
+top: 15px;
+right: 10px;
+width: 245px;
+background: rgba(2, 6, 23, 0.35);
+border: 1.5px solid rgba(56, 189, 248, 0.75);
+border-radius: 12px;
+padding: 10px 12px;
+z-index: 2147483647;
+pointer-events: auto;
+touch-action: manipulation;
+text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+}
 
-        /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
-        .player-container {
-            position: fixed;
-            top: 15px;
-            right: 10px;
-            width: 245px;
-            background: rgba(2, 6, 23, 0.55);
-            border: 1.5px solid rgba(56, 189, 248, 0.75);
-            border-radius: 12px;
-            padding: 10px 12px;
-            z-index: 2147483647;
-            pointer-events: auto;
-            touch-action: manipulation;
-            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
-        }
+.player-header {
+font-size: 12px;
+font-weight: bold;
+color: #38bdf8;
+margin-bottom: 5px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 4px;
+}
 
-        .player-header {
-            font-size: 12px;
-            font-weight: bold;
-            color: #38bdf8;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 4px;
-        }
+.live-badge {
+background: rgba(239, 68, 68, 0.92);
+color: #fff;
+font-size: 9px;
+padding: 2px 6px;
+border-radius: 8px;
+font-weight: bold;
+flex-shrink: 0;
+}
 
-        .live-badge {
-            background: rgba(239, 68, 68, 0.92);
-            color: #fff;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
+.track-title {
+font-size: 11px;
+font-weight: bold;
+color: #ffffff;
+margin-bottom: 10px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
 
-        .track-title {
-            font-size: 11px;
-            font-weight: bold;
-            color: #ffffff;
-            margin-bottom: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+/* แผงปุ่มควบคุม */
+.control-panel {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 4px;
+margin-bottom: 10px;
+}
 
-        /* แผงปุ่มควบคุม */
-        .control-panel {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 4px;
-            margin-bottom: 10px;
-        }
+.btn-ctrl {
+width: 36px;
+height: 36px;
+border-radius: 50%;
+border: 1.5px solid rgba(255,255,255,0.4);
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+transition: transform 0.15s;
+pointer-events: auto;
+touch-action: manipulation;
+}
 
-        .btn-ctrl {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(255,255,255,0.4);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-            transition: transform 0.15s;
-            pointer-events: auto;
-            touch-action: manipulation;
-        }
+.btn-nav { background: #0284c7; color: #fff; }
+.btn-play { background: #10b981; color: #fff; }
+.btn-pause { background: #f59e0b; color: #fff; }
+.btn-stop { background: #ef4444; color: #fff; }
+.btn-ctrl:hover { transform: scale(1.08); }
+.btn-ctrl:active { transform: scale(0.94); }
+.btn-ctrl svg {
+width: 15px;
+height: 15px;
+fill: currentColor;
+pointer-events: none;
+}
 
-        .btn-nav { background: #0284c7; color: #fff; }
-        .btn-play { background: #10b981; color: #fff; }
-        .btn-pause { background: #f59e0b; color: #fff; }
-        .btn-stop { background: #ef4444; color: #fff; }
-        .btn-ctrl:hover { transform: scale(1.08); }
-        .btn-ctrl:active { transform: scale(0.94); }
-        .btn-ctrl svg {
-            width: 15px;
-            height: 15px;
-            fill: currentColor;
-            pointer-events: none;
-        }
+/* ✨ ตัววิ่งชื่อเพลง */
+.marquee-box {
+width: 100%;
+overflow: hidden;
+background: rgba(15, 23, 42, 0.65);
+border: 1px solid rgba(56, 189, 248, 0.6);
+padding: 5px 8px;
+border-radius: 20px;
+position: relative;
+}
 
-        /* ✨ ตัววิ่งชื่อเพลง */
-        .marquee-box {
-            width: 100%;
-            overflow: hidden;
-            background: rgba(15, 23, 42, 0.75);
-            border: 1px solid rgba(56, 189, 248, 0.6);
-            padding: 5px 8px;
-            border-radius: 20px;
-            position: relative;
-        }
+.marquee-text {
+display: block;
+white-space: nowrap;
+font-size: 11px;
+font-weight: bold;
+color: #fde047;
+padding-left: 100%;
+animation: marqueeSlide 18s linear infinite;
+animation-play-state: paused;
+}
 
-        .marquee-text {
-            display: inline-block;
-            white-space: nowrap;
-            font-size: 11px;
-            font-weight: bold;
-            color: #fde047;
-            padding-left: 100%;
-            animation: marqueeSlide 18s linear infinite;
-            animation-play-state: paused;
-        }
+.marquee-box.running .marquee-text {
+animation-play-state: running;
+}
 
-        .marquee-box.running .marquee-text {
-            animation-play-state: running;
-        }
+@keyframes marqueeSlide {
+0% { transform: translateX(0%); }
+100% { transform: translateX(-100%); }
+}
 
-        @keyframes marqueeSlide {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-100%); }
-        }
+/* 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง */
+.sub-radio-badge {
+margin-top: 7px;
+padding: 4px 8px;
+border-radius: 10px;
+background: rgba(15, 23, 42, 0.55);
+border: 1px solid rgba(56, 189, 248, 0.4);
+font-size: 10px;
+font-weight: bold;
+color: #e2e8f0;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 6px;
+}
 
-        /* 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง */
-        .sub-radio-badge {
-            margin-top: 7px;
-            padding: 4px 8px;
-            border-radius: 10px;
-            background: rgba(15, 23, 42, 0.65);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            font-size: 10px;
-            font-weight: bold;
-            color: #e2e8f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-        }
+.sub-radio-tag {
+background: rgba(14, 165, 233, 0.9);
+color: #ffffff;
+font-size: 9px;
+padding: 1px 6px;
+border-radius: 6px;
+letter-spacing: 0.4px;
+}
 
-        .sub-radio-tag {
-            background: rgba(14, 165, 233, 0.9);
-            color: #ffffff;
-            font-size: 9px;
-            padding: 1px 6px;
-            border-radius: 6px;
-            letter-spacing: 0.4px;
-        }
+/* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง (เอาภาพพื้นหลังออกแล้ว) */
+.playlist-container {
+position: fixed;
+top: 202px;
+right: 10px;
+width: 245px;
+background: rgba(2, 6, 23, 0.35);
+border: 1.5px solid rgba(56, 189, 248, 0.85);
+border-radius: 12px;
+padding: 10px 12px;
+max-height: calc(100vh - 215px);
+display: flex;
+flex-direction: column;
+z-index: 2147483647;
+pointer-events: auto;
+touch-action: manipulation;
+overflow: hidden;
+text-shadow: 0 1px 3px #000, 0 0 8px #000;
+}
 
-        /* 📌 กรอบรายชื่อเพลง ใต้กล่องเพลง */
-        .playlist-container {
-            position: fixed;
-            top: 202px;
-            right: 10px;
-            width: 245px;
-            background: rgba(2, 6, 23, 0.55);
-            border: 1.5px solid rgba(56, 189, 248, 0.85);
-            border-radius: 12px;
-            padding: 10px 12px;
-            max-height: calc(100vh - 215px);
-            display: flex;
-            flex-direction: column;
-            z-index: 2147483647;
-            pointer-events: auto;
-            touch-action: manipulation;
-            overflow: hidden;
-            text-shadow: 0 1px 3px #000, 0 0 8px #000;
-        }
+.playlist-content {
+position: relative;
+z-index: 2;
+pointer-events: auto;
+display: flex;
+flex-direction: column;
+height: 100%;
+min-height: 0;
+}
 
-        .playlist-bg-art {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 15%;
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 0;
-            border-radius: 12px;
-        }
+.playlist-title {
+font-size: 12px;
+font-weight: 800;
+margin-bottom: 6px;
+border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+padding-bottom: 5px;
+color: #7dd3fc;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-shrink: 0;
+}
 
-        .playlist-content {
-            position: relative;
-            z-index: 2;
-            pointer-events: auto;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-        }
+.song-list {
+position: relative;
+z-index: 3;
+flex: 1;
+min-height: 110px;
+max-height: 240px;
+overflow-y: auto;
+display: flex;
+flex-direction: column;
+gap: 4px;
+padding-right: 2px;
+pointer-events: auto;
+touch-action: manipulation;
+}
 
-        .playlist-title {
-            font-size: 12px;
-            font-weight: 800;
-            margin-bottom: 6px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
-            padding-bottom: 5px;
-            color: #7dd3fc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
+.song-list::-webkit-scrollbar {
+width: 4px;
+}
 
-        .song-list {
-            position: relative;
-            z-index: 3;
-            flex: 1;
-            min-height: 110px;
-            max-height: 240px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding-right: 2px;
-            pointer-events: auto;
-            touch-action: manipulation;
-        }
+.song-list::-webkit-scrollbar-thumb {
+background: rgba(56, 189, 248, 0.65);
+border-radius: 4px;
+}
 
-        .song-list::-webkit-scrollbar {
-            width: 4px;
-        }
+.song-row {
+position: relative;
+z-index: 4;
+padding: 5px 8px;
+background: rgba(2, 6, 23, 0.55);
+border: 1px solid rgba(255, 255, 255, 0.25);
+border-left: 3px solid transparent;
+border-radius: 5px;
+cursor: pointer;
+transition: 0.15s;
+font-size: 11px;
+pointer-events: auto;
+touch-action: manipulation;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 6px;
+flex-shrink: 0;
+}
 
-        .song-list::-webkit-scrollbar-thumb {
-            background: rgba(56, 189, 248, 0.65);
-            border-radius: 4px;
-        }
+.song-row:hover {
+background: rgba(14, 165, 233, 0.42);
+border-color: rgba(125, 211, 252, 0.6);
+}
 
-        .song-row {
-            position: relative;
-            z-index: 4;
-            padding: 6px 8px;
-            background: rgba(2, 6, 23, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-left: 3px solid transparent;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.15s;
-            font-size: 11px;
-            pointer-events: auto;
-            touch-action: manipulation;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
+.song-row.active {
+background: rgba(14, 165, 233, 0.55);
+border-color: #38bdf8;
+border-left: 3px solid #fde047;
+color: #fef08a;
+font-weight: 800;
+}
 
-        .song-row:hover {
-            background: rgba(14, 165, 233, 0.45);
-            border-color: rgba(125, 211, 252, 0.6);
-        }
+.song-name {
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+color: #ffffff;
+pointer-events: none;
+}
 
-        .song-row.active {
-            background: rgba(14, 165, 233, 0.6);
-            border-color: #38bdf8;
-            border-left: 3px solid #fde047;
-            color: #fef08a;
-            font-weight: 800;
-        }
+.song-row.active .song-name {
+color: #fef08a;
+}
 
-        .song-name {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: #ffffff;
-            pointer-events: none;
-        }
+.song-tag {
+font-size: 9px;
+font-weight: bold;
+color: #7dd3fc;
+flex-shrink: 0;
+pointer-events: none;
+}
 
-        .song-row.active .song-name {
-            color: #fef08a;
-        }
+.after-tracks-note {
+margin-top: 7px;
+padding: 5px 6px 2px;
+border-top: 1px dashed rgba(255, 255, 255, 0.35);
+background: rgba(2, 6, 23, 0.5);
+border-radius: 6px;
+font-size: 10px;
+font-weight: 700;
+color: #fef08a;
+text-align: center;
+line-height: 1.45;
+flex-shrink: 0;
+}
 
-        .song-tag {
-            font-size: 9px;
-            font-weight: bold;
-            color: #7dd3fc;
-            flex-shrink: 0;
-            pointer-events: none;
-        }
+.right-footer-widget {
+margin-top: 7px;
+padding-top: 7px;
+border-top: 1px solid rgba(255, 255, 255, 0.3);
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 8px;
+flex-shrink: 0;
+}
 
-        .after-tracks-note {
-            margin-top: 7px;
-            padding: 5px 6px 2px;
-            border-top: 1px dashed rgba(255, 255, 255, 0.35);
-            background: rgba(2, 6, 23, 0.6);
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 700;
-            color: #fef08a;
-            text-align: center;
-            line-height: 1.45;
-            flex-shrink: 0;
-        }
+.eq-box {
+display: flex;
+align-items: flex-end;
+gap: 3px;
+height: 16px;
+}
 
-        .right-footer-widget {
-            margin-top: 7px;
-            padding-top: 7px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
-        }
+.eq-bar {
+width: 3px;
+height: 100%;
+background: linear-gradient(to top, #0072ff, #38bdf8);
+border-radius: 2px;
+transform-origin: bottom;
+transform: scaleY(0.25);
+}
 
-        .eq-box {
-            display: flex;
-            align-items: flex-end;
-            gap: 3px;
-            height: 16px;
-        }
+.eq-box.playing .eq-bar:nth-child(1) { animation: eqMove 0.55s infinite alternate ease-in-out; }
+.eq-box.playing .eq-bar:nth-child(2) { animation: eqMove 0.4s infinite alternate ease-in-out 0.1s; }
+.eq-box.playing .eq-bar:nth-child(3) { animation: eqMove 0.65s infinite alternate ease-in-out 0.2s; }
+.eq-box.playing .eq-bar:nth-child(4) { animation: eqMove 0.48s infinite alternate ease-in-out 0.15s; }
+.eq-box.playing .eq-bar:nth-child(5) { animation: eqMove 0.6s infinite alternate ease-in-out 0.05s; }
 
-        .eq-bar {
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(to top, #0072ff, #38bdf8);
-            border-radius: 2px;
-            transform-origin: bottom;
-            transform: scaleY(0.25);
-        }
+@keyframes eqMove {
+0% { transform: scaleY(0.2); }
+100% { transform: scaleY(1); }
+}
 
-        .eq-box.playing .eq-bar:nth-child(1) { animation: eqMove 0.55s infinite alternate ease-in-out; }
-        .eq-box.playing .eq-bar:nth-child(2) { animation: eqMove 0.4s infinite alternate ease-in-out 0.1s; }
-        .eq-box.playing .eq-bar:nth-child(3) { animation: eqMove 0.65s infinite alternate ease-in-out 0.2s; }
-        .eq-box.playing .eq-bar:nth-child(4) { animation: eqMove 0.48s infinite alternate ease-in-out 0.15s; }
-        .eq-box.playing .eq-bar:nth-child(5) { animation: eqMove 0.6s infinite alternate ease-in-out 0.05s; }
+.clock-box {
+text-align: right;
+font-size: 10px;
+line-height: 1.3;
+}
 
-        @keyframes eqMove {
-            0% { transform: scaleY(0.2); }
-            100% { transform: scaleY(1); }
-        }
+.clock-time {
+font-family: monospace;
+font-size: 11px;
+font-weight: bold;
+color: #ffffff;
+}
 
-        .clock-box {
-            text-align: right;
-            font-size: 10px;
-            line-height: 1.3;
-        }
-
-        .clock-time {
-            font-family: monospace;
-            font-size: 11px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-
-        .clock-date {
-            font-size: 9px;
-            font-weight: bold;
-            color: #7dd3fc;
-        }
-    </style>
+.clock-date {
+font-size: 9px;
+font-weight: bold;
+color: #7dd3fc;
+}
+</style>
 </head>
 <body>
 
-    <video id="bg-video" class="bg-video" src="https://ia600603.us.archive.org/12/items/hailuo014_202611/hailuo014.mp4" autoplay loop muted playsinline preload="auto"></video>
+<!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
+<video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
 
-    <div class="vinyl-container" id="vinyl-logo">
-        <img id="vinyl-disc-img" src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
-        <div class="vinyl-copyright">© 2026 YokkhemRadio. All rights reserved.</div>
-    </div>
+<!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ สลับหมุน 6 ภาพตลอดเวลา -->
+<div class="vinyl-container" id="vinyl-logo">
+<img id="vinyl-disc-img" src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
+<div class="vinyl-copyright">© 2026 YokkhemRadio. All rights reserved.</div>
+</div>
 
-    <div class="player-container" id="radio-player">
-        <div class="player-header">
-            <span>🎧 หยกเข้มเรดิโอ</span>
-            <span class="live-badge" id="status-badge">READY</span>
-        </div>
-        <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
+<!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
+<div class="player-container" id="radio-player">
+<div class="player-header">
+<span>🎧 หยกเข้มเรดิโอ</span>
+<span class="live-badge" id="status-badge">LOOP</span>
+</div>
+<div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
 
-        <div class="control-panel">
-            <button type="button" class="btn-ctrl btn-nav" id="btn-prev" title="เพลงก่อนหน้า (Prev)">
-                <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
-            </button>
-            <button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <button type="button" class="btn-ctrl btn-pause" id="btn-pause" title="พักชั่วคราว (Pause)">
-                <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
-            </button>
-            <button type="button" class="btn-ctrl btn-stop" id="btn-stop" title="หยุดเล่น (Stop)">
-                <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-            </button>
-            <button type="button" class="btn-ctrl btn-nav" id="btn-next" title="เพลงถัดไป (Next)">
-                <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
-            </button>
-        </div>
+<div class="control-panel">
+<button type="button" class="btn-ctrl btn-nav" id="btn-prev" title="เพลงก่อนหน้า (Prev)">
+<svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+</button>
+<button type="button" class="btn-ctrl btn-play" id="btn-play" title="เล่น (Play)">
+<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+</button>
+<button type="button" class="btn-ctrl btn-pause" id="btn-pause" title="พักชั่วคราว (Pause)">
+<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+</button>
+<button type="button" class="btn-ctrl btn-stop" id="btn-stop" title="หยุดเล่น (Stop)">
+<svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+</button>
+<button type="button" class="btn-ctrl btn-nav" id="btn-next" title="เพลงถัดไป (Next)">
+<svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+</button>
+</div>
 
-        <div class="marquee-box" id="marquee-box">
-            <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
-        </div>
+<!-- ✨ ตัววิ่งชื่อเพลง -->
+<div class="marquee-box running" id="marquee-box">
+<div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
+</div>
 
-        <div class="sub-radio-badge">
-            <span>🎧 หยกเข้มเรดิโอ</span>
-            <span class="sub-radio-tag">RADIO</span>
-        </div>
-    </div>
+<!-- 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง -->
+<div class="sub-radio-badge">
+<span>🎧 หยกเข้มเรดิโอ</span>
+<span class="sub-radio-tag">RADIO</span>
+</div>
+</div>
 
-    <div class="playlist-container" id="right-playlist">
-        <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
+<!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
+<div class="playlist-container" id="right-playlist">
+<div class="playlist-content">
+<div class="playlist-title">
+<span>รายชื่อเพลง</span>
+<span style="font-size: 10px;" id="song-count-label">8 เพลง</span>
+</div>
 
-        <div class="playlist-content">
-            <div class="playlist-title">
-                <span>รายชื่อเพลง</span>
-                <span style="font-size: 10px;" id="song-count-label">8 เพลง</span>
-            </div>
+<div class="song-list" id="song-list"></div>
 
-            <div class="song-list" id="song-list"></div>
+<!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
+<div class="after-tracks-note">
+🔁 วนลูบต่อเนื่องครบ 8 เพลงอัตโนมัติครับ<br>
+เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
+</div>
 
-            <div class="after-tracks-note">
-                🔁 วนลูบต่อเนื่องครบ 8 เพลงอัตโนมัติครับ<br>
-                เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
-            </div>
+<!-- 📊 EQ + นาฬิกาและวันที่ -->
+<div class="right-footer-widget">
+<div class="eq-box" id="eq-box">
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+<div class="eq-bar"></div>
+</div>
+<div class="clock-box">
+<div class="clock-time" id="clock-time">00:00:00</div>
+<div class="clock-date" id="clock-date">00/00/0000</div>
+</div>
+</div>
+</div>
+</div>
 
-            <div class="right-footer-widget">
-                <div class="eq-box" id="eq-box">
-                    <div class="eq-bar"></div>
-                    <div class="eq-bar"></div>
-                    <div class="eq-bar"></div>
-                    <div class="eq-bar"></div>
-                    <div class="eq-bar"></div>
-                </div>
-                <div class="clock-box">
-                    <div class="clock-time" id="clock-time">00:00:00</div>
-                    <div class="clock-date" id="clock-date">00/00/0000</div>
-                </div>
-            </div>
-        </div>
-    </div>
+<audio id="audio-player" preload="auto"></audio>
 
-    <audio id="audio-player" preload="none"></audio>
+<script>
+const bgVideo = document.getElementById('bg-video');
+function keepVideoSilentLoop() {
+bgVideo.loop = true;
+bgVideo.muted = true;
+bgVideo.volume = 0;
+bgVideo.play().catch(() => {});
+}
+keepVideoSilentLoop();
+bgVideo.addEventListener('volumechange', keepVideoSilentLoop);
+bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
+document.addEventListener('pointerdown', keepVideoSilentLoop, { once: true });
 
-    <script>
-        const bgVideo = document.getElementById('bg-video');
-        function keepVideoSilentLoop() {
-            bgVideo.loop = true;
-            bgVideo.muted = true;
-            bgVideo.volume = 0;
-            bgVideo.play().catch(() => {});
-        }
-        keepVideoSilentLoop();
-        bgVideo.addEventListener('volumechange', keepVideoSilentLoop);
-        bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
-        document.addEventListener('click', keepVideoSilentLoop, { once: true });
+/* 💿 รายการรูปแผ่นเสียงด้านซ้ายทั้งหมด 6 ภาพ (หมุนและสลับภาพตลอดเวลา) */
+const vinylImages = [
+'https://xatimg.com/image/fjEsd5AbEVj5.png',
+'https://xatimg.com/image/XTTbqv6zoCU8.png',
+'https://xatimg.com/image/abliUvSPFlEw.png',
+'https://xatimg.com/image/nJyMBgcAguvu.png',
+'https://xatimg.com/image/UlZNA6zCRruo.png',
+'https://xatimg.com/image/U8GScSjgqNcs.png'
+];
+let vinylImgIndex = 0;
+let vinylSlideTimer = null;
+const vinylDiscImg = document.getElementById('vinyl-disc-img');
 
-        /* 💿 รายการรูปแผ่นเสียงด้านซ้ายทั้งหมด 6 ภาพ */
-        const vinylImages = [
-            'https://xatimg.com/image/fjEsd5AbEVj5.png',
-            'https://xatimg.com/image/XTTbqv6zoCU8.png',
-            'https://xatimg.com/image/abliUvSPFlEw.png',
-            'https://xatimg.com/image/nJyMBgcAguvu.png',
-            'https://xatimg.com/image/UlZNA6zCRruo.png',
-            'https://xatimg.com/image/U8GScSjgqNcs.png'
-        ];
-        let vinylImgIndex = 0;
-        let vinylSlideTimer = null;
-        const vinylDiscImg = document.getElementById('vinyl-disc-img');
+vinylImages.forEach((src) => {
+const preloadImg = new Image();
+preloadImg.src = src;
+});
 
-        vinylImages.forEach((src) => {
-            const img = new Image();
-            img.src = src;
-        });
+function startVinylSlideshow() {
+if (vinylSlideTimer) return;
+vinylSlideTimer = setInterval(() => {
+vinylDiscImg.classList.add('fading');
+setTimeout(() => {
+vinylImgIndex = (vinylImgIndex + 1) % vinylImages.length;
+vinylDiscImg.src = vinylImages[vinylImgIndex];
+vinylDiscImg.classList.remove('fading');
+}, 400);
+}, 5000);
+}
 
-        function startVinylSlideshow() {
-            if (vinylSlideTimer) return;
-            vinylSlideTimer = setInterval(() => {
-                vinylDiscImg.classList.add('fading');
-                setTimeout(() => {
-                    vinylImgIndex = (vinylImgIndex + 1) % vinylImages.length;
-                    vinylDiscImg.src = vinylImages[vinylImgIndex];
-                    vinylDiscImg.classList.remove('fading');
-                }, 400);
-            }, 5000);
-        }
+// เริ่มสลับภาพโลโก้ทันทีที่โหลดหน้าเว็บ
+startVinylSlideshow();
 
-        function stopVinylSlideshow() {
-            if (vinylSlideTimer) {
-                clearInterval(vinylSlideTimer);
-                vinylSlideTimer = null;
-            }
-            vinylDiscImg.classList.remove('fading');
-        }
+const tracks = [
+{ title: 'Cover🔥รวมเพลงฮิต มาลีฮวนน่า', url: 'https://files.catbox.moe/gmfhha.mp3' },
+{ title: '🔥รวมเพลงเพราะเพลงดัง', url: 'https://files.catbox.moe/cquyp2.mp3' },
+{ title: 'เพลงฮิต 🔥tiktok 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
+{ title: '🔥สตริงเพลงเพราะ', url: 'https://ia601906.us.archive.org/3/items/radio_202607/1.radio.mp3' },
+{ title: '✨️รวมเพลงฮิตติดกระแส', url: 'https://ia601501.us.archive.org/2/items/thaistation-v.-1/thaistation%20v.1.mp3' },
+{ title: '🎵 เพลงเพราะๆ ฟังสบายๆ ', url: 'https://files.catbox.moe/kaunbh.mp3' },
+{ title: '✨️เพลงใต้ แนวเพราะ', url: 'https://files.catbox.moe/k4dtxi.mp3' },
+{ title: 'ปลาทอง เรดิโอ', url: 'https://radio9.plathong.net/7264/;stream.mp3?type=http' }
+];
 
-        const tracks = [
-            { title: 'Cover🔥รวมเพลงฮิต มาลีฮวนน่า', url: 'https://files.catbox.moe/gmfhha.mp3' },
-            { title: '🔥รวมเพลงเพราะเพลงดัง', url: 'https://files.catbox.moe/cquyp2.mp3' },
-            { title: 'เพลงฮิต 🔥tiktok 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
-            { title: '🔥สตริงเพลงเพราะ', url: 'https://ia601906.us.archive.org/3/items/radio_202607/1.radio.mp3' },
-            { title: '✨️รวมเพลงฮิตติดกระแส', url: 'https://ia601501.us.archive.org/2/items/thaistation-v.-1/thaistation%20v.1.mp3' },
-            { title: '🎵 เพลงเพราะๆ ฟังสบายๆ ', url: 'https://files.catbox.moe/kaunbh.mp3' },
-            { title: '✨️เพลงใต้ แนวเพราะ', url: 'https://files.catbox.moe/k4dtxi.mp3' },
-            { title: 'ปลาทอง เรดิโอ', url: 'https://radio9.plathong.net/7264/;stream.mp3?type=http' }
-        ];
+let currentIndex = 0;
+let isPaused = false;
+const player = document.getElementById('audio-player');
+const titleElement = document.getElementById('current-title');
+const statusBadge = document.getElementById('status-badge');
+const eqBox = document.getElementById('eq-box');
+const songListEl = document.getElementById('song-list');
+const marqueeBox = document.getElementById('marquee-box');
+const marqueeText = document.getElementById('marquee-text');
 
-        let currentIndex = 0;
-        let isPaused = false;
-        let errorSkipCount = 0;
-        const player = document.getElementById('audio-player');
-        const titleElement = document.getElementById('current-title');
-        const statusBadge = document.getElementById('status-badge');
-        const eqBox = document.getElementById('eq-box');
-        const songListEl = document.getElementById('song-list');
-        const marqueeBox = document.getElementById('marquee-box');
-        const marqueeText = document.getElementById('marquee-text');
-        const vinylLogo = document.getElementById('vinyl-logo');
+document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
 
-        document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
+function bindAction(el, fn) {
+el.addEventListener('pointerdown', (e) => {
+e.stopPropagation();
+fn();
+});
+el.addEventListener('click', (e) => {
+e.stopPropagation();
+});
+}
 
-        function setPlayingVisuals(playing) {
-            if (playing) {
-                eqBox.classList.add('playing');
-                marqueeBox.classList.add('running');
-                vinylLogo.classList.add('spinning');
-                startVinylSlideshow();
-            } else {
-                eqBox.classList.remove('playing');
-                marqueeBox.classList.remove('running');
-                vinylLogo.classList.remove('spinning');
-                stopVinylSlideshow();
-            }
-        }
+function setPlayingVisuals(playing) {
+if (playing) {
+eqBox.classList.add('playing');
+marqueeBox.classList.add('running');
+} else {
+eqBox.classList.remove('playing');
+marqueeBox.classList.remove('running');
+}
+}
 
-        function syncMarqueeTitle(track, prefix = 'กำลังเล่น') {
-            marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ 🎶`;
-        }
+function syncMarqueeTitle(track, prefix = 'กำลังเล่น') {
+marqueeText.innerText = `🎶 ${prefix}: ${track.title} • หยกเข้มเรดิโอ 🎶`;
+}
 
-        function highlightSong(index, autoScroll = false) {
-            for (let i = 0; i < tracks.length; i++) {
-                const row = document.getElementById('song-' + i);
-                if (row) row.classList.toggle('active', i === index);
-            }
-            if (autoScroll) {
-                const activeRow = document.getElementById('song-' + index);
-                if (activeRow) {
-                    activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                }
-            }
-        }
+function highlightSong(index, autoScroll = false) {
+for (let i = 0; i < tracks.length; i++) {
+const row = document.getElementById('song-' + i);
+if (row) row.classList.toggle('active', i === index);
+}
+if (autoScroll) {
+const activeRow = document.getElementById('song-' + index);
+if (activeRow) {
+activeRow.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+}
+}
 
-        function renderSongList() {
-            songListEl.innerHTML = '';
-            tracks.forEach((track, idx) => {
-                const row = document.createElement('div');
-                row.id = 'song-' + idx;
-                row.dataset.index = idx;
-                row.className = 'song-row' + (idx === currentIndex ? ' active' : '');
+function renderSongList() {
+songListEl.innerHTML = '';
+tracks.forEach((track, idx) => {
+const row = document.createElement('div');
+row.id = 'song-' + idx;
+row.dataset.index = idx;
+row.className = 'song-row' + (idx === currentIndex ? ' active' : '');
 
-                const nameSpan = document.createElement('span');
-                nameSpan.className = 'song-name';
-                nameSpan.innerText = `${idx + 1}. ${track.title}`;
+const nameSpan = document.createElement('span');
+nameSpan.className = 'song-name';
+nameSpan.innerText = `${idx + 1}. ${track.title}`;
 
-                const tagSpan = document.createElement('span');
-                tagSpan.className = 'song-tag';
-                tagSpan.innerText = 'LOOP';
+const tagSpan = document.createElement('span');
+tagSpan.className = 'song-tag';
+tagSpan.innerText = 'LOOP';
 
-                row.appendChild(nameSpan);
-                row.appendChild(tagSpan);
-                row.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    errorSkipCount = 0;
-                    startPlaylist(idx);
-                });
-                songListEl.appendChild(row);
-            });
-        }
+row.appendChild(nameSpan);
+row.appendChild(tagSpan);
+songListEl.appendChild(row);
+});
+}
 
-        function startPlaylist(index = 0) {
-            currentIndex = (index + tracks.length) % tracks.length;
-            isPaused = false;
+/* 🎯 ดักคลิกผ่านกล่องรายชื่อเพลงโดยตรงเพื่อลดโอกาสอีเวนต์หลุดใน iframe */
+function handleSongListTrigger(e) {
+const row = e.target.closest('.song-row');
+if (!row || !songListEl.contains(row)) return;
+e.stopPropagation();
+const idx = Number(row.dataset.index);
+if (!Number.isNaN(idx)) {
+startPlaylist(idx);
+}
+}
 
-            const track = tracks[currentIndex];
-            player.pause();
-            player.muted = false;
-            player.volume = 1;
-            player.src = track.url;
-            player.load();
+songListEl.addEventListener('pointerdown', handleSongListTrigger);
+songListEl.addEventListener('click', (e) => {
+if (e.target.closest('.song-row')) {
+e.stopPropagation();
+}
+});
 
-            titleElement.innerText = `🎵 ${track.title}`;
-            syncMarqueeTitle(track, 'กำลังเล่น');
-            statusBadge.innerText = "PLAYING";
-            statusBadge.style.background = "#10b981";
-            highlightSong(currentIndex, true);
-            setPlayingVisuals(true);
+function startPlaylist(index = 0) {
+currentIndex = (index + tracks.length) % tracks.length;
+isPaused = false;
 
-            const playPromise = player.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    errorSkipCount = 0;
-                    statusBadge.innerText = "LOOP";
-                    statusBadge.style.background = "#10b981";
-                    setPlayingVisuals(true);
-                }).catch(() => {
-                    statusBadge.innerText = "TAP PLAY";
-                    statusBadge.style.background = "#f59e0b";
-                    setPlayingVisuals(false);
-                });
-            }
-        }
+player.pause();
+player.muted = false;
+player.volume = 1;
+player.src = tracks[currentIndex].url;
+player.load();
 
-        function handlePrev() {
-            errorSkipCount = 0;
-            startPlaylist(currentIndex - 1);
-        }
+titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
+syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+statusBadge.innerText = "LOOP";
+statusBadge.style.background = "#10b981";
+highlightSong(currentIndex, true);
+setPlayingVisuals(true);
 
-        function handleNext() {
-            errorSkipCount = 0;
-            startPlaylist(currentIndex + 1);
-        }
+const p = player.play();
+if (p !== undefined) {
+p.catch(() => {
+statusBadge.innerText = "TAP PLAY";
+setPlayingVisuals(false);
+});
+}
+}
 
-        function handlePlay() {
-            errorSkipCount = 0;
-            if (isPaused && player.src) {
-                isPaused = false;
-                player.muted = false;
-                player.volume = 1;
-                titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
-                syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
-                statusBadge.innerText = "LOOP";
-                statusBadge.style.background = "#10b981";
-                setPlayingVisuals(true);
-                player.play().catch(() => {
-                    statusBadge.innerText = "TAP PLAY";
-                    setPlayingVisuals(false);
-                });
-            } else {
-                startPlaylist(currentIndex);
-            }
-        }
+function handlePrev() {
+startPlaylist(currentIndex - 1);
+}
 
-        function handlePause() {
-            player.pause();
-            isPaused = true;
-            titleElement.innerText = `พัก: ${tracks[currentIndex].title}`;
-            syncMarqueeTitle(tracks[currentIndex], 'พักชั่วคราว');
-            statusBadge.innerText = "PAUSED";
-            statusBadge.style.background = "#f59e0b";
-            setPlayingVisuals(false);
-        }
+function handleNext() {
+startPlaylist(currentIndex + 1);
+}
 
-        function handleStop() {
-            player.pause();
-            player.muted = true;
-            player.volume = 0;
-            player.currentTime = 0;
-            player.removeAttribute('src');
-            player.load();
-            isPaused = false;
-            errorSkipCount = 0;
-            currentIndex = 0;
-            titleElement.innerText = "หยุดเล่นเพลงแล้ว";
-            marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • หยกเข้มเรดิโอ 🎶";
-            statusBadge.innerText = "STOPPED";
-            statusBadge.style.background = "#ef4444";
-            highlightSong(0, false);
-            setPlayingVisuals(false);
-        }
+function handlePlay() {
+if (isPaused && player.src) {
+isPaused = false;
+player.muted = false;
+player.volume = 1;
+titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
+syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
+statusBadge.innerText = "LOOP";
+statusBadge.style.background = "#10b981";
+setPlayingVisuals(true);
+player.play().catch(() => {});
+} else {
+startPlaylist(currentIndex);
+}
+}
 
-        player.addEventListener('playing', () => {
-            if (!isPaused) {
-                statusBadge.innerText = "LOOP";
-                statusBadge.style.background = "#10b981";
-                setPlayingVisuals(true);
-            }
-        });
+function handlePause() {
+player.pause();
+isPaused = true;
+titleElement.innerText = `พัก: ${tracks[currentIndex].title}`;
+syncMarqueeTitle(tracks[currentIndex], 'พักชั่วคราว');
+statusBadge.innerText = "PAUSED";
+statusBadge.style.background = "#f59e0b";
+setPlayingVisuals(false);
+}
 
-        player.addEventListener('error', () => {
-            if (!player.src || isPaused) return;
-            errorSkipCount++;
-            if (errorSkipCount < tracks.length) {
-                statusBadge.innerText = "SKIP ERR";
-                statusBadge.style.background = "#ef4444";
-                setTimeout(() => startPlaylist(currentIndex + 1), 600);
-            } else {
-                statusBadge.innerText = "NO AUDIO";
-                statusBadge.style.background = "#ef4444";
-                setPlayingVisuals(false);
-            }
-        });
+function handleStop() {
+player.pause();
+player.muted = true;
+player.volume = 0;
+player.currentTime = 0;
+player.removeAttribute('src');
+player.src = '';
+player.load();
+isPaused = false;
+currentIndex = 0;
+titleElement.innerText = "หยุดเล่นเพลงแล้ว";
+marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • หยกเข้มเรดิโอ 🎶";
+statusBadge.innerText = "STOPPED";
+statusBadge.style.background = "#ef4444";
+highlightSong(0, false);
+setPlayingVisuals(false);
+}
 
-        player.addEventListener('ended', () => {
-            errorSkipCount = 0;
-            startPlaylist(currentIndex + 1);
-        });
+player.addEventListener('ended', () => {
+startPlaylist(currentIndex + 1);
+});
 
-        renderSongList();
-        syncMarqueeTitle(tracks[0], 'พร้อมเล่น');
-        document.getElementById('btn-prev').addEventListener('click', handlePrev);
-        document.getElementById('btn-next').addEventListener('click', handleNext);
-        document.getElementById('btn-play').addEventListener('click', handlePlay);
-        document.getElementById('btn-pause').addEventListener('click', handlePause);
-        document.getElementById('btn-stop').addEventListener('click', handleStop);
+renderSongList();
+syncMarqueeTitle(tracks[0], 'พร้อมเล่น');
+bindAction(document.getElementById('btn-prev'), handlePrev);
+bindAction(document.getElementById('btn-next'), handleNext);
+bindAction(document.getElementById('btn-play'), handlePlay);
+bindAction(document.getElementById('btn-pause'), handlePause);
+bindAction(document.getElementById('btn-stop'), handleStop);
 
-        function updateClock() {
-            const now = new Date();
-            const hh = String(now.getHours()).padStart(2, '0');
-            const mm = String(now.getMinutes()).padStart(2, '0');
-            const ss = String(now.getSeconds()).padStart(2, '0');
-            const dd = String(now.getDate()).padStart(2, '0');
-            const mo = String(now.getMonth() + 1).padStart(2, '0');
-            const yyyy = now.getFullYear();
+function updateClock() {
+const now = new Date();
+const hh = String(now.getHours()).padStart(2, '0');
+const mm = String(now.getMinutes()).padStart(2, '0');
+const ss = String(now.getSeconds()).padStart(2, '0');
+const dd = String(now.getDate()).padStart(2, '0');
+const mo = String(now.getMonth() + 1).padStart(2, '0');
+const yyyy = now.getFullYear();
 
-            document.getElementById('clock-time').innerText = `${hh}:${mm}:${ss}`;
-            document.getElementById('clock-date').innerText = `${dd}/${mo}/${yyyy}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
+document.getElementById('clock-time').innerText = `${hh}:${mm}:${ss}`;
+document.getElementById('clock-date').innerText = `${dd}/${mo}/${yyyy}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
 </body>
 </html>
