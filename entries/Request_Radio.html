@@ -38,7 +38,7 @@
             left: 10px;
             transform: translateY(-50%);
             width: 245px;
-            background: rgba(2, 6, 23, 0.35);
+            background: rgba(2, 6, 23, 0.45);
             border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
             padding: 10px 12px;
@@ -82,7 +82,7 @@
             top: 15px;
             right: 10px;
             width: 245px;
-            background: rgba(2, 6, 23, 0.35);
+            background: rgba(2, 6, 23, 0.45);
             border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
             padding: 10px 12px;
@@ -145,6 +145,8 @@
             transition: transform 0.15s;
             pointer-events: auto;
             touch-action: manipulation;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn-nav { background: #0284c7; color: #fff; }
@@ -197,7 +199,7 @@
             top: 175px;
             right: 10px;
             width: 245px;
-            background: rgba(2, 6, 23, 0.35);
+            background: rgba(2, 6, 23, 0.45);
             border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
             padding: 10px 12px;
@@ -276,6 +278,7 @@
             align-items: center;
             gap: 6px;
             flex-shrink: 0;
+            user-select: none;
         }
 
         .song-row:hover {
@@ -450,30 +453,38 @@
         </div>
     </div>
 
-    <audio id="audio-player" preload="auto"></audio>
-    <audio id="left-audio-player" src="https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3" loop preload="auto"></audio>
+    <audio id="audio-player" preload="none"></audio>
+    <audio id="left-audio-player" src="https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3" loop preload="none"></audio>
 
     <script>
         const bgVideo = document.getElementById('bg-video');
         function keepVideoSilentLoop() {
+            if (!bgVideo) return;
             bgVideo.loop = true;
             bgVideo.muted = true;
             bgVideo.volume = 0;
             bgVideo.play().catch(() => {});
         }
         keepVideoSilentLoop();
-        bgVideo.addEventListener('volumechange', keepVideoSilentLoop);
-        bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
-        document.addEventListener('pointerdown', keepVideoSilentLoop, { once: true });
+        if (bgVideo) {
+            bgVideo.addEventListener('volumechange', keepVideoSilentLoop);
+            bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
+        }
+        document.addEventListener('click', keepVideoSilentLoop, { once: true });
 
+        /* 🎯 ผูกอีเวนต์แบบกันเบิ้ลใน 350ms รองรับทั้ง click และ touch/pointer ใน iframe ของ xat */
         function bindAction(el, fn) {
-            el.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
+            if (!el) return;
+            let lastFired = 0;
+            const trigger = (e) => {
+                const now = Date.now();
+                if (now - lastFired < 350) return;
+                lastFired = now;
+                if (e) e.stopPropagation();
                 fn();
-            });
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
+            };
+            el.addEventListener('click', trigger);
+            el.addEventListener('touchend', trigger, { passive: true });
         }
 
         /* 🎵 ระบบเครื่องเล่นเพลงด้านซ้ายมือ */
@@ -481,17 +492,20 @@
         const leftStatus = document.getElementById('left-track-status');
 
         function handleLeftPlay() {
-            // หยุดเสียงวิทยุด้านขวาอัตโนมัติเพื่อไม่ให้เสียงตีกัน
             if (!player.paused) {
                 handlePause();
             }
             leftAudio.muted = false;
             leftAudio.volume = 1;
-            leftAudio.play().then(() => {
-                leftStatus.innerText = '🎶 กำลังเล่น: สตริงใหม่ล่าสุด';
-            }).catch(() => {
-                leftStatus.innerText = '⚠️ กดเล่นอีกครั้งเพื่อเปิดเสียง';
-            });
+            const promise = leftAudio.play();
+            if (promise !== undefined) {
+                promise.then(() => {
+                    leftStatus.innerText = '🎶 กำลังเล่น: สตริงใหม่ล่าสุด';
+                }).catch((err) => {
+                    console.warn('Left audio error:', err);
+                    leftStatus.innerText = '⚠️ โหลดเพลงไม่ได้หรือถูกบล็อก';
+                });
+            }
         }
 
         function handleLeftPause() {
@@ -504,6 +518,10 @@
             leftAudio.currentTime = 0;
             leftStatus.innerText = '⏹️ หยุดเล่นเพลงแล้ว';
         }
+
+        leftAudio.addEventListener('error', () => {
+            leftStatus.innerText = '⚠️ ไฟล์เสียงโหลดไม่ได้ (xat/เครือข่าย)';
+        });
 
         bindAction(document.getElementById('left-btn-play'), handleLeftPlay);
         bindAction(document.getElementById('left-btn-pause'), handleLeftPause);
@@ -582,9 +600,13 @@
             });
         }
 
+        let lastSongClick = 0;
         function handleSongListTrigger(e) {
             const row = e.target.closest('.song-row');
             if (!row || !songListEl.contains(row)) return;
+            const now = Date.now();
+            if (now - lastSongClick < 350) return;
+            lastSongClick = now;
             e.stopPropagation();
             const idx = Number(row.dataset.index);
             if (!Number.isNaN(idx)) {
@@ -592,15 +614,10 @@
             }
         }
 
-        songListEl.addEventListener('pointerdown', handleSongListTrigger);
-        songListEl.addEventListener('click', (e) => {
-            if (e.target.closest('.song-row')) {
-                e.stopPropagation();
-            }
-        });
+        songListEl.addEventListener('click', handleSongListTrigger);
+        songListEl.addEventListener('touchend', handleSongListTrigger, { passive: true });
 
         function startPlaylist(index = 0) {
-            // หยุดเพลงฝั่งซ้ายอัตโนมัติเพื่อไม่ให้เสียงตีกัน
             if (!leftAudio.paused) {
                 handleLeftPause();
             }
@@ -624,7 +641,8 @@
             const p = player.play();
             if (p !== undefined) {
                 p.catch(() => {
-                    statusBadge.innerText = "TAP PLAY";
+                    statusBadge.innerText = "ERR/TAP";
+                    statusBadge.style.background = "#ef4444";
                     setPlayingVisuals(false);
                 });
             }
@@ -652,7 +670,10 @@
                 statusBadge.innerText = "LOOP";
                 statusBadge.style.background = "#10b981";
                 setPlayingVisuals(true);
-                player.play().catch(() => {});
+                player.play().catch(() => {
+                    statusBadge.innerText = "ERR/TAP";
+                    statusBadge.style.background = "#ef4444";
+                });
             } else {
                 startPlaylist(currentIndex);
             }
@@ -674,7 +695,6 @@
             player.volume = 0;
             player.currentTime = 0;
             player.removeAttribute('src');
-            player.src = '';
             player.load();
             isPaused = false;
             currentIndex = 0;
@@ -685,6 +705,14 @@
             highlightSong(0, false);
             setPlayingVisuals(false);
         }
+
+        player.addEventListener('error', () => {
+            if (player.getAttribute('src')) {
+                statusBadge.innerText = "LINK ERR";
+                statusBadge.style.background = "#ef4444";
+                setPlayingVisuals(false);
+            }
+        });
 
         player.addEventListener('ended', () => {
             startPlaylist(currentIndex + 1);
