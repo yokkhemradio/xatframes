@@ -31,6 +31,51 @@
             pointer-events: none;
         }
 
+        /* 🖼️ กรอบรูปภาพและเครื่องเล่นเพลงด้านซ้ายมือ ขนาดกว้างเท่ากรอบด้านขวามือ (245px) */
+        .left-media-container {
+            position: fixed;
+            top: 50%;
+            left: 10px;
+            transform: translateY(-50%);
+            width: 245px;
+            background: rgba(2, 6, 23, 0.35);
+            border: 1.5px solid rgba(56, 189, 248, 0.85);
+            border-radius: 12px;
+            padding: 10px 12px;
+            z-index: 2147483645;
+            pointer-events: auto;
+            touch-action: manipulation;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.65);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
+        }
+
+        .left-cover-img {
+            width: 100%;
+            display: block;
+            border-radius: 8px;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .left-track-status {
+            font-size: 11px;
+            font-weight: bold;
+            color: #fde047;
+            text-align: center;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .left-control-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
         /* 📌 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา */
         .player-container {
             position: fixed;
@@ -329,6 +374,23 @@
     <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
     <video id="bg-video" class="bg-video" src="https://ia600805.us.archive.org/21/items/hailuo014/hailuo014.mp4" autoplay loop muted playsinline preload="auto"></video>
 
+    <!-- 🖼️ กรอบรูปภาพแทนวิดีโอ + ปุ่มกดเล่นเพลงด้านซ้ายมือ -->
+    <div class="left-media-container" id="left-media-box">
+        <img src="https://xatimg.com/image/6bkwXuF3xR9l.png" alt="Request_Radio" class="left-cover-img">
+        <div class="left-track-status" id="left-track-status">🎵 สตริงใหม่ล่าสุด • พร้อมเล่น</div>
+        <div class="left-control-panel">
+            <button type="button" class="btn-ctrl btn-play" id="left-btn-play" title="เล่นเพลง (Play)">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </button>
+            <button type="button" class="btn-ctrl btn-pause" id="left-btn-pause" title="พักชั่วคราว (Pause)">
+                <svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button type="button" class="btn-ctrl btn-stop" id="left-btn-stop" title="หยุดเล่น (Stop)">
+                <svg viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
+            </button>
+        </div>
+    </div>
+
     <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
     <div class="player-container" id="radio-player">
         <div class="player-header">
@@ -389,6 +451,7 @@
     </div>
 
     <audio id="audio-player" preload="auto"></audio>
+    <audio id="left-audio-player" src="https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3" loop preload="auto"></audio>
 
     <script>
         const bgVideo = document.getElementById('bg-video');
@@ -403,6 +466,50 @@
         bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
         document.addEventListener('pointerdown', keepVideoSilentLoop, { once: true });
 
+        function bindAction(el, fn) {
+            el.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
+                fn();
+            });
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+
+        /* 🎵 ระบบเครื่องเล่นเพลงด้านซ้ายมือ */
+        const leftAudio = document.getElementById('left-audio-player');
+        const leftStatus = document.getElementById('left-track-status');
+
+        function handleLeftPlay() {
+            // หยุดเสียงวิทยุด้านขวาอัตโนมัติเพื่อไม่ให้เสียงตีกัน
+            if (!player.paused) {
+                handlePause();
+            }
+            leftAudio.muted = false;
+            leftAudio.volume = 1;
+            leftAudio.play().then(() => {
+                leftStatus.innerText = '🎶 กำลังเล่น: สตริงใหม่ล่าสุด';
+            }).catch(() => {
+                leftStatus.innerText = '⚠️ กดเล่นอีกครั้งเพื่อเปิดเสียง';
+            });
+        }
+
+        function handleLeftPause() {
+            leftAudio.pause();
+            leftStatus.innerText = '⏸️ พักชั่วคราว: สตริงใหม่ล่าสุด';
+        }
+
+        function handleLeftStop() {
+            leftAudio.pause();
+            leftAudio.currentTime = 0;
+            leftStatus.innerText = '⏹️ หยุดเล่นเพลงแล้ว';
+        }
+
+        bindAction(document.getElementById('left-btn-play'), handleLeftPlay);
+        bindAction(document.getElementById('left-btn-pause'), handleLeftPause);
+        bindAction(document.getElementById('left-btn-stop'), handleLeftStop);
+
+        /* 📻 ระบบวิทยุด้านขวามือ */
         const tracks = [
             { title: 'สตริงใหม่ล่าสุด', url: 'https://ia600607.us.archive.org/28/items/sting-new/sting%20new.mp3' },
             { title: 'เพลงฮิต tiktok 2026', url: 'https://files.catbox.moe/f2ngzy.mp3' },
@@ -425,16 +532,6 @@
         const marqueeText = document.getElementById('marquee-text');
 
         document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
-
-        function bindAction(el, fn) {
-            el.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                fn();
-            });
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-        }
 
         function setPlayingVisuals(playing) {
             if (playing) {
@@ -503,6 +600,11 @@
         });
 
         function startPlaylist(index = 0) {
+            // หยุดเพลงฝั่งซ้ายอัตโนมัติเพื่อไม่ให้เสียงตีกัน
+            if (!leftAudio.paused) {
+                handleLeftPause();
+            }
+
             currentIndex = (index + tracks.length) % tracks.length;
             isPaused = false;
 
@@ -537,6 +639,10 @@
         }
 
         function handlePlay() {
+            if (!leftAudio.paused) {
+                handleLeftPause();
+            }
+
             if (isPaused && player.src) {
                 isPaused = false;
                 player.muted = false;
