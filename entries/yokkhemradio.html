@@ -14,7 +14,7 @@
         html, body {
             width: 100%;
             height: 100%;
-            background: transparent;
+            background: #020617;
             color: #fff;
             overflow: hidden;
         }
@@ -31,11 +31,12 @@
             pointer-events: none;
         }
 
-        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ กึ่งกลางระหว่างขอบซ้ายกับกล่องแชท (สลับ 6 ภาพ + หมุนตอนเล่นเพลง) */
+        /* 💿 โลโก้แผ่นเสียงด้านซ้ายมือ (สลับ 6 ภาพ + หมุนตอนเล่นเพลง) */
         .vinyl-container {
             position: fixed;
             top: 50%;
             left: calc((100vw - 728px) / 4 + 14px);
+            min-left: 110px;
             transform: translate(-50%, -50%);
             width: 175px;
             z-index: 2147483645;
@@ -55,8 +56,9 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.85), 0 0 18px rgba(56, 189, 248, 0.45);
             animation: vinylSpin 5s linear infinite;
             animation-play-state: paused;
-            transition: opacity 0.45s ease-in-out;
+            transition: opacity 0.4s ease-in-out;
             opacity: 1;
+            will-change: transform;
         }
 
         .vinyl-disc.fading {
@@ -89,7 +91,7 @@
             top: 15px;
             right: 10px;
             width: 245px;
-            background: rgba(2, 6, 23, 0.35);
+            background: rgba(2, 6, 23, 0.55);
             border: 1.5px solid rgba(56, 189, 248, 0.75);
             border-radius: 12px;
             padding: 10px 12px;
@@ -171,7 +173,7 @@
         .marquee-box {
             width: 100%;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.75);
             border: 1px solid rgba(56, 189, 248, 0.6);
             padding: 5px 8px;
             border-radius: 20px;
@@ -179,7 +181,7 @@
         }
 
         .marquee-text {
-            display: block;
+            display: inline-block;
             white-space: nowrap;
             font-size: 11px;
             font-weight: bold;
@@ -203,7 +205,7 @@
             margin-top: 7px;
             padding: 4px 8px;
             border-radius: 10px;
-            background: rgba(15, 23, 42, 0.55);
+            background: rgba(15, 23, 42, 0.65);
             border: 1px solid rgba(56, 189, 248, 0.4);
             font-size: 10px;
             font-weight: bold;
@@ -229,7 +231,7 @@
             top: 202px;
             right: 10px;
             width: 245px;
-            background: rgba(2, 6, 23, 0.35);
+            background: rgba(2, 6, 23, 0.55);
             border: 1.5px solid rgba(56, 189, 248, 0.85);
             border-radius: 12px;
             padding: 10px 12px;
@@ -243,7 +245,6 @@
             text-shadow: 0 1px 3px #000, 0 0 8px #000;
         }
 
-        /* 🖼️ ภาพพื้นหลังด้านในกรอบรายชื่อเพลง */
         .playlist-bg-art {
             position: absolute;
             inset: 0;
@@ -251,7 +252,7 @@
             height: 100%;
             object-fit: cover;
             object-position: center 15%;
-            opacity: 0.45;
+            opacity: 0.35;
             pointer-events: none;
             z-index: 0;
             border-radius: 12px;
@@ -307,8 +308,8 @@
         .song-row {
             position: relative;
             z-index: 4;
-            padding: 5px 8px;
-            background: rgba(2, 6, 23, 0.55);
+            padding: 6px 8px;
+            background: rgba(2, 6, 23, 0.65);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-left: 3px solid transparent;
             border-radius: 5px;
@@ -325,12 +326,12 @@
         }
 
         .song-row:hover {
-            background: rgba(14, 165, 233, 0.42);
+            background: rgba(14, 165, 233, 0.45);
             border-color: rgba(125, 211, 252, 0.6);
         }
 
         .song-row.active {
-            background: rgba(14, 165, 233, 0.55);
+            background: rgba(14, 165, 233, 0.6);
             border-color: #38bdf8;
             border-left: 3px solid #fde047;
             color: #fef08a;
@@ -361,7 +362,7 @@
             margin-top: 7px;
             padding: 5px 6px 2px;
             border-top: 1px dashed rgba(255, 255, 255, 0.35);
-            background: rgba(2, 6, 23, 0.5);
+            background: rgba(2, 6, 23, 0.6);
             border-radius: 6px;
             font-size: 10px;
             font-weight: 700;
@@ -431,20 +432,17 @@
 </head>
 <body>
 
-    <!-- 🌌 วิดีโอพื้นหลัง Background (ปิดเสียงสนิท และวนลูบต่อเนื่อง) -->
     <video id="bg-video" class="bg-video" src="https://ia601902.us.archive.org/33/items/hailuo3_20261125/hailuo3.mp4" autoplay loop muted playsinline preload="auto"></video>
 
-    <!-- 💿 โลโก้แผ่นเสียงด้านซ้ายมือ สลับหมุน 6 ภาพ -->
     <div class="vinyl-container" id="vinyl-logo">
         <img id="vinyl-disc-img" src="https://xatimg.com/image/fjEsd5AbEVj5.png" alt="โลโก้แผ่นเสียง" class="vinyl-disc">
         <div class="vinyl-copyright">© 2026 YokkhemRadio. All rights reserved.</div>
     </div>
 
-    <!-- 🎧 กล่องเพลง (ตัวเล่นวิทยุ) ด้านบนขวา -->
     <div class="player-container" id="radio-player">
         <div class="player-header">
             <span>🎧 หยกเข้มเรดิโอ</span>
-            <span class="live-badge" id="status-badge">LOOP</span>
+            <span class="live-badge" id="status-badge">READY</span>
         </div>
         <div class="track-title" id="current-title">🎵 สตริงใหม่ล่าสุด</div>
 
@@ -466,19 +464,16 @@
             </button>
         </div>
 
-        <!-- ✨ ตัววิ่งชื่อเพลง -->
-        <div class="marquee-box running" id="marquee-box">
+        <div class="marquee-box" id="marquee-box">
             <div class="marquee-text" id="marquee-text">🎶 พร้อมเล่น: สตริงใหม่ล่าสุด • หยกเข้มเรดิโอ 🎶</div>
         </div>
 
-        <!-- 🎧 ป้ายชื่อวิทยุใต้ตัววิ่ง -->
         <div class="sub-radio-badge">
             <span>🎧 หยกเข้มเรดิโอ</span>
             <span class="sub-radio-tag">RADIO</span>
         </div>
     </div>
 
-    <!-- 📻 กล่องรายชื่อเพลง ใต้กล่องเพลง -->
     <div class="playlist-container" id="right-playlist">
         <img id="playlist-bg-img" src="https://xatimg.com/image/ER094pHfejKv.png" alt="" class="playlist-bg-art">
 
@@ -490,13 +485,11 @@
 
             <div class="song-list" id="song-list"></div>
 
-            <!-- ✨ ข้อความเชิญชวนใต้รายชื่อเพลง -->
             <div class="after-tracks-note">
                 🔁 วนลูบต่อเนื่องครบ 8 เพลงอัตโนมัติครับ<br>
                 เปิดฟังเพลินๆ กับ หยกเข้มเรดิโอ ✨
             </div>
 
-            <!-- 📊 EQ + นาฬิกาและวันที่ -->
             <div class="right-footer-widget">
                 <div class="eq-box" id="eq-box">
                     <div class="eq-bar"></div>
@@ -513,7 +506,7 @@
         </div>
     </div>
 
-    <audio id="audio-player" preload="auto"></audio>
+    <audio id="audio-player" preload="none"></audio>
 
     <script>
         const bgVideo = document.getElementById('bg-video');
@@ -526,7 +519,7 @@
         keepVideoSilentLoop();
         bgVideo.addEventListener('volumechange', keepVideoSilentLoop);
         bgVideo.addEventListener('loadeddata', keepVideoSilentLoop);
-        document.addEventListener('pointerdown', keepVideoSilentLoop, { once: true });
+        document.addEventListener('click', keepVideoSilentLoop, { once: true });
 
         /* 💿 รายการรูปแผ่นเสียงด้านซ้ายทั้งหมด 6 ภาพ */
         const vinylImages = [
@@ -542,8 +535,8 @@
         const vinylDiscImg = document.getElementById('vinyl-disc-img');
 
         vinylImages.forEach((src) => {
-            const preloadImg = new Image();
-            preloadImg.src = src;
+            const img = new Image();
+            img.src = src;
         });
 
         function startVinylSlideshow() {
@@ -579,6 +572,7 @@
 
         let currentIndex = 0;
         let isPaused = false;
+        let errorSkipCount = 0;
         const player = document.getElementById('audio-player');
         const titleElement = document.getElementById('current-title');
         const statusBadge = document.getElementById('status-badge');
@@ -589,16 +583,6 @@
         const vinylLogo = document.getElementById('vinyl-logo');
 
         document.getElementById('song-count-label').innerText = `${tracks.length} เพลง`;
-
-        function bindAction(el, fn) {
-            el.addEventListener('pointerdown', (e) => {
-                e.stopPropagation();
-                fn();
-            });
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-            });
-        }
 
         function setPlayingVisuals(playing) {
             if (playing) {
@@ -649,63 +633,60 @@
 
                 row.appendChild(nameSpan);
                 row.appendChild(tagSpan);
+                row.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    errorSkipCount = 0;
+                    startPlaylist(idx);
+                });
                 songListEl.appendChild(row);
             });
         }
-
-        /* 🎯 ดักคลิกผ่านกล่องรายชื่อเพลงโดยตรงเพื่อลดโอกาสอีเวนต์หลุดใน iframe */
-        function handleSongListTrigger(e) {
-            const row = e.target.closest('.song-row');
-            if (!row || !songListEl.contains(row)) return;
-            e.stopPropagation();
-            const idx = Number(row.dataset.index);
-            if (!Number.isNaN(idx)) {
-                startPlaylist(idx);
-            }
-        }
-
-        songListEl.addEventListener('pointerdown', handleSongListTrigger);
-        songListEl.addEventListener('click', (e) => {
-            if (e.target.closest('.song-row')) {
-                e.stopPropagation();
-            }
-        });
 
         function startPlaylist(index = 0) {
             currentIndex = (index + tracks.length) % tracks.length;
             isPaused = false;
 
+            const track = tracks[currentIndex];
             player.pause();
             player.muted = false;
             player.volume = 1;
-            player.src = tracks[currentIndex].url;
+            player.src = track.url;
             player.load();
 
-            titleElement.innerText = `🎵 ${tracks[currentIndex].title}`;
-            syncMarqueeTitle(tracks[currentIndex], 'กำลังเล่น');
-            statusBadge.innerText = "LOOP";
+            titleElement.innerText = `🎵 ${track.title}`;
+            syncMarqueeTitle(track, 'กำลังเล่น');
+            statusBadge.innerText = "PLAYING";
             statusBadge.style.background = "#10b981";
             highlightSong(currentIndex, true);
             setPlayingVisuals(true);
 
-            const p = player.play();
-            if (p !== undefined) {
-                p.catch(() => {
+            const playPromise = player.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    errorSkipCount = 0;
+                    statusBadge.innerText = "LOOP";
+                    statusBadge.style.background = "#10b981";
+                    setPlayingVisuals(true);
+                }).catch(() => {
                     statusBadge.innerText = "TAP PLAY";
+                    statusBadge.style.background = "#f59e0b";
                     setPlayingVisuals(false);
                 });
             }
         }
 
         function handlePrev() {
+            errorSkipCount = 0;
             startPlaylist(currentIndex - 1);
         }
 
         function handleNext() {
+            errorSkipCount = 0;
             startPlaylist(currentIndex + 1);
         }
 
         function handlePlay() {
+            errorSkipCount = 0;
             if (isPaused && player.src) {
                 isPaused = false;
                 player.muted = false;
@@ -715,7 +696,10 @@
                 statusBadge.innerText = "LOOP";
                 statusBadge.style.background = "#10b981";
                 setPlayingVisuals(true);
-                player.play().catch(() => {});
+                player.play().catch(() => {
+                    statusBadge.innerText = "TAP PLAY";
+                    setPlayingVisuals(false);
+                });
             } else {
                 startPlaylist(currentIndex);
             }
@@ -737,9 +721,9 @@
             player.volume = 0;
             player.currentTime = 0;
             player.removeAttribute('src');
-            player.src = '';
             player.load();
             isPaused = false;
+            errorSkipCount = 0;
             currentIndex = 0;
             titleElement.innerText = "หยุดเล่นเพลงแล้ว";
             marqueeText.innerText = "🎶 หยุดเล่นเพลงแล้ว • หยกเข้มเรดิโอ 🎶";
@@ -749,17 +733,40 @@
             setPlayingVisuals(false);
         }
 
+        player.addEventListener('playing', () => {
+            if (!isPaused) {
+                statusBadge.innerText = "LOOP";
+                statusBadge.style.background = "#10b981";
+                setPlayingVisuals(true);
+            }
+        });
+
+        player.addEventListener('error', () => {
+            if (!player.src || isPaused) return;
+            errorSkipCount++;
+            if (errorSkipCount < tracks.length) {
+                statusBadge.innerText = "SKIP ERR";
+                statusBadge.style.background = "#ef4444";
+                setTimeout(() => startPlaylist(currentIndex + 1), 600);
+            } else {
+                statusBadge.innerText = "NO AUDIO";
+                statusBadge.style.background = "#ef4444";
+                setPlayingVisuals(false);
+            }
+        });
+
         player.addEventListener('ended', () => {
+            errorSkipCount = 0;
             startPlaylist(currentIndex + 1);
         });
 
         renderSongList();
         syncMarqueeTitle(tracks[0], 'พร้อมเล่น');
-        bindAction(document.getElementById('btn-prev'), handlePrev);
-        bindAction(document.getElementById('btn-next'), handleNext);
-        bindAction(document.getElementById('btn-play'), handlePlay);
-        bindAction(document.getElementById('btn-pause'), handlePause);
-        bindAction(document.getElementById('btn-stop'), handleStop);
+        document.getElementById('btn-prev').addEventListener('click', handlePrev);
+        document.getElementById('btn-next').addEventListener('click', handleNext);
+        document.getElementById('btn-play').addEventListener('click', handlePlay);
+        document.getElementById('btn-pause').addEventListener('click', handlePause);
+        document.getElementById('btn-stop').addEventListener('click', handleStop);
 
         function updateClock() {
             const now = new Date();
